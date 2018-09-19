@@ -1,0 +1,463 @@
+{% extends 'new/public.html' %}
+
+
+{% block topfile %}
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/bitbug_favicon.ico') }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/public.css') }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/sub.css') }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/iconfont.css') }}"/>
+    <link rel="stylesheet" type="text/css"
+          href="{{ url_for('static', filename='plugins/iCheck/skins/minimal/grey.css') }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/calendar.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/datamanage.css') }}"/>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-1.7.2.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/Feffects.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='plugins/iCheck/icheck.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jq-datepicker.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.nicescroll.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/echarts.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/public.js') }}"></script>
+{% endblock topfile %}
+
+{% block rightcontent %}
+<style>
+    .container{min-height: 88vh;}
+    @media screen and (max-width: 1350px){
+        .icon_all_i a{width: 35px}
+    }
+    .filter-list .filter-currentr {
+        background: #00b5b8;
+        color: #ffffff;
+    }
+</style>
+
+    <div class="f-l title">
+        <h1 class="f-l c-grayblue"> 数据管理 </h1>
+        <span class="f-l c-gray"> Welcome back, {{request.cookies.username}} </span>
+    </div>
+
+    <div class="f-l sub-title bgc-white">
+        <a href="{{url_for('hyperai.views.index')}}" class="f-l c-gray c-aqua-h"><span class="f-l"> Home   </span><em class="f-l c-gray">
+            / </em></a>
+        <a href="" class="f-l c-gray c-aqua-h"><span class="f-l"> 数据管理 </span><em class="f-l c-gray"> / </em></a>
+    </div>
+
+    <div class="f-l lis-d bgc-white">
+        <div class="l-box" style="width: 50%">
+            <a href="#" class="f-l btn-2 bgc-Aqua c-white m-r25 bgc-red-h c-white-h new-dataset-popup"> 新建数据集 </a>
+            <a href="{{url_for('hyperai.show.views.shop',path='dataset') }}" class="f-l btn-2 bgc-Aqua c-white m-r25 bgc-red-h c-white-h"> 查看共享数据集 </a>
+        </div>
+        <p class="model_select_1" style="display: none;">{{apply_scence}}</p> <p class="model_select_2" style="display: none;">{{layout}}</p>
+        <div class="r-box">
+            <input type="search" placeholder="输入需要查找的数据集名称" class="btn_select_i_text f-l c-gray input-info bdr-n bdr-b"/>
+            <a href="#" class="f-l btn-3 c-gray c-red-h btn_select_i"><i class="f-l iconfont fz-24"> &#xe608; </i></a>
+            <script>
+                $('.btn_select_i').on('click',function () {
+                    window.location.href='datasets?name='+encodeURI($('.btn_select_i_text').val())
+                })
+
+                $(window).bind('load',function () {
+                    $('.data_select_scene li').each(function(){
+//        console.log($(this).text())
+
+                        if($(this).find('p').text()==$('.model_select_1').text()){
+                            $(this).addClass('filter-currentr')
+                            $(this).siblings().removeClass('filter-currentr')
+                        }
+
+                    })
+                    $('.data_select_layout li').each(function() {
+//        console.log($(this).text())
+
+                        if ($(this).find('p').text() == $('.model_select_2').text()) {
+                            $(this).addClass('filter-currentr')
+                            $(this).siblings().removeClass('filter-currentr')
+                        }
+                    })
+
+
+                })
+            </script>
+        </div>
+
+
+
+        <div class="f-l filterbox bgc-white" style="margin-top: 30px;">
+            <div class="f-l filter-div bdr-b">
+                <h2 class="f-l c-grayblue">场景：</h2>
+                <ul class="f-l filter-list data_select_scene">
+                    <li class="f-l sort-s filter-currentr c-gray data_select_scene_span"><span class="">None</span><p style="display: none">default</p></li>
+                    <li class="f-l sort-s c-gray data_select_scene_span"><span class="">图像分类</span><p style="display: none;">Classification</p></li>
+                    <li class="f-l sort-s c-gray data_select_scene_span"><span class="">目标检测</span><p style="display: none;">image-object-detection</p></li>
+                    <li class="f-l sort-s c-gray data_select_scene_span"><span class="">图像分割</span><p style="display: none;">image-segmentation</p></li>
+                    <!--<li class="f-l sort-s c-gray data_select_scene_span"><span class="">图像处理</span><p style="display: none;">image-processing</p></li>-->
+                    <!--<li class="f-l sort-s c-gray data_select_scene_span"><span class="">文本分类</span><p style="display: none;">text-classification</p></li>-->
+                    <li class="f-l sort-s c-gray"><span>医疗影像</span><p style="display: none;">image-sunnybrook</p></li>
+                </ul>
+                <!--<div class="filter-morel f-r"></div>-->
+            </div>
+            <div class="f-l filter-div bdr-b">
+                <h2 class="f-l c-grayblue">格式：</h2>
+                <ul class="f-l filter-list data_select_layout">
+                    <li class="f-l sort-s filter-currentr c-gray data_select_layout_span"><span  class="">None</span><p style="display: none">default</p></li>
+                    <li class="f-l sort-s c-gray data_select_layout_span"><span class="">TFRECORDS</span><p style="display: none">tfrecords</p></li>
+                    <li class="f-l sort-s c-gray data_select_layout_span"><span class="">LMDB</span><p style="display: none">lmdb</p></li>
+                    <li class="f-l sort-s c-gray data_select_layout_span"><span class="">HDF5</span><p style="display: none">hdf5</p></li>
+                </ul>
+                <!--<div class="filter-morel f-r"></div>-->
+            </div>
+
+        </div>
+
+
+        <script>
+
+
+
+
+
+            var href_obj={'apply_scence':$('.model_select_1').text(),'layout':$('.model_select_2').text()}
+
+            $('.data_select_scene').on('click','li',function () {
+                $(this).addClass('filter-currentr').siblings().removeClass('filter-currentr')
+                href_obj.apply_scence=$(this).children('p').text()
+                console.log(href_obj)
+                window.location.href='datasets?apply_scence='+href_obj.apply_scence+'&layout='+href_obj.layout+'&p=1'
+            })
+            $('.data_select_layout').on('click','li',function () {
+                $(this).addClass('filter-currentr').siblings().removeClass('filter-currentr')
+                href_obj.layout=$(this).children('p').text()
+                console.log(href_obj)
+                window.location.href='datasets?apply_scence='+href_obj.apply_scence+'&layout='+href_obj.layout+'&p=1'
+            })
+
+        </script>
+
+
+    </div>
+
+    <!-- mask-newdataset-popup Start-------------------------------------------------------------->
+    <div class="mask-box"></div>
+    <div class="f-l mask-newdataset-popup bgc-white">
+        <div class="f-l popup-title bgc-gray">
+            <h1 class="f-l c-gray"> 新建数据集 </h1>
+            <a href="#" class="f-r popup-close bgc-Aqua bgc-red-h c-white"><i class="fz-24 iconfont"> &#xe676; </i></a>
+        </div>
+        <div class="c-box">
+            <h2 class="f-l m-t30 c-grayblue"> 选择新建数据集应用场景 </h2>
+            <div class="select-box popup-select m-t25 bdr">
+                <span class="f-l select-txt c-gray href_data">图像分类</span><i class="iconfont fz-16"> &#xe610; </i>
+                <div class="option">
+                    <ul class="f-l stat-op bg-white">
+                        <li class="f-l"><a href="#" class="c-gray c-aqua-h">图像分类</a></li>
+                        <li class="f-l"><a href="#" class="c-gray c-aqua-h">目标检测</a></li>
+                        <li class="f-l"><a href="#" class="c-gray c-aqua-h">图像分割</a></li>
+                        <!--<li class="f-l"><a href="#" class="c-gray c-aqua-h">图像处理</a></li>-->
+                        <!--<li class="f-l"><a href="#" class="c-gray c-aqua-h">文本分类</a></li>-->
+                        <!--<li class="f-l"><a href="#" class="c-gray c-aqua-h">其他</a></li>-->
+                        <li class="f-l"><a href="#" class="c-gray c-aqua-h">医疗影像</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="c-box m-t150">
+                <a href="#" class="btn-6 m-l15 bgc-red-h bgc-gray-b c-grayblue c-white-h btn_select_no"> 取消 </a>
+                <a href="#" class="btn-6 m-l15 bgc-red-h c-white bgc-Aqua href_data_btn"> 提交 </a>
+                <script>
+                    $('.btn_select_no').on('click',function () {
+                        $('.mask-box').css('display','none')
+                        $('.mask-newdataset-popup').css('display','none')
+                    })
+                </script>
+            </div>
+        </div>
+    </div>
+    <!-- mask-newdataset-popup End -------------------------------------------------------------->
+    <style>
+        @media screen and (min-width: 1450px){
+            .w_w-4{width: 6%}
+            .w_w-30{width: 16%}
+            .w_w-19{width: 10%}
+            .w_w-6{width: 12%}
+            .w_w-8{width: 8%}
+            .w_w-17{width: 17%}
+        }
+        @media screen and (max-width: 1400px){
+            .w_w-4{width: 7%}
+            .w_w-19{width: 8%}
+            .w_w-30{width: 10%}
+            .w_w-8{width: 10%}
+            .w_w-6{width: 12%}
+            .w_w-17{width: 20%}
+        }
+        @media screen and (min-width: 1400px) and (max-width: 1450px){
+            .w_w-4{width: 7%}
+            .w_w-19{width: 8%}
+            .w_w-30{width: 10%}
+            .w_w-8{width: 10%}
+            .w_w-6{width: 12%}
+            .w_w-17{width: 20%}
+        }
+    </style>
+    <div class="f-l lis-f bgc-white">
+        <div class="table bdr">
+            <div class="table-tr bgc-gray">
+                <div class="table-th w_w-8">数据集名称</div>
+                <div class="table-th w_w-30">概述</div>
+                <div class="table-th w_w-19">应用场景</div>
+                <div class="table-th w_w-4" style="width: 7%;">
+                    <div class="f-l select-box sub-select m-t8">
+                        <span class="f-l select-txt c-grayblue">大小</span>
+                    </div>
+                </div>
+                <div class="table-th w_w-4">
+                    <div class="f-l select-box sub-select m-t8">
+                        <span class="f-l select-txt c-grayblue">存储</span>
+                    </div>
+                </div>
+                <div class="table-th w_w-4">
+                    <div class="f-l select-box sub-select m-t8">
+                        <span class="f-l select-txt c-grayblue">Group</span>
+                    </div>
+                </div>
+                <div class="table-th w_w-4">
+                    <div class="f-l select-box sub-select m-t8">
+                        <span class="f-l select-txt c-grayblue">共享</span>
+                    </div>
+                </div>
+                <div class="table-th w_w-6">更新时间</div>
+                <div class="table-th w_w-6">用户名</div>
+                <div class="table-th w_w-17">操作</div>
+            </div>
+            {% if datas.user_datasets %}
+            {% for dataset in datas.user_datasets%}
+            <div class="table-tr bdr-t">
+
+                <div class="bdr-l table-td w_w-8"><p style="text-align: center" class="f-l p-text fz-12 ta-l c-grayblue"> {{dataset.name()}} </p></div>
+                <div class="bdr-l table-td w_w-30"><p class="f-l p-text fz-12 ta-l c-grayblue">
+                    {{dataset.desc}} </p>
+                </div>
+                <div class="bdr-l table-td w_w-19"><p class="f-l p-text fz-12 ta-l c-grayblue">
+                    {{dataset.apply_scence | transfer}} </p>
+                </div>
+
+                <div class="bdr-l table-td w_w-4" style="width: 7%;"><p class="f-l p-text fz-12 ta-c c-grayblue"> {{dataset.disk_size_fmt()}} </p></div>
+                <div class="bdr-l table-td w_w-4"><p class="f-l p-text fz-12 ta-c c-grayblue"> {{dataset.get_backend()}} </p></div>
+                <div class="bdr-l table-td w_w-4"><p class="f-l p-text fz-12 ta-c c-grayblue">{%if dataset.group%}是{%else%}否{%endif%}</p></div>
+                <div class="bdr-l table-td w_w-4"><p class="f-l p-text fz-12 ta-c c-grayblue">{%if dataset.delete%}否{%else%}是{%endif%}</p></div>
+                <div class="bdr-l table-td w_w-6"><p class="f-l p-text fz-12 ta-c c-grayblue"> {{dataset.create_time}} </p></div>
+                <div class="bdr-l table-td w_w-6"><p class="f-l p-text fz-12 ta-c c-grayblue"> {{dataset.username}} </p></div>
+                <div class="bdr-l table-td w_w-17 icon_all_i">
+                    <div class="job_idi" style="display: none">/datasets/{{dataset.id()}}</div>
+                    <p style="display: none;">{{dataset.id()}}</p>
+                    <a href="#" class="f-l  m-t10 c-gray c-red-h jobb_i"  id="{{dataset.id()}}"><i class="f-l iconfont fz-22"> &#xe677; </i>
+                        <span>删除</span>
+                    </a>
+                    <a {%if dataset.status == 'D' %}href="{{url_for('hyperai.dataset.views.to_store',job_id=dataset.id())}}" {%else%} href='#'{%endif%} class="f-l  m-t10 c-gray c-aqua-h share">
+                        <i class="f-l iconfont fz-22 "> &#xe663; </i>
+                        <span>共享</span>
+                    </a>
+
+                    <a href="{{url_for('hyperai.views.log_new',job_id=dataset.id())}}" class="f-l  m-t10 c-gray c-aqua-h"><i class="f-l iconfont fz-22"> &#xe600; </i>
+                        <span>下载</span>
+                    </a>
+                    <a href="{%if dataset%}/datasets/{{dataset.id()}}{%else%}{%endif%}" class="f-l  m-t10 c-gray c-aqua-h">
+                        <i class="f-l iconfont fz-22"> &#xe649; </i>
+                        <span>查看</span>
+                    </a>
+                </div>
+
+            </div>
+             {% endfor %}
+            {%else%}
+            {%endif%}
+
+        </div>
+        <script>
+            $('.table').on('click','.share',function () {
+                console.log('share')
+                if($(this).parents('.icon_all_i').prev('.table-td').prev('.table-td').prev('.table-td').find('p').html() == '是'){
+                    alert('已共享')
+                    $(this).attr('href','#')
+                    // return false
+                }
+
+            })
+        </script>
+        <div class="f-l page-box">
+            <div class="f-l page-box">
+                 <ul class="pagination">
+       {% if datas.show_shouye_status==1%}
+           <li class=''><a href='/datasets?p=1'>首页</a></li>
+           <li class=''><a href='/datasets?p={{datas.p-1}}'>上一页</a></li>
+      {%endif%}
+
+       {% for dic in datas.dic_list %}
+           {% if dic==datas.p%}
+             <li class="active"><a href="/datasets?p={{dic}}">{{dic}}</a></li>
+           {%else%}
+               <li class=""><a href="/datasets?p={{dic}}">{{dic}}</a></li>
+           {%endif%}
+        {%endfor%}
+
+       {% if datas.p < datas.total%}
+            <li class=''><a href='/datasets?p={{datas.p+1}}'>下一页</a></li>
+            <li class=''><a href='/datasets?p={{datas.total}}'>尾页</a></li>
+       {%endif%}
+ </ul>
+
+        </div>
+        </div>
+        <style>
+            .pagination{text-align: center}
+            .pagination li{display: inline-block;height: 30px;}
+            .active li{color: red}
+            .pagination a{padding: 0 10px;
+                display: inline-block;
+                color: #666666;
+                border:solid 1px #dce0e0;
+                height: 30px;
+                font-size: 14px;
+                line-height:30px;
+            }
+            .active a{background: #00b5b8;color: white;border: none}
+             </style>
+    </div>
+<style>
+    .alert-box,.prompt-box{    z-index: 99998;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, .6);
+        display: none;
+    }
+    .alert-div{
+        width: 400px;
+        height: 240px;
+        background: white;
+        margin: 0 auto;
+        margin-top: 10%;
+        position: relative;
+    }
+    .alert-div-nav{
+        height:40px;
+    }
+    .alert-div-nav i{
+        background: #00b5b8;
+        color: white;
+    }
+    .alert-div-content h3{height: 40px;
+        line-height: 40px;
+        text-align: center;
+        margin-top: 35px;
+    }
+    .alert-btn{height: 40px;
+        text-align: center;
+        position: absolute;
+        bottom: 35px;
+        width: 100%;
+    }
+    .alert-btn div{display: inline-block; }
+    .alert-btn  h3{
+        height:40px;
+        width: 100%;
+        /*padding: 0 30px;*/
+        line-height: 40px;
+    }
+    .alert-btn-no{
+        color: #2c3850;
+        background: #d2e0e9;
+        margin-right: 20px;
+        width:100px;
+    }
+    .alert-btn-yes{background: #00b5b8;
+        color: white;
+        width:100px;
+    }
+    .hover-red:hover{color: white;
+        background: #ff6376;
+    }
+</style>
+<div class="alert-box">
+    <div class="alert-div">
+        <div class="alert-div-nav">
+            <!--<i class="fz-24 iconfont f-r hover-red"> &#xe676; </i>-->
+        </div>
+        <div class="alert-div-content">
+            <h3>确认删除？</h3>
+        </div>
+        <div class="alert-btn">
+            <div class="alert-btn-no hover-red">
+                <h3>取消</h3>
+            </div>
+            <div class="alert-btn-yes hover-red">
+                <h3>确认</h3>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="prompt-box">
+    <div class="alert-div">
+        <div class="alert-div-nav">
+            <!--<i class="fz-24 iconfont f-r hover-red"> &#xe676; </i>-->
+        </div>
+        <div class="alert-div-content">
+            <h3></h3>
+        </div>
+        <div class="alert-btn">
+            <!--<div class="alert-btn-no hover-red">-->
+            <!--&lt;!&ndash;<h3>取消</h3>&ndash;&gt;-->
+            <!--</div>-->
+            <div class="alert-btn-yes hover-red">
+                <h3>确定</h3>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var delete_url=null;
+    var delete_id=null;
+    var delede_index=null;
+    $('.alert-btn-no').on('click',function () {
+        $('.alert-box').css('display','none')
+    })
+    $('.alert-div-nav').on('click',function () {
+        $('.alert-box').css('display','none')
+    })
+    $('.prompt-box .alert-btn-yes').on('click',function () {
+        $('.prompt-box').css('display','none')
+    })
+    $('.jobb_i').on('click',function () {
+        $('.alert-box').css('display','block')
+        delete_url=$(this).siblings('div').text();
+        delete_id=$(this).siblings('p').text();
+        $('.alert-box .alert-btn-yes').on('click',function () {
+            $('.alert-box').css('display','none')
+            console.log(delete_id)
+            console.log(delete_url)
+            $.ajax({
+                type:'DELETE',
+                url:delete_url,
+                data:{id:delete_id},
+                success:function (res) {
+                    console.log(res)
+                    if(res.res==2){
+                        $('.prompt-box').css('display','block')
+                        $('.prompt-box .alert-div-content h3').html('数据集已被模型占用、不能删除!')
+                    }
+                    else {
+                        location.reload()
+                    }
+                }
+            })
+        })
+
+    })
+</script>
+{% endblock rightcontent %}
+{% block bottomfile %}
+    <script type="text/javascript" src="{{ url_for('static', filename='js/paging.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/dataManage.js') }}"></script>
+
+{% endblock bottomfile %}

@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		{% include 'new/public/meta.html' %}
+		<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='advance/css/homeworkMinitor.css')}}"/>
+
+	</head>
+
+	<body>
+	{% include 'new/public/header.html' %}
+		<div class="container-fluid" style="margin-top: 51px;">
+			<div class="row" id="row-box">
+
+				{% include 'new/public/left.html' %}
+
+				<div class="col-sm-11 col-sm-offset-3 col-md-20 col-md-offset-2 main" style="padding: 0px 20px;">
+			
+				<h4 class="page-header bdr-n h-50" style="margin: 0;">超参调优</h4>
+					<div class="col-md-12 c-gray pd-n "> Welcome back, <span>{{request.cookies.username}}</span></div>
+					<div class="col-md-12 b-nav bg-white mt-30">
+						<ol class="breadcrumb bg-white mb-0 pdtb-15">
+							<li>
+								<a href="/index" class="c-gray">Home</a>
+							</li>
+							<li class="c-green">调优训练</li>
+						</ol>
+					</div>
+					<div class="col-md-12 mt-30" style="background: #FFFFFF; padding:20px 30px;">
+						<div class="title">
+							<h4 class="col-md-6 pd-n">训练结果</h4>
+							<h4 class="col-md-6 pd-n">作业状态：<em class="home-state">完成</em></h4>
+						</div>
+						<div class="col-md-12 chart-box mt-30 pdl-40">
+							<div class="col-md-12">
+								<h5>模型训练信息</h5>
+								<div class="col-md-12 bg-gray1 pdtb-15">
+									<div class="col-md-6">
+										<div class="col-md-4 pd-n" style="width: 108px;">
+											训练开始时间:
+										</div>
+										<div class="col-md-5 start_time pd-n">
+											2018-09-10 16:27:30
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="col-md-4 pd-n" style="width: 108px;">
+											训练结束时间:
+										</div>
+										<div class="col-md-5 end_time pd-n">
+
+										</div>
+									</div>
+									<div class="col-md-6 mt-15">
+										<div class="col-md-4 pd-n" style="width: 108px;">
+											共用时:
+										</div>
+										<div class="col-md-5 all_time pd-n">
+											
+										</div>
+									</div>
+								</div>
+							</div>
+							
+							
+							<div class="col-md-12 mt-30 t-result">
+								<h5>超参数</h5>
+								<div class="col-md-12 bdr pdtb-15">
+									<div class="col-md-2 mt-15 mb-15 l-box" style="width: 20%;">
+										<h4 class="col-md-12 fz-16 center pd-n"></h4>
+										<p class="col-md-12 fz-w c-red1 center pd-n"></p>
+									</div>
+
+
+									<div class="col-md-2 mt-15 mb-15 l-box" style="width: 20%;">
+										<h4 class="col-md-12 fz-16 center pd-n"></h4>
+										<p class="col-md-12 fz-w c-red1 center pd-n"></p>
+									</div>
+
+
+									<div class="col-md-2 mt-15 mb-15 l-box" style="width: 20%;">
+										<h4 class="col-md-12 fz-16 center pd-n"></h4>
+										<p class="col-md-12 fz-w c-red1 center pd-n"></p>
+									</div>
+
+
+									<div class="col-md-2 mt-15 mb-15 l-box" style="width: 20%;">
+										<h4 class="col-md-12 fz-16 center pd-n"></h4>
+										<p class="col-md-12 fz-w c-red1 center pd-n"></p>
+									</div>
+
+
+									<div class="col-md-2 mt-15 mb-15 l-box" style="width: 20%;">
+										<h4 class="col-md-12 fz-16 center pd-n"></h4>
+										<p class="col-md-12 fz-w c-red1 center pd-n"></p>
+									</div>
+								</div>
+							</div>
+							
+							<div class="col-md-12 mt-30">
+								<h5>日志</h5>
+
+								<div class="col-md-12 bdr log-content" style="height: 400px;">
+									
+
+									
+								</div>
+							</div>
+							
+						</div>
+						
+						
+					</div>
+
+
+
+
+					<div class="clone-box resource-all">
+						<div class="col-md-12  resource-parent pd-n">
+							<div class="bdr-l table-td col-md-1 pd-n" style="width: 5%;">
+								<div class="sub-table">
+									<div class="sub-table-tr-i1">
+										<div class="sub-table-td bdr-b ta-c h-70"> 容器  </div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+
+						<div class="container-info col-md-11 pd-n resource-children">
+
+							<!--卡-->
+							<div class="bdr-l table-td col-md-2" style="width: 25%;">
+								<div class="sub-table sub-table-ka1">
+									<div class="sub-table-tr-i1">
+										<div class="sub-table-td bdr-b ta-c h-70 sub-table-ka1-name"> 卡  </div>
+									</div>
+								</div>
+							</div>
+
+							<!--GPU-->
+
+							<div class="bdr-l table-td col-md-1" style="width: 10%;">
+								<div class="sub-table sub-table-ka1">
+									<div class="sub-table-tr-i1">
+										<div class="sub-table-td bdr-b ta-l h-70"><i class="f-l iconfont fz-24 icon-GPU pr-5 c-orange">  </i> GPU </div>
+									</div>
+								</div>
+							</div>
+							<div class="bdr-l table-td col-md-3" style="width: 15%;">
+								<div class="sub-table sub-table-ka1">
+									<div class="sub-table-tr-i1">
+										<div class="sub-table-td bdr-b h-70">
+											<div class="f-l m-t5 cpu-meter col-md-12 pd-n">
+												<div class="threm cpu-threm">
+													<div class="length_i length_i_g">
+
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+
+							<!--显存-->
+							<div class="bdr-l table-td col-md-1" style="width: 10%;">
+								<div class="sub-table sub-table-ka1">
+									<div class="sub-table-tr-i1">
+										<div class="sub-table-td bdr-b ta-l h-70"><i class="f-l iconfont fz-28 pr-5 c-green1"> &#xe670; </i> 显存 </div>
+									</div>
+								</div>
+							</div>
+							<div class="bdr-l table-td col-md-3" style="width:15%">
+								<div class="sub-table sub-table-ka1">
+									<div class="sub-table-tr-i1">
+										<div class="sub-table-td bdr-b h-70">
+											<div class="f-l m-t5 gpu-meter col-md-12 pd-n">
+												<div class="threm gpu-threm">
+													<div class="length_i length_i_gm">
+
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+
+							<!--温度-->
+							<div class="bdr-l table-td col-md-1" style="width: 10%;">
+								<div class="sub-table sub-table-ka1">
+									<div class="sub-table-tr-i1">
+										<div class="sub-table-td bdr-b ta-l h-70"><i class="f-l iconfont fz-28 pr-5 c-green1 icon-wenduji"> </i> 温度 </div>
+									</div>
+								</div>
+							</div>
+							<div class="bdr-l table-td col-md-1" style="width: 15%;">
+								<div class="sub-table sub-table-ka1">
+									<div class="sub-table-tr-i1">
+										<div class="sub-table-td bdr-b h-70">
+											<div class="f-l m-t5 gpu-meter  col-md-12 pd-n">
+												<div class="threm" style="background: #ff976a;">
+													<div class="length_i_t length_i">
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+
+
+
+						</div>
+					</div>
+
+
+
+
+
+					
+					<div class="col-md-12 mt-30" style="background: #FFFFFF; padding:20px 30px;">
+						<div class="title col-md-12">
+							<h4 class="col-md-3 pd-n"><i class="iconfont icon-ziyuanjiankong fz-36 c-green"></i>资源使用监控</h4>
+						</div>
+						
+						<div class="col-md-12 pd-n mt-15 bdr">
+							<div class="sour-title bgc-gray w-100 h-50 bdr-b">
+								<div class="col-md-1 h-50 center pd-n" style="width: 5%;">
+									容器
+								</div>
+								<div class="col-md-3 center h-50 pd-n">
+									显卡
+								</div>
+								<div class="col-md-3 center h-50 pd-n">
+									使用率
+								</div>
+								<div class="col-md-3 center h-50 pd-n">
+									使用率
+								</div>
+								<div class="col-md-2 center h-50 pd-n">
+									温度
+								</div>
+							</div>
+							
+							<div class="sour-list col-md-12 w-100 pd-n">
+							  
+							  
+							  
+							    <div class="container-box col-md-12 resource-content  pd-n">
+
+							    
+							    </div>
+							 
+							 
+							 
+							 
+							</div>
+						</div>
+					</div>
+					
+				</div>
+
+				<div class="col-sm-11 col-sm-offset-3 col-md-20 col-md-offset-2 main nav-bottom bg-white">Copyright © 2017
+					<a href="#">中科弘云科技(北京)有限公司,</a> All rights reserved.</div>
+
+			</div>
+		</div>
+
+		{% include 'new/public/script.html'%}
+		<script src="{{url_for('static', filename='advance/js/tuning-result.js')}}" type="text/javascript" charset="utf-8"></script>
+	<script>
+        console.log(JSON.parse(localStorage.getItem('data')))
+        var obj = JSON.parse(localStorage.getItem('data'))
+        $('.start_time').html(obj['create_time'])
+        $('.home-state').html(obj['statue'])
+		var jobid = obj['job_id']
+        if( $('.home-state').html() == 'Waiting'){
+            $('.home-state').html('等待')
+            $('.home-state').css('background','#ff976a')
+        }else if( $('.home-state').html() == 'Running'){
+            $('.home-state').html('运行中')
+            // $('.home-state').addClass('bg-green1').removeClass('bg-red','bgc-gray','bg-orangle')
+            $('.home-state').css('background','#0dc999')
+        }else if( $('.home-state').html() == 'Aborted'){
+            $('.home-state').html('终止')
+            // $('.home-state').addClass('bgc-gray').removeClass('bg-red','bg-green1','bg-orangle')
+            $('.home-state').css('background','rgb(158, 183, 198)')
+        }else if( $('.home-state').html() == 'Done'){
+            $('.home-state').html('完成')
+            // $('.home-state').addClass('bg-red').removeClass('bgc-gray','bgc-gray','bg-orangle')
+            $('.home-state').css('background','#ff6376')
+        }else if( $('.home-state').html() == 'Error'){
+            $('.home-state').html('错误')
+            // $('.home-state').addClass('bg-red').removeClass('bgc-gray','bgc-gray','bg-orangle')
+            $('.home-state').css('background','#ff976a')
+        }
+	</script>
+	{% with namespace = "/jobs" %}
+	{% include 'socketio.html' %}
+	<script>
+        socket.on('connect', function () {
+            socket.emit('join', {'room': jobid});
+        });
+	</script>
+
+
+	{% endwith %}
+	{% include 'job2.html' %}
+	<script>
+
+
+
+	  if(obj['method'] == 'GD'){
+          $('.t-result h4').eq(0).html('学习率(lr)')
+
+	  }else if(obj['method'] == 'Adam'){
+			if(localStorage.getItem('fun') == '学习率(lr)'){
+                $('.t-result h4').eq(0).html('学习率(lr)')
+			}else{
+                $('.t-result .l-box').eq(0).hide()
+			}
+			if(localStorage.getItem('fun3') == '指数衰减率1(beta1)'){
+                $('.t-result h4').eq(1).html('指数衰减率1(beta1)')
+			}else{
+                $('.t-result .l-box').eq(1).hide()
+			}
+
+           if(localStorage.getItem('fun4') == '指数衰减率2(beta2)'){
+               $('.t-result h4').eq(2).html('指数衰减率2(beta2)')
+            }else{
+               $('.t-result .l-box').eq(2).hide()
+		   }
+	  }else if(obj['method'] == 'RMSProp'){
+          $('.t-result h4').eq(0).html('学习率(lr)')
+          if(localStorage.getItem('fun1') == '动量(momentum)'){
+              $('.t-result h4').eq(1).html('动量(momentum)')
+          }else{
+              $('.t-result .l-box').eq(1).hide()
+          }
+
+          if(localStorage.getItem('fun2') == '梯度衰减因子(decay)'){
+              $('.t-result h4').eq(2).html('梯度衰减因子(decay)')
+          }else{
+              $('.t-result .l-box').eq(2).hide()
+          }
+
+	  }else if(obj['method'] == 'Momentum'){
+          $('.t-result h4').eq(0).html('学习率(lr)')
+          $('.t-result h4').eq(2).html('动量(momentum)')
+	  }
+
+
+	  $.ajax({
+		  type:'POST',
+		  url:'/tuning/show',
+		  data:{'job_id':jobid},
+		  success:function (e) {
+			  console.log('-----keep data----',e)
+
+			  if(e.log.length == 0){
+
+			  }else{
+                  for(var i = 0;i<e.log.length;i++){
+                      $("<p>" + e.log[i] +"</p>").appendTo($(".log-content"))
+                      $('.log-content')[0].scrollTop = $('.log-content')[0].scrollHeight
+                  }
+			  }
+
+
+
+
+              $('.home-state').html(e.statue)
+              $('.create-time').html(e.create_time)
+              $('.end_time').html(e.end_time)
+              $('.username').html(e.name)
+              $('.all_time').html(e.cost_time)
+              if( $('.home-state').html() == 'Waiting'){
+                  $('.home-state').html('等待')
+                  $('.home-state').css('background','#ff976a')
+              }else if( $('.home-state').html() == 'Running'){
+                  $('.home-state').html('运行中')
+                  // $('.home-state').addClass('bg-green1').removeClass('bg-red','bgc-gray','bg-orangle')
+                  $('.home-state').css('background','#0dc999')
+              }else if( $('.home-state').html() == 'Aborted'){
+                  $('.home-state').html('终止')
+                  // $('.home-state').addClass('bgc-gray').removeClass('bg-red','bg-green1','bg-orangle')
+                  $('.home-state').css('background','rgb(158, 183, 198)')
+              }else if( $('.home-state').html() == 'Done'){
+                  $('.home-state').html('完成')
+                  // $('.home-state').addClass('bg-red').removeClass('bgc-gray','bgc-gray','bg-orangle')
+                  $('.home-state').css('background','#ff6376')
+              }else if( $('.home-state').html() == 'Error'){
+                  $('.home-state').html('错误')
+                  // $('.home-state').addClass('bg-red').removeClass('bgc-gray','bgc-gray','bg-orangle')
+                  $('.home-state').css('background','#ff976a')
+              }
+
+              $('.l-box').each(function () {
+				  if($(this).find('h4').html() == '学习率(lr)'){
+				      $(this).find('p').html(e.train_lr)
+				  }
+                  if($(this).find('h4').html() == '指数衰减率1(beta1)'){
+                      $(this).find('p').html(e.train_beta1)
+                  }
+                  if($(this).find('h4').html() == '指数衰减率2(beta2)'){
+                      $(this).find('p').html(e.train_beta2)
+                  }
+                  if($(this).find('h4').html() == '动量(momentum)'){
+                      $(this).find('p').html(e.train_momentum)
+                  }
+                  if($(this).find('h4').html() == '梯度衰减因子(decay)'){
+                      $(this).find('p').html(e.train_decay)
+                  }
+              })
+
+
+			if(e.method == 'GD'){
+				$('.l-box').eq(0).find('h4').html('学习率(lr)')
+                $('.l-box').eq(0).find('p').html(e.train_lr)
+			}else if(e.method == 'RMSProp'){
+                $('.l-box').eq(0).find('h4').html('学习率(lr)')
+                $('.l-box').eq(0).find('p').html(e.train_lr)
+				if(e.train_momentum && e.train_decay){
+                    $('.l-box').eq(1).find('h4').html('动量(momentum)')
+                    $('.l-box').eq(1).find('p').html(e.train_momentum)
+                    $('.l-box').eq(2).find('h4').html('梯度衰减因子(decay)')
+                    $('.l-box').eq(2).find('p').html(e.train_decay)
+				}else if(e.train_momentum && train_decay== ''){
+                    $('.l-box').eq(1).find('h4').html('动量(momentum)')
+                    $('.l-box').eq(1).find('p').html(e.train_momentum)
+				}else if(e.train_momentum == '' && train_decay){
+                    $('.l-box').eq(1).find('h4').html('梯度衰减因子(decay)')
+                    $('.l-box').eq(1).find('p').html(e.train_decay)
+				}else{
+
+				}
+
+			}else if(e.method == 'Adam'){
+			      if(e.train_lr && e.train_beta1 && e.train_beta2){
+                      $('.l-box').eq(0).find('h4').html('学习率(lr)')
+                      $('.l-box').eq(0).find('p').html(e.train_lr)
+                      $('.l-box').eq(1).find('h4').html('指数衰减率1(beta1)')
+                      $('.l-box').eq(1).find('p').html(e.train_beta1)
+                      $('.l-box').eq(2).find('h4').html('指数衰减率2(beta2)')
+                      $('.l-box').eq(2).find('p').html(e.train_beta2)
+				  }else if(e.train_lr && e.train_beta1 && e.train_beta2==''){
+                      $('.l-box').eq(0).find('h4').html('学习率(lr)')
+                      $('.l-box').eq(0).find('p').html(e.train_lr)
+                      $('.l-box').eq(1).find('h4').html('指数衰减率1(beta1)')
+                      $('.l-box').eq(1).find('p').html(e.train_beta1)
+				  }else if(e.train_lr && e.train_beta1=='' && e.train_beta2){
+                      $('.l-box').eq(0).find('h4').html('学习率(lr)')
+                      $('.l-box').eq(0).find('p').html(e.train_lr)
+                      $('.l-box').eq(1).find('h4').html('指数衰减率2(beta2)')
+                      $('.l-box').eq(1).find('p').html(e.train_beta2)
+				  }else if(e.train_lr && e.train_beta1=='' && e.train_beta2==''){
+                      $('.l-box').eq(0).find('h4').html('学习率(lr)')
+                      $('.l-box').eq(0).find('p').html(e.train_lr)
+				  }else if(e.train_lr=='' && e.train_beta1 && e.train_beta2){
+                      $('.l-box').eq(0).find('h4').html('指数衰减率1(beta1)')
+                      $('.l-box').eq(0).find('p').html(e.train_beta1)
+                      $('.l-box').eq(1).find('h4').html('指数衰减率2(beta2)')
+                      $('.l-box').eq(1).find('p').html(e.train_beta2)
+				  }else if(e.train_lr=='' && e.train_beta1 == '' && e.train_beta2){
+                      $('.l-box').eq(0).find('h4').html('指数衰减率2(beta2)')
+                      $('.l-box').eq(0).find('p').html(e.train_beta2)
+				  }else if(e.train_lr=='' && e.train_beta1 && e.train_beta2 == ''){
+                      $('.l-box').eq(0).find('h4').html('指数衰减率1(beta1)')
+                      $('.l-box').eq(0).find('p').html(e.train_beta1)
+                  }
+
+			}else if(e.method == 'Momentum'){
+                $('.l-box').eq(0).find('h4').html('学习率(lr)')
+                $('.l-box').eq(0).find('p').html(e.train_lr)
+                $('.l-box').eq(1).find('h4').html('动量(momentum)')
+                $('.l-box').eq(1).find('p').html(e.train_momentum)
+			}
+
+
+
+
+
+
+          }
+	  })
+
+
+	</script>
+	</body>
+
+</html>

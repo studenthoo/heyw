@@ -1,0 +1,17 @@
+#!/bin/bash
+
+SERVER_EXEC=tensorrt_server
+MODEL=$MODEL$
+WEIGHTS=$WEIGHTS$
+LABELS=$LABELS$
+INPUT_NAME=data
+OUTPUT_NAME=softmax
+INFER_DTYPE=float32
+
+CMD="$SERVER_EXEC -t caffe -d $INFER_DTYPE -i $INPUT_NAME -o $OUTPUT_NAME -m $MODEL -w $WEIGHTS -l $LABELS"
+
+echo
+echo "================================================"
+echo "$CMD"
+echo "================================================"
+exec $CMD

@@ -1,0 +1,65 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: hyw-20180314-075449-11f6
+spec:
+  template:
+    metadata:
+      labels:
+        name: hyw-20180314-075449-11f6
+        role: hyperaijob
+    spec:
+      containers:
+        - name: hyw-20180314-075449-11f6
+          image: hyperai_pyc:hyperai20180302
+          command: ["/usr/bin/python2"]
+          args: ['/home/nfsdir/hyperai/code/mnist.py', '--model_dir=/home/nfsdir/hyperai/jobs/20180314-075449-a59e', '--data_dir=/home/nfsdir/hyw/mnist/']
+          env:
+          - name: PROTOBUF_ROOT
+            value: "/root/protobuf"
+          - name: HYPERAI_ROOT
+            value: "/root/hyperai"
+          - name: CUDNN_VERSION
+            value: "5.1.10"
+          - name: NVIDIA_REQUIRE_CUDA
+            value: "cuda>=8.0"
+          - name: LIBRARY_PATH
+            value: "/usr/local/cuda/lib64/stubs:"
+          - name: LD_LIBRARY_PATH
+            value: "/usr/local/nvidia/lib:/usr/local/nvidia/lib64"
+          - name: NVIDIA_DRIVER_CAPABILITIES
+            value: "compute,utility"
+          - name: PATH
+            value: "/usr/local/nvidia/bin:/usr/local/cuda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+          - name: CUDA_PKG_VERSION
+            value: "8-0=8.0.61-1"
+          - name: CUDA_VERSION
+            value: "8.0.61"
+          - name: CAFFE_ROOT
+            value: "/root/caffe/"
+          - name: TORCH_ROOT
+            value: "/root/torch/"
+          - name: HYPERAI_JOBS_DIR
+            value: /home/nfsdir
+          volumeMounts:
+          - name: nfs-storage
+            readOnly: false
+            mountPath: /home/nfsdir
+          resources:
+            limits:
+              nvidia.com/gpu: 1
+              cpu: 4
+              memory: 8Gi
+          ports:
+          - name: tensorflow-1
+            containerPort: 5000
+          - name: tensorflow-2
+            containerPort: 22
+      restartPolicy: OnFailure
+#      restartPolicy: Never
+      volumes:
+        - name: nfs-storage
+          nfs:
+            server: 10.18.95.2
+            path: /home/nfsdir
+

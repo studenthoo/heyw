@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		{% include 'new/public/meta.html' %}
+		<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='advance/css/MirrorWarehouse.css')}}"/>
+
+	</head>
+
+	<body>
+
+	{% include 'new/public/header.html' %}
+		
+		
+		
+		<div class="modal fade" id="pushImg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+					&times;
+				</button>
+				<h4 class="modal-title" id="myModalLabel">
+					上传镜像
+				</h4>
+			</div>
+			<div class="modal-body">
+				 <div class="form-group">
+            <label for="project-name" class="control-label">输入路径<span class="c-red">*</span></label>
+					 <span class="name_tishi c-red f-r" style="padding: 0 5px"></span>
+            <input type="text" class="form-control autocomplete_path" id="project-name">
+          </div>
+          
+          
+         
+          
+          
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">取消
+				</button>
+				<button type="button" class="btn-yes bg-green c-white">
+					确认
+				</button>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal -->
+</div>
+
+
+
+
+<!--编辑-->
+
+
+	<div class="modal fade" id="editorImg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+						&times;
+					</button>
+					<h4 class="modal-title" id="myModalLabel">
+						编辑
+					</h4>
+				</div>
+				<div class="modal-body">
+					<div class="form-group">
+						<label for="img-name" class="control-label">镜像名称<span class="c-red" style="font-weight: 400;"> (格式：ip:port/项目名/镜像名)</span></label>
+						<span class="name_tishi c-red f-r" style="padding: 0 5px"></span>
+						<input type="text" class="form-control" id="img-name">
+					</div>
+					<div class="form-group">
+						<label for="img-tag" class="control-label">标签<span class="c-red">*</span></label>
+						<span class="name_tishi c-red f-r" style="padding: 0 5px"></span>
+						<input type="text" class="form-control" id="img-tag">
+					</div>
+					<div class="form-group">
+
+						<input type="hidden" class="form-control" id="imgid">
+					</div>
+
+
+
+
+
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">取消
+					</button>
+					<button type="button" class="btn-yes bg-green c-white">
+						确认
+					</button>
+				</div>
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal -->
+	</div>
+
+
+	<!--删除提示-->
+	<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="deleteProject">
+		<div class="modal-dialog modal-sm" role="document">
+			<div class="modal-content">
+				<div class="modal-body pd-n h-50 center">
+					确认删除？
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">取消
+					</button>
+					<button type="button" class="btn-yes bg-green c-white">
+						确认
+					</button>
+
+				</div>
+			</div>
+		</div>
+	</div>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+
+		<div class="container-fluid" style="margin-top: 51px;">
+			<div class="row" id="row-box">
+				{% include 'new/public/left.html' %}
+				<div class="col-sm-11 col-sm-offset-3 col-md-20 col-md-offset-2 main" style="padding: 0px 20px;">
+			
+							<h4 class="page-header h-50" style="margin: 0">镜像仓库</h4>
+					<div class="col-md-12 c-gray pd-n "> Welcome back, <span>{{request.cookies.username}}</span></div>
+					<div class="col-md-12 b-nav bg-white mt-30" >
+						<ol class="breadcrumb bg-white mb-0 pdtb-15">
+						    <li><a href="/index" class="c-gray">Home</a></li>
+						    <li><a href="{{url_for('hyperai.sysmanager.views.show')}}" class="c-gray">系统管理</a></li>
+						    <li class="c-green">镜像仓库</li>
+						</ol>
+					</div>
+
+
+					<div class="col-md-12 mt-30" style="background: #FFFFFF; padding:20px 30px;">
+						<span class="push-btn"  data-toggle="modal" data-target="#pushImg" >上传镜像</span>
+						 <div class="r-box">
+        <input type="search" placeholder="输入需要查找的镜像名称" class="btn_select_i_text f-l c-gray input-info bdr-n bdr-b  form-control" style="width: 600px;border-bottom: 1px solid #ddd;"/>
+        <a href="#" class="f-l btn-3 c-gray c-red-h btn_select_i"><i class="iconfont icon-chazhao fz-24"> </i></a>
+    </div>
+					</div>
+
+
+
+
+
+					<!--提示框-->
+					<div class="static">
+						<div id="myAlert" class="alert col-md-6">
+							<a href="#" class="close" data-dismiss="alert">&times;</a>
+							<strong>成功！</strong>
+						</div>
+					</div>
+
+
+
+					
+					<div class="col-md-12 mt-30 content-list" style="background: #FFFFFF; padding:20px 30px; ">
+						
+						<div class="table-responsive">
+								<table class="table">
+									<thead>
+										<tr>
+
+											<th>镜像名称</th>
+											<th>标签</th>
+											<th>大小</th>
+											<th>镜像id</th>
+											<th>操作</th>
+
+										</tr>
+									</thead>
+									<tbody class="mirror-list">
+										<tr>
+
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td class="img-do">
+												<span class="editor-img"  data-toggle="modal" data-target="#editorImg">
+													<i class="iconfont icon-bianji"></i>
+													<em class="c-green">编辑</em>
+												</span>
+												<span class="push-img" data-container="body" data-toggle="popover" data-placement="right"
+													  data-content="镜像正在push！" data-trigger="click">
+													<i class="iconfont icon-tuisong"></i>
+													<em class="c-green">推送</em>
+												</span>
+												<span class="delete-img" data-toggle="modal" data-target="#deleteProject">
+													<i class="iconfont icon-shanchu"></i>
+													<em class="c-green">删除</em>
+												</span>
+												
+												
+												
+											</td>
+										</tr>
+
+										<tr>
+
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td class="img-do">
+												<span class="editor-img"   data-toggle="modal" data-target="#editorImg" >
+													<i class="iconfont icon-bianji"></i>
+													<em class="c-green">编辑</em>
+												</span>
+												<span class="push-img">
+													<i class="iconfont icon-tuisong"></i>
+													<em class="c-green">推送</em>
+												</span>
+												<span class="delete-img" data-toggle="modal" data-target="#deleteProject">
+													<i class="iconfont icon-shanchu"></i>
+													<em class="c-green">删除</em>
+												</span>
+
+
+
+											</td>
+										</tr>
+										<tr>
+
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td class="img-do">
+												<span class="editor-img"  data-toggle="modal" data-target="#editorImg">
+													<i class="iconfont icon-bianji"></i>
+													<em class="c-green">编辑</em>
+												</span>
+												<span class="push-img">
+													<i class="iconfont icon-tuisong"></i>
+													<em class="c-green">推送</em>
+												</span>
+												<span class="delete-img" data-toggle="modal" data-target="#deleteProject">
+													<i class="iconfont icon-shanchu"></i>
+													<em class="c-green">删除</em>
+												</span>
+
+
+
+											</td>
+										</tr>
+										<tr>
+
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td class="img-do">
+												<span class="editor-img"  data-toggle="modal" data-target="#editorImg">
+													<i class="iconfont icon-bianji"></i>
+													<em class="c-green">编辑</em>
+												</span>
+												<span class="push-img">
+													<i class="iconfont icon-tuisong"></i>
+													<em class="c-green">推送</em>
+												</span>
+												<span class="delete-img" data-toggle="modal" data-target="#deleteProject">
+													<i class="iconfont icon-shanchu"></i>
+													<em class="c-green">删除</em>
+												</span>
+
+
+
+											</td>
+										</tr>
+										<tr>
+
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td class="img-do">
+												<span class="editor-img"  data-toggle="modal" data-target="#editorImg">
+													<i class="iconfont icon-bianji"></i>
+													<em class="c-green">编辑</em>
+												</span>
+												<span class="push-img">
+													<i class="iconfont icon-tuisong"></i>
+													<em class="c-green">推送</em>
+												</span>
+												<span class="delete-img" data-toggle="modal" data-target="#deleteProject">
+													<i class="iconfont icon-shanchu"></i>
+													<em class="c-green">删除</em>
+												</span>
+
+
+
+											</td>
+										</tr>
+										<tr>
+
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td class="img-do">
+												<span class="editor-img"  data-toggle="modal" data-target="#editorImg">
+													<i class="iconfont icon-bianji"></i>
+													<em class="c-green">编辑</em>
+												</span>
+												<span class="push-img">
+													<i class="iconfont icon-tuisong"></i>
+													<em class="c-green">推送</em>
+												</span>
+												<span class="delete-img" data-toggle="modal" data-target="#deleteProject">
+													<i class="iconfont icon-shanchu"></i>
+													<em class="c-green">删除</em>
+												</span>
+
+
+
+											</td>
+										</tr>
+										<tr>
+
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td class="img-do">
+												<span class="editor-img"  data-toggle="modal" data-target="#editorImg">
+													<i class="iconfont icon-bianji"></i>
+													<em class="c-green">编辑</em>
+												</span>
+												<span class="push-img">
+													<i class="iconfont icon-tuisong"></i>
+													<em class="c-green">推送</em>
+												</span>
+												<span class="delete-img" data-toggle="modal" data-target="#deleteProject">
+													<i class="iconfont icon-shanchu"></i>
+													<em class="c-green">删除</em>
+												</span>
+
+
+
+											</td>
+										</tr>
+										<tr>
+
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td class="img-do">
+												<span class="editor-img"  data-toggle="modal" data-target="#editorImg">
+													<i class="iconfont icon-bianji"></i>
+													<em class="c-green">编辑</em>
+												</span>
+												<span class="push-img">
+													<i class="iconfont icon-tuisong"></i>
+													<em class="c-green">推送</em>
+												</span>
+												<span class="delete-img" data-toggle="modal" data-target="#deleteProject">
+													<i class="iconfont icon-shanchu"></i>
+													<em class="c-green">删除</em>
+												</span>
+
+
+
+											</td>
+										</tr>
+										<tr>
+
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td class="img-do">
+												<span class="editor-img"  data-toggle="modal" data-target="#editorImg">
+													<i class="iconfont icon-bianji"></i>
+													<em class="c-green">编辑</em>
+												</span>
+												<span class="push-img">
+													<i class="iconfont icon-tuisong"></i>
+													<em class="c-green">推送</em>
+												</span>
+												<span class="delete-img" data-toggle="modal" data-target="#deleteProject">
+													<i class="iconfont icon-shanchu"></i>
+													<em class="c-green">删除</em>
+												</span>
+
+
+
+											</td>
+										</tr>
+										<tr>
+
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td class="img-do">
+												<span class="editor-img"  data-toggle="modal" data-target="#editorImg">
+													<i class="iconfont icon-bianji"></i>
+													<em class="c-green">编辑</em>
+												</span>
+												<span class="push-img" data-container="body" data-toggle="popover" data-placement="right"
+													  data-content="" data-trigger="hover">
+													<i class="iconfont icon-tuisong"></i>
+													<em class="c-green">推送</em>
+												</span>
+
+
+
+												<span class="delete-img" data-toggle="modal" data-target="#deleteProject">
+													<i class="iconfont icon-shanchu"></i>
+													<em class="c-green">删除</em>
+												</span>
+
+
+
+											</td>
+										</tr>
+
+
+
+
+									</tbody>
+								</table>
+						</div>
+
+						<div class="w-100 page_box f-l" style="margin-top: 40px;">
+							<div id="page">
+
+							</div>
+						</div>
+					</div>
+						
+			
+				</div>
+
+				<div class="col-sm-11 col-sm-offset-3 col-md-20 col-md-offset-2 main nav-bottom bg-white">Copyright © 2017
+					<a href="#">中科弘云科技(北京)有限公司,</a> All rights reserved.</div>
+
+				<div class="load-box2">
+					<content></content>
+				</div>
+			</div>
+		</div>
+
+	{% include 'new/public/script.html'%}
+	<script src="{{url_for('static', filename='advance/js/paging.js')}}" type="text/javascript" charset="utf-8"></script>
+	<script src="{{url_for('static', filename='advance/js/load-img.js')}}" type="text/javascript" charset="utf-8"></script>
+	
+
+	<script>
+        $(function () {
+            $("[data-toggle='popover']").popover();
+        });
+
+
+        // var flag
+        // socket.on('load img',function (msg) {
+        //     console.log('++++++socket.io connecting+++++',msg)
+        //     $('.load-box1 content').html(msg.data)
+        //     flag = msg.task
+		//
+        // })
+		//
+        // // 推送镜像
+        // socket.on('push img',function (msg) {
+        //     console.log('-----push img------',msg)
+        //     $('.load-box2 content').html(msg.data )
+        //     // if($('.load-box2 content').html() == '镜像push成功！'){
+        //     //     $('.load-box2').hide()
+        //     // }
+		//
+        // })
+        // $('body').on('click',function () {
+        //     if(flag == 'success'){
+        //         console.log('---body---')
+        //         var timer = setTimeout(function () {
+        //             $('.load-box1').hide()
+        //             clearTimeout(timer)
+        //         },5000)
+        //     }
+        //     if($('.load-box2 content').html() == '镜像push成功！'){
+        //         $('.load-box2').hide()
+        //     }
+        // })
+
+	</script>
+	</body>
+
+</html>

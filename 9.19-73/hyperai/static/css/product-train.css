@@ -1,0 +1,91 @@
+.w-70{width: 70%;}
+.w-6{width: 6%;}
+.w-84{width: 84%;}
+.h-40{height: 40px;}
+.h-20{height: 20px;}
+.h-100{height: 100%;}
+.gcpu_name_mg{margin: 20px 0;}
+.w-100vw{width: 100vw;}
+.h-100vh{height: 100vh;}
+.font-w{font-weight: bold;}
+.line-h40{line-height: 40px;}
+.line-h20{line-height: 20px;}
+.bx-sz{box-sizing: border-box;}
+.mr-r-10{margin-right: 10px}
+.text_indent10{text-indent: 10px}
+.product-select {
+    display: inline-block;
+    position: relative;
+    top: 0;
+    left: 0;
+    height: 40px;
+    line-height: 40px;
+}
+.input-info-product {
+    display: inline-block;
+    height: 40px;
+    line-height: 40px;
+    font-family: "宋体";
+    font-size: 12px;
+    font-weight: 200;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    /*padding: 0 5px;*/
+}
+.product-alert,.product-end{position: absolute;
+    z-index: 99999;
+    background-color: rgba(0, 0, 0, .6);
+}
+.product-alert-content,.product-end-content{width: 450px;
+    height: 200px;
+    background: white;
+    margin: 0 auto;
+    margin-top: 100px;
+    position: relative;
+}
+.product-alert-btn-box,.product-end-btn-box{width: 100%;
+    height: 50px;
+    position: absolute;
+    bottom: 10px;
+}
+.product-end-length-box{margin: 0 auto;}
+.product-end-length{width: 0%;
+    background-color: #00b5b8;
+}
+.btn-8-product{
+    isplay: inline-block;
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    padding: 0 40px;
+    font-family: "微软雅黑";
+    font-size: 16px;
+    font-weight: 300;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.upload-file{
+    display: inline-block;
+    padding: 0;
+    height: 40px;
+    line-height: 40px;
+    position: relative;
+    cursor: pointer;
+    font-family: "宋体";
+    font-size: 14px;
+    font-weight: 200;
+    overflow: hidden;
+    /*border: 1px solid #999;*/
+    width: 8rem;
+    text-align: center;
+    /*border-radius: 5px;*/
+    color: #FFFFFF;
+    background-color: #FF6376;
+}
+.upload-file:hover{
+    background-color: #00B5B8;
+}
+.model-select-content dl,.model-select-content dd{height: 40px;line-height: 40px;}

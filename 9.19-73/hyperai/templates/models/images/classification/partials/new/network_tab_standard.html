@@ -1,0 +1,52 @@
+{# Copyright (c) 2016-2017, NVIDIA CORPORATION.  All rights reserved. #}
+<ul class="nav nav-tabs" id="stdnetRole">
+    {% for fw in frameworks %}
+    <li id="{{ fw.get_id() }}"><a href="#{{ fw.get_id() }}_standard" data-toggle="tab">{{ fw.get_name() }}</a></li>
+    {% endfor %}
+</ul>
+<div id="network-tab-standard-contents" class="tab-pane active">
+    <script>
+        $('#stdnetRole li').first().addClass("active");
+        $('#stdnetRole li').on('click', function(e) {
+             $(this).addClass('active');
+             $(this).siblings().removeClass('active');
+//             setFramework($(this).attr('id'));
+        });
+    </script>
+    <table class="table standard_networks-i">
+        <!--<tr>-->
+            <!--<th>Network</th>-->
+            <!--<th>Details</th>-->
+            <!--<th>Intended image size</th>-->
+            <!--<th></th>-->
+        <!--</tr>-->
+        {% for network in form.standard_networks %}
+        <tr>
+            <td style="text-align: left;height: 40px;line-height: 40px;">{{ network }} {{ network.label }}</td>
+            {% if network.data == 'lenet' %}
+            <td style="height: 40px;line-height: 40px;">图片尺寸：28x28 (gray)</td>
+            {% elif network.data == 'alexnet' %}
+            <td style="height: 40px;line-height: 40px;">图片尺寸：256x256</td>
+            {% elif network.data == 'vgg-16' %}
+            <td style="height: 40px;line-height: 40px;">图片尺寸：224x224</td>
+            {% elif network.data == 'googlenet' %}
+            <td style="height: 40px;line-height: 40px;">图片尺寸：224x224</td>
+            {% elif network.data == 'resnet101' %}
+            <td style="height: 40px;line-height: 40px;">图片尺寸：224x224</td>
+            {% elif network.data == 'resnet152' %}
+            <td style="height: 40px;line-height: 40px;">图片尺寸：224x224</td>
+            {% elif network.data == 'resnet50' %}
+            <td style="height: 40px;line-height: 40px;">图片尺寸：224x224</td>
+            {% elif network.data == 'squeezenet' %}
+            <td style="height: 40px;line-height: 40px;">图片尺寸：224x224</td>
+            {% elif network.data == 'inception' %}
+           <td style="height: 40px;line-height: 40px;">图片尺寸：224x224</td>
+            {% else %}
+            <td></td><td>?</td>
+            {% endif %}
+            <!--<td><a class="btn btn-sm" onClick="customizeNetwork('{{network.data}}');">Customize</a></td>-->
+            <td style="height: 40px;line-height: 40px;"><a class="btn btn-sm" style="cursor: pointer" onClick="">Customize</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>

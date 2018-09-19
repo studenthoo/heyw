@@ -1,0 +1,119 @@
+{% extends 'job1.html' %}
+{% from "helper.html" import print_flashes, print_exception,serve_file%}
+
+{% block topfile %}
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/bitbug_favicon.ico') }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/ZK_last4/public.css') }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/ZK_last4/sub.css') }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/ZK_last4/iconfont.css') }}"/>
+    <!--<link rel="stylesheet" type="text/css" href="plugins/iCheck/skins/minimal/grey.css" />-->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/ZK_last4/calendar.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='c3/c3.css') }}"/>
+
+
+
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-1.7.2.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/Feffects.js') }}"></script>
+
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jq-datepicker.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.nicescroll.js') }}"></script>
+
+    <script type="text/javascript" src="{{ url_for('static', filename='js/CustomScrollbar.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jqmeter.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/public.js') }}"></script>
+
+{% endblock topfile %}
+
+
+{% block rightcontent %}
+
+
+    <div class="f-l title">
+        <h1 class="f-l c-grayblue"> 数据管理 </h1>
+        <span class="f-l c-gray"> Welcome back,{{request.cookies.username}} </span>
+    </div>
+
+    <div class="f-l sub-title bgc-white">
+        <a href="{{ url_for('hyperai.views.index') }}" class="f-l c-gray c-aqua-h"><span class="f-l"> Home   </span><em class="f-l c-gray"> / </em></a>
+        <a href="{{ url_for('hyperai.views.datasets') }}" class="f-l c-gray c-aqua-h"><span class="f-l"> 数据管理 </span><em class="f-l c-gray"> / </em></a>
+        <a href="#" class="f-l c-gray c-aqua-h"><span class="f-l"> 数据集预览 </span><em class="f-l c-gray"> / </em></a>
+    </div>
+
+    <div class="f-l lis-m bgc-white">
+        <div class="c-box">
+            <div class="l-box w-48">
+                <div class="div-box">
+                    <a href="{{ url_for('hyperai.views.datasets') }}" class="f-l btn-9 bdr bgc-white c-grayblue c-aqua-h"><i class="fz-14 iconfont ">
+                        &#xe6c5; </i> 返回 </a>
+                    <em class="f-l bgc-gray-c"></em>
+                    <img src="{{ url_for('static', filename='images/pic/h-1.png') }}" class="f-l"/>
+                </div>
+            </div>
+
+            <div class="r-box w-50">
+                <div class="div-box">
+                    <div class="c-box m-t30">
+                        <h2 class="f-l"> {{job.name()}}</h2>
+                    </div>
+                    <div class="c-box">
+                        <div class="l-box w-35"><h2 class="f-l c-gray"><i class="f-l fz-18 iconfont "> &#xe669; </i>
+                            发布者: </h2><span class="f-l c-gray"> {{job.username}}    </span></div>
+                        <div class="r-box w-35"><h2 class="f-l c-gray"><i class="f-l fz-18 iconfont "> &#xe60d; </i>
+                            发布时间: </h2><span class="f-l c-gray"> {{job.create_time}}  </span></div>
+                    </div>
+                    <div class="c-box">
+                        <div class="l-box w-35"><h2 class="f-l c-gray"><i class="f-l fz-18 iconfont "> &#xe72a; </i>
+                            应用场景: </h2><span class="f-l c-gray"> 其它 </span></div>
+                        <div class="r-box w-35"><h2 class="f-l c-gray"><i class="f-l fz-18 iconfont "> &#xe623; </i>
+                            数据库类型: </h2><span class="f-l c-gray"> {{job.get_backend()}} </span></div>
+                    </div>
+                    <div class="c-box">
+                        <div class="l-box w-35"><h2 class="f-l c-gray"><i class="f-l fz-20 iconfont "> &#xe66b; </i>
+                            数据个数： </h2><span class="f-l c-gray data_num11">       </span></div>
+                    </div>
+                    <div class="c-box">
+                        <p class="f-l p-text c-gray Scrollbars">
+                            {{job.desc}}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="c-box m-t15">
+            <div class="f-l preview-dataset-meter">
+                 <div class="length_i"></div>
+                <style>
+                    .length_i{height: 40px;
+                            float: left;
+                            width: 0;
+                            background: #00b5b8;
+                            line-height: 40px;
+                        text-align: center;
+                    }
+                </style>
+                <div class="length_YN" style="display: none">{{job.status}}</div>
+            </div>
+        </div>
+    </div>
+{% if job.analyze_db_tasks()%}
+ {% for task in job.analyze_db_tasks()%}
+ {% if task.image_count %}
+<div class="num_all_i2" style="display: none;"> {{ task.image_count }}</div>
+
+{%endif%}
+{%endfor%}
+{%endif%}
+
+{% endblock rightcontent %}
+<!---------------->
+
+{% block bottomfile %}
+<script>
+    $('.data_num11').html($('.num_all_i2').text()+'个')
+</script>
+
+    <script type="text/javascript" src="{{ url_for('static', filename='c3/d3.v3.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='c3/c3.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/data-dataPreview_c3.js') }}"></script>
+{% endblock bottomfile %}

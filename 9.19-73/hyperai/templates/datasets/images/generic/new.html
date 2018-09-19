@@ -1,0 +1,101 @@
+{% from "helper.html" import print_flashes %}
+{% from "helper.html" import print_errors %}
+{% from "helper.html" import mark_errors %}
+
+{% extends 'new/public.html' %}
+
+{% block topfile %}
+    <link rel="shortcut icon" href="{{url_for('static', filename='images/bitbug_favicon.ico')}}" />
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/public.css')}}" />
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/sub.css')}}" />
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/iconfont.css')}}" />
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='plugins/iCheck/skins/minimal/grey.css')}}" />
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/calendar.css')}}" />
+
+<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/style.css')}}"/>
+
+    <script type="text/javascript" src="{{url_for('static', filename='js/jquery-1.7.2.js')}}"></script>
+    <script type="text/javascript" src="{{url_for('static', filename='js/Feffects.js')}}"></script>
+    <script type="text/javascript" src="{{url_for('static', filename='plugins/iCheck/icheck.min.js')}}"></script>
+    <script type="text/javascript" src="{{url_for('static', filename='js/jq-datepicker.js')}}"></script>
+    <script type="text/javascript" src="{{url_for('static', filename='js/jquery.nicescroll.js')}}"></script>
+    <script type="text/javascript" src="{{url_for('static', filename='js/echarts.min.js')}}"></script>
+    <script type="text/javascript" src="{{url_for('static', filename='js/public.js')}}"></script>
+
+<script src="{{ url_for('static', filename='js/3rdparty/underscore-1.8.3.min.js', ver=dir_hash) }}" type="text/javascript" charset="utf-8"></script>
+
+     {% endblock topfile %}
+
+{% block rightcontent %}
+
+            <div class="f-l title">
+            	<h1 class="f-l c-grayblue"> 数据管理 </h1>
+            	<span class="f-l c-gray"> Welcome back, {{request.cookies.username}} </span>
+            </div>
+
+			      <div class="f-l sub-title bgc-white">
+			      	<a href="{{ url_for('hyperai.views.index') }}" class="f-l c-gray c-aqua-h"><span class="f-l"> Home   </span><em class="f-l c-gray"> / </em></a>
+			      	<a href="{{ url_for('hyperai.views.datasets') }}" class="f-l c-gray c-aqua-h"><span class="f-l"> 数据管理 </span><em class="f-l c-gray"> / </em></a>
+			      	<a href="#" class="f-l c-gray c-aqua-h"><span class="f-l"> 其他 </span><em class="f-l c-gray"> / </em></a>
+			      </div>
+
+            <div class="f-l title bgc-white">
+            	<h3 class="f-l c-grayblue"> 新建其他类型数据集  </h3>
+            </div>
+
+            <div class="f-l lis-l bgc-white">
+
+	            <div class="f-l title bgc-white">
+	            	<h2 class="f-l c-grayblue"> 数据集属性  </h2>
+	            </div>
+
+	            <div class="f-l lis-l-a bdr">
+	            	<span class="f-l btn-1 bgc-Aqua c-white"> 图像文件 </span>
+	              <h2 class="f-l c-red"> 该方式仅适合于使用已创建的LMDB </h2>
+
+	              <form action="{{url_for('hyperai.dataset.images.generic.views.create')}}" enctype="multipart/form-data"
+          method="post">
+					  {{ form.hidden_tag()}}
+        {{ print_errors(form)}}
+	              <div class="c-box m-t15">
+	              	<h3 class="f-l c-grayblue"> 数据集名称 </h3>{{ form.dataset_name(class='f-l input-info bdr w-50 dataset-name') }}
+	              </div>
+	              <div class="c-box m-t15">
+	              	<h3 class="f-l c-grayblue"> 概述 </h3>
+					  {{form.dataset_desc(class='f-l input-info bdr c-gray w-50 input-intro')}}
+	              </div>
+	              <div class="c-box m-t15"><hr /></div>
+	              <div class="c-box m-t15">
+	              	<h3 class="f-l c-grayblue"> 训练图像LMDB </h3>{{ form.prebuilt_train_images(class='f-l input-info bdr w-50 autocomplete_path') }}
+	              </div>
+	              <div class="c-box m-t15">
+	              	<h3 class="f-l c-grayblue"> 训练标签LMDB </h3>{{ form.prebuilt_train_labels(class='f-l input-info bdr w-50 autocomplete_path') }}
+	              </div>
+	              <div class="c-box m-t15">
+	              	<h3 class="f-l c-grayblue"> 验证图像LMDB </h3>{{ form.prebuilt_val_images(class='f-l input-info  bdr w-50 autocomplete_path') }}
+	              </div>
+	              <div class="c-box m-t15">
+	                <h3 class="f-l c-grayblue"> 验证标签LMDB </h3>{{ form.prebuilt_val_labels(class='f-l input-info bdr w-50 autocomplete_path') }}
+	              </div>
+	              <div class="c-box m-t15">
+	              	<h3 class="f-l c-grayblue"> 强制相同形状 </h3>
+					 				<div class="f-l w-52 div-select">
+					 				<div class="f-l select-box sub-select">
+										 {{ form.force_same_shape(class='f-l select-box bdr sub-select') }}
+									</div>
+									</div>
+	              </div>
+	              <div class="c-box m-t15">
+	              	 <h3 class="f-l c-grayblue"> Mean 图像 </h3> {{ form.prebuilt_mean_file(class='f-l input-info bdr w-50 autocomplete_path') }}
+	              </div>
+	              <div class="c-box m-t15">
+	                <h3 class="f-l c-grayblue"> 组名 </h3>{{ form.group_name(class='f-l input-info bdr w-50') }}
+	              </div>
+
+	            </div>
+	            <input class="f-l btn-8 m-t15 m-r15 c-grayblue bgc-red-h c-white-h bgc-gray-b sbmit" type="reset" name="" id="" value="取消" style="width: 130px;outline: none;border:none" />
+
+ <input class="f-l btn-8 m-t15 m-r15 c-white bgc-Aqua bgc-red-h sbmit" type="submit" name="" id="" value="提交" style="width: 130px;outline: none;border:none"/>
+            </div>
+</form>
+	      {% endblock rightcontent%}

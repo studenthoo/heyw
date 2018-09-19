@@ -1,0 +1,54 @@
+{# Copyright (c) 2016-2017, NVIDIA CORPORATION.  All rights reserved. #}
+
+{% from "helper.html" import print_flashes %}
+{% from "helper.html" import print_errors %}
+{% from "helper.html" import mark_errors %}
+
+<div class="row">
+    
+    <style>
+        #custom-inference-form{
+            float: left;
+            width: 100%;
+            background: white;
+            padding:0 20px;
+        }
+        .col-sm-6 textarea{width: 85%;
+            height: 220px;
+        }
+        .col-sm-6 label{
+            float: left;}
+        .model_scene_4 .btn-primary{
+            border-radius: 0!important;
+            background: #00b5b8;
+            color: white;
+            outline: none;
+            border: none;
+        }
+        .model_scene_4 .btn-primary:hover{background: #ff6376}
+
+    </style>
+    <script>
+        console.log($('.model_scene_4 button'))
+    </script>
+    <div class="col-sm-6 f-l" style="width: 52%">
+        <h3 style="padding: 10px 0;">Test a snippet</h3>
+        <div class="form-group">
+            <div class="form-group">
+                {{ form.snippet.label }}
+                {{ form.snippet.tooltip }}
+                {{ form.snippet(class='form-control', placeholder='text snippet') }}
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 f-l" style="width: 40%">
+        <h3 style="padding: 10px 0;">Test a data file</h3>
+        <div class="form-group">
+            <div class="form-group">
+                {{ form.test_data_file.label }}
+                {{ form.test_data_file.tooltip }}
+                {{ form.test_data_file(class='form-control autocomplete_path', placeholder='.csv file') }}
+            </div>
+        </div>
+    </div>
+</div>

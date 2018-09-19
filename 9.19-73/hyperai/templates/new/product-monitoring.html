@@ -1,0 +1,471 @@
+{% extends 'job4.html' %}
+{% block topfile %}
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/bitbug_favicon.ico') }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/ZK_last11/public.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/ZK_last11/sub.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/ZK_last11/iconfont.css') }}" />
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/product-monitoring.css') }}" />
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/c3.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/ZK_last11/calendar.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/modetrain_a.css') }}" />
+	<!--<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/load_style.css') }}" />-->
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-1.7.2.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/d3.v3.min.js') }}" ></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/c3.min..js') }}" ></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/Feffects.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/CustomScrollbar.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.nicescroll.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jqmeter.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/public.js') }}"></script>
+	<!--<script type="text/javascript" src="{{ url_for('static', filename='js/load_index.js') }}"></script>-->
+
+{% endblock topfile%}
+
+{% block rightcontent %}
+<style>
+	.right-bottom{
+		margin-top: 150px;
+	}
+	/*.load_box{*/
+		/*position: fixed;*/
+		/*width: 100vw;*/
+		/*height: 100vh;*/
+		/*background: #161616;*/
+		/*z-index: 9999;*/
+		/*left: 200px;*/
+		/*top: 65px;*/
+	/*}*/
+	/*#ajaxloader3{margin-right: 200px;*/
+		/*margin-top: 10%;*/
+	/*}*/
+	/*.load_txt{line-height: 40px;*/
+		/*text-align: center;*/
+		/*color: white;*/
+		/*font-size: 18px;*/
+		/*font-weight: bold;*/
+		/*margin-right: 200px;*/
+	/*}*/
+</style>
+<!--<div class="load_box">-->
+	<!--<div id="ajaxloader3">-->
+		<!--<div class="outer" style="width: 60px;height: 60px;"></div>-->
+		<!--<div class="inner" style="width: 40px;height: 40px;"></div>-->
+	<!--</div>-->
+	<!--<div class="load_txt">-->
+		<!--加载中...-->
+	<!--</div>-->
+<!--</div>-->
+<!--<script>-->
+	<!--setTimeout(function () {-->
+		<!--$('.load_box').css('display','none')-->
+	<!--},3000)-->
+<!--</script>-->
+	            <div class="f-l title">
+	            	<h1 class="f-l c-grayblue"> 模型产品 </h1>  
+	            	<span class="f-l c-gray"> Welcome back {{request.cookies.username}}</span>
+	            </div>
+				<div class="f-l sub-title bgc-white">
+				      	<a href="{{url_for('hyperai.views.index')}}" class="f-l c-gray c-aqua-h"><span class="f-l"> Home</span><em class="f-l c-gray"> / </em></a>
+				      	<a href="{{url_for('hyperai.ration.views.show')}}" class="f-l c-gray c-aqua-h"><span class="f-l"> 模型产品</span><em class="f-l c-gray"> / </em></a>
+				      	
+				      	<a href="#" class="f-l c-gray c-aqua-h"><span class="f-l"> {{job.name}}</span><em class="f-l c-gray"> / </em></a>
+				</div>
+<!--api信息-->
+				<div class="f-l lis-g bgc-white">
+					<div class="title">
+						<div class="l-box">
+							<h2 class="f-l c-grayblue"><i class="f-l iconfont fz-38 pr-5 m-t5 c-aqua"> &#xe625; </i> 应用名称： <strong>
+								{{job.name}} </strong></h2>
+						</div>
+					</div>
+
+					<div class="f-l c-box bdr m-t15">
+						<dl class="f-l">
+							<dt class="f-l w-10 bdr-l c-grayblue bgc-gray-c"></dt>
+							<dt class="f-l w-90 bdr-l c-grayblue"> 基本信息</dt>
+						</dl>
+						<dl class="f-l bdr-t">
+							<dd class="f-l w-10 bdr-l c-grayblue bgc-gray-c"> 用户名</dd>
+							<dd class="f-l w-10 bdr-l c-gray"> {{job.username}}</dd>
+							<dd class="f-l w-10 bdr-l c-grayblue bgc-gray-c"> 创建时间</dd>
+							<dd class="f-l w-20 bdr-l c-gray"> {{job.create_time}}</dd>
+							<dd class="f-l w-10 bdr-l c-grayblue bgc-gray-c"> API地址：</dd>
+							<!--<dd class="f-l w-30 bdr-l c-gray"> {%if job.api%}{{job.api}}{%else%}None{%endif%}</dd>-->
+							<dd class="f-l w-30 bdr-l c-gray"> {%if job.select_scence=='classification' and job.scene=='classification'%}{{job.api}}{%else%}None{%endif%}</dd>
+
+						</dl>
+						<dl class="f-l bdr-t">
+							<dd class="f-l w-10 bdr-l c-grayblue bgc-gray-c"> 应用场景</dd>
+							<dd class="f-l w-10 bdr-l c-gray"> {{job.select_scence}}</dd>
+							<dd class="f-l w-10 bdr-l c-grayblue bgc-gray-c"> 优化引擎</dd>
+							<dd class="f-l w-20 bdr-l c-gray">{{job.optimization_engine}}</dd>
+							<dd class="f-l w-10 bdr-l c-grayblue bgc-gray-c"> 服务地址</dd>
+							<!--<dd class="f-l w-30 bdr-l c-gray"><a href="{%if job.api_url%}{{job.api_url}}{%else%}None{%endif%}" class="c-gray" target="_blank">{%if job.api_url%}{{job.api_url}}{%else%}None{%endif%}</a> </dd>-->
+							<dd class="f-l w-30 bdr-l c-gray"><a href="http://{{hyperai_ip}}:{{hyperai_port}}{{url_for('hyperai.ration.views.infer',job_id=job.id())}}" class="c-gray" target="_blank">http://{{hyperai_ip}}:{{hyperai_port}}{{url_for('hyperai.ration.views.infer',job_id=job.id())}}</a> </dd>
+						</dl>
+						<dl class="f-l bdr-t">
+							<dd class="f-l w-10 bdr-l c-grayblue bgc-gray-c"> API调用次数</dd>
+							<dd class="f-l w-10 bdr-l c-gray"> {{job.count_success+job.count_fail}}</dd>
+							<dd class="f-l w-10 bdr-l c-grayblue bgc-gray-c">  API调用成功次数</dd>
+							<dd class="f-l w-20 bdr-l c-gray">{{job.count_success}}</dd>
+							<dd class="f-l w-10 bdr-l c-grayblue bgc-gray-c">  API调用失败次数</dd>
+							<!--<dd class="f-l w-30 bdr-l c-gray"><a href="{%if job.api_url%}{{job.api_url}}{%else%}None{%endif%}" class="c-gray" target="_blank">{%if job.api_url%}{{job.api_url}}{%else%}None{%endif%}</a> </dd>-->
+							<dd class="f-l w-30 bdr-l c-gray">{{job.count_fail}}</dd>
+						</dl>
+					</div>
+				</div>
+				{% if job.resources_deployment == '弹性伸缩模式' %}
+				<div class="f-l title source-title">
+					<h1 class="f-l c-grayblue"> 资源均值 </h1>
+				</div>
+				<style>
+					.round_all{
+						height: 300px;
+						margin: 0 auto;
+					}
+					.round_all .round_i{
+						box-sizing: border-box;
+						width: 25%;
+						float: left;
+						height: 100%;
+
+					}
+					.round_i .round_box{
+						box-sizing: border-box;
+						width: 40%;
+						margin: 0 auto;
+						height: 200px;
+
+					}
+					@media screen and (max-width: 1400px){
+						.round_i .round_box{
+							width: 70%;
+						}
+					}
+				</style>
+				<div class="f-l lis-ad bgc-white round_all">
+					<div class="round_i">
+						<div class="round_i_nav ">CPU</div>
+						<div id="round_1" class="round_box"></div>
+					</div>
+					<div class="round_i">
+						<div class="round_i_nav">GPU</div>
+						<div id="round_2" class="round_box"></div>
+					</div>
+					<div class="round_i">
+						<div class="round_i_nav">内存</div>
+						<div id="round_3" class="round_box"></div>
+					</div>
+					<div class="round_i">
+						<div class="round_i_nav">显存</div>
+						<div id="round_4" class="round_box"></div>
+					</div>
+				</div>
+				{% endif %}
+	            <div class="f-l title">
+	            	<h1 class="f-l c-grayblue"> 资源监控 </h1>
+	            </div>
+				<div class="f-l lis-ad bgc-white ">
+					<div class="l-box">
+            			<h2 class="f-l c-grayblue" style="font-size: 18px;"><i class="f-l iconfont fz-38 pr-5 m-t5 c-aqua"> &#xe632; </i> 资源使用监控：</h2>
+            	  	</div>
+            	  					<!--r容器1-->
+				<!--clone-框架+容器-->
+					<style>
+						.w-25{width: 25%}
+						.w-15{width: 15%}
+						@font-face {font-family: "iconfont";
+							src: url('iconfont.eot?t=1529980529900'); /* IE9*/
+							src: url('iconfont.eot?t=1529980529900#iefix') format('embedded-opentype'), /* IE6-IE8 */
+							url('data:application/x-font-woff;charset=utf-8;base64,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') format('woff'),
+							url('iconfont.ttf?t=1529980529900') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
+							url('iconfont.svg?t=1529980529900#iconfont') format('svg'); /* iOS 4.1- */
+						}
+
+						.iconfont {
+							font-family:"iconfont" !important;
+							font-style:normal;
+							-webkit-font-smoothing: antialiased;
+							-moz-osx-font-smoothing: grayscale;
+						}
+
+						.icon-wangluo:before { content: "\e66d"; }
+
+						.icon-IO:before { content: "\e74b"; }
+
+						.icon-wenduji:before { content: "\e67d"; }
+
+
+
+					</style>
+					<div class="resource-all">
+						<div class="table-tr bdr-t gpu_cpu_all resource-parent" style="display: none;height: 100%;">
+							<div class="bdr-l table-td w-5">
+								<div class="sub-table">
+									<div class="sub-table-tr-i1">
+										<div class="sub-table-td bdr-b ta-c h-70"> 容器  </div>
+									</div>
+								</div>
+							</div>
+
+						</div>
+						<!--clone&#45;&#45;卡-->
+						<div class="bdr-l table-td w-95  resource-children" style="display: none;float: right;">
+							<!--name-->
+							<div class="bdr-l table-td w-25">
+								<div class="sub-table sub-table-ka1">
+									<div class="sub-table-tr-i1">
+										<div class="sub-table-td bdr-b ta-c h-70 sub-table-ka1-name"> 卡  </div>
+									</div>
+								</div>
+							</div>
+							<!--GPU**************************************-->
+							<div class="bdr-l table-td w-10">
+								<div class="sub-table sub-table-ka1">
+									<div class="sub-table-tr-i1">
+										<div class="sub-table-td bdr-b ta-l h-70"><i class="f-l iconfont fz-36 pr-5 c-orange"> &#xe62a; </i> GPU </div>
+									</div>
+								</div>
+							</div>
+							<div class="bdr-l table-td w-15">
+								<div class="sub-table sub-table-ka1">
+									<div class="sub-table-tr-i1">
+										<div class="sub-table-td bdr-b h-70">
+											<div class="f-l m-t5 cpu-meter">
+												<div class="threm cpu-threm">
+													<div class="length_i length_i_g">
+
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!--CPU*9***************************************-->
+							<div class="bdr-l table-td w-10">
+								<div class="sub-table sub-table-ka1">
+									<div class="sub-table-tr-i1">
+										<div class="sub-table-td bdr-b ta-l h-70"><i class="f-l iconfont fz-30 pr-5 c-green"> &#xe670; </i> 显存 </div>
+									</div>
+								</div>
+							</div>
+							<div class="bdr-l table-td w-15">
+								<div class="sub-table sub-table-ka1">
+									<div class="sub-table-tr-i1">
+										<div class="sub-table-td bdr-b h-70">
+											<div class="f-l m-t5 gpu-meter">
+												<div class="threm gpu-threm">
+													<div class="length_i length_i_gm">
+
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!--温度 temperature************************************-->
+							<div class="bdr-l table-td w-10">
+								<div class="sub-table sub-table-ka1">
+									<div class="sub-table-tr-i1">
+
+										<div class="sub-table-td bdr-b ta-l h-70"><i class="f-l iconfont fz-30 pr-5 c-green icon-wenduji"> </i> 温度 </div>
+									</div>
+								</div>
+							</div>
+							<div class="bdr-l table-td w-15">
+								<div class="sub-table sub-table-ka1">
+									<div class="sub-table-tr-i1">
+										<div class="sub-table-td bdr-b h-70">
+											<div class="f-l m-t5 gpu-meter">
+												<div class="threm gpu-threm">
+													<div class="length_i_t length_i">
+
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+
+							<!--新加-->
+							<!--CPU-->
+							<!--<div class="bdr-l table-td w-10 h-70">-->
+
+							<!--</div>-->
+							<!--<div class="table-td w-15 h-70">-->
+
+							<!--</div>-->
+							<!--<div class="bdr-l table-td w-10">-->
+								<!--<div class="sub-table sub-table-ka1">-->
+									<!--<div class="sub-table-tr-i1">-->
+										<!--<div class="sub-table-td bdr-b ta-l h-70"><i class="f-l iconfont fz-36 pr-5 c-orange"> &#xe688; </i> CPU </div>-->
+										<!--&lt;!&ndash;<div class="sub-table-td bdr-b ta-l h-70"><i class="f-l iconfont fz-30 pr-5 c-green icon-IO"></i> 磁盘IO </div>&ndash;&gt;-->
+
+									<!--</div>-->
+								<!--</div>-->
+							<!--</div>-->
+							<!--<div class="bdr-l table-td w-15">-->
+								<!--<div class="sub-table sub-table-ka1">-->
+									<!--<div class="sub-table-tr-i1">-->
+										<!--<div class="sub-table-td bdr-b h-70">-->
+											<!--<div class="f-l m-t5 gpu-meter">-->
+												<!--<div class="threm gpu-threm">-->
+													<!--<div class="length_i_t length_i">-->
+
+													<!--</div>-->
+												<!--</div>-->
+											<!--</div>-->
+										<!--</div>-->
+									<!--</div>-->
+								<!--</div>-->
+							<!--</div>-->
+							<!--&lt;!&ndash;内存**************************************&ndash;&gt;-->
+							<!--<div class="bdr-l table-td w-10">-->
+								<!--<div class="sub-table sub-table-ka1">-->
+									<!--<div class="sub-table-tr-i1">-->
+										<!--<div class="sub-table-td bdr-b ta-l h-70"><i class="f-l iconfont fz-30 pr-5 c-green"> &#xe616; </i> 内存 </div>-->
+										<!--&lt;!&ndash;<div class="sub-table-td bdr-b ta-l h-70"><i class="f-l iconfont fz-36 pr-5 c-orange"> &#xe688; </i> CPU </div>&ndash;&gt;-->
+									<!--</div>-->
+								<!--</div>-->
+							<!--</div>-->
+							<!--<div class="bdr-l table-td w-15">-->
+								<!--<div class="sub-table sub-table-ka1">-->
+									<!--<div class="sub-table-tr-i1">-->
+										<!--<div class="sub-table-td bdr-b h-70">-->
+											<!--<div class="f-l m-t5 cpu-meter">-->
+												<!--<div class="threm cpu-threm">-->
+													<!--<div class="length_i length_i_g">-->
+
+													<!--</div>-->
+												<!--</div>-->
+											<!--</div>-->
+										<!--</div>-->
+									<!--</div>-->
+								<!--</div>-->
+							<!--</div>-->
+							<!--&lt;!&ndash;网络1*9***************************************&ndash;&gt;-->
+							<!--<div class="bdr-l table-td w-10">-->
+								<!--<div class="sub-table sub-table-ka1">-->
+									<!--<div class="sub-table-tr-i1">-->
+										<!--<div class="sub-table-td bdr-b ta-l h-70"><i class="f-l iconfont fz-30 pr-5 c-green icon-wangluo"></i> 网络 </div>-->
+										<!--&lt;!&ndash;<div class="sub-table-td bdr-b ta-l h-70"><i class="f-l iconfont fz-30 pr-5 c-green"> &#xe616; </i> 内存 </div>&ndash;&gt;-->
+									<!--</div>-->
+								<!--</div>-->
+							<!--</div>-->
+							<!--<div class="bdr-l table-td w-15">-->
+								<!--<div class="sub-table sub-table-ka1">-->
+									<!--<div class="sub-table-tr-i1">-->
+										<!--<div class="sub-table-td bdr-b h-70">-->
+											<!--<div class="f-l m-t5 gpu-meter">-->
+												<!--<div class="threm gpu-threm">-->
+													<!--<div class="length_i length_i_gm">-->
+
+													<!--</div>-->
+												<!--</div>-->
+											<!--</div>-->
+										<!--</div>-->
+									<!--</div>-->
+								<!--</div>-->
+							<!--</div>-->
+							<!--网络************************************-->
+
+
+
+						</div>
+					</div>
+				<div class="f-l c-box m-t15">
+					<div class="table bdr">
+						<div class="table-tr bgc-gray" style="height: 100%">
+							<div class="table-th w-5 f-l">容器</div>
+							<div class="table-th w-95">
+								<div class="table-th w-25 f-l">显卡</div>
+								<div class="table-th w-10 f-l" style="height: 50px"> </div>
+								<div class="table-th w-15 f-l">使用率</div>
+								<div class="table-th w-10 f-l" style="height: 50px"> </div>
+								<div class="table-th w-15 f-l">使用率</div>
+								<div class="table-th w-10 f-l" style="height: 50px"> </div>
+								<div class="table-th w-15 f-l">温度</div>
+							</div>
+
+						</div>
+						<div class="table-tr bgc-gray  resource-content">
+						</div>
+					</div>
+				</div>
+				</div>
+
+
+<script>
+
+	 var bing=function(a,b){
+	 	var chart = c3.generate({
+	 		bindto:a,
+	 		data: {
+	 			columns:b,
+	 			type: 'pie'
+	 		},
+	 		pie: {
+	 			label: {
+	 				// format: function (value, ratio, id) {
+	 				// 	return d3.format('0.00%')(ratio);
+	 				// }
+	 			}
+	 		},
+	 		color: {
+	 			pattern: ['#FF6376','#00b5b8']
+	 		}
+	 	});
+	 }
+     {% if job.cpu %}
+     bing('#round_1',[['使用率','{{job.cpu}}'],['未使用率',1- '{{job.cpu}}']])
+//	 bing('#round_2',[['使用率','{{job.gpu}}'],['未使用率',1- '{{job.gpu}}']])
+//	 bing('#round_3',[['使用率','{{job.men}}'],['未使用率',1- '{{job.men}}']])
+//	 bing('#round_4',[['使用率','{{job.memory}}'],['未使用率',1- '{{job.memory}}']])
+	 console.log('cpu')
+	 {% else %}
+	 bing('#round_1',[['使用率',0],['未使用率',1]])
+
+	 {% endif %}
+     {% if job.gpu %}
+     bing('#round_2',[['使用率','{{job.gpu}}'],['未使用率',1- '{{job.gpu}}']])
+	 console.log('gpu')
+	 {% else %}
+	 console.log('gpu22')
+	 bing('#round_2',[['使用率',0],['未使用率',1]])
+
+	 {% endif %}
+     {% if job.men %}
+     bing('#round_3',[['使用率','{{job.men}}'],['未使用率',1- '{{job.men}}']])
+	 {% else %}
+
+	 bing('#round_3',[['使用率',0],['未使用率',1]])
+
+	 {% endif %}
+     {% if job.memory %}
+     bing('#round_4',[['使用率','{{job.memory}}'],['未使用率',1- '{{job.memory}}']])
+	 {% else %}
+
+	 bing('#round_4',[['使用率',0],['未使用率',1]])
+	 {% endif %}
+
+     // bing('#round_1',[['使用率',0],['未使用率',1]])
+     // bing('#round_2',[['使用率',0],['未使用率',1]])
+     // bing('#round_3',[['使用率',0],['未使用率',1]])
+     // bing('#round_4',[['使用率',0],['未使用率',1]])
+
+
+
+
+
+
+</script>
+
+{% endblock rightcontent %}
+
+{% block bottomfile %}
+<!--<script type="text/javascript" src="{{ url_for('static', filename='js/product-monitoring.js') }}" ></script>-->
+{% endblock bottomfile %}

@@ -1,0 +1,29 @@
+Source: hyperai
+Section: universe/misc
+Maintainer: #USERNAME# <#EMAIL#>
+Homepage: https://developer.nvidia.com/hyperai
+Vcs-Browser: https://github.com/NVIDIA/hyperai
+Priority: optional
+Build-Depends: debhelper (>= 9), dh-python, dh-systemd, python-all, python-setuptools, debconf
+Standards-Version: #POLICY#
+
+Package: hyperai
+Architecture: all
+Depends: ${misc:Depends}, ${python:Depends},
+ caffe-nv (>= 0.13),
+ graphviz,
+ nginx,
+ python-caffe-nv (>= 0.13),
+ python-flaskext.socketio (>= 2.6),
+ python-flaskext.wtf (>= 0.11),
+ python-lmdb (>= 0.87),
+ python-setuptools,
+ python-wtforms (>= 2.0.1)
+Recommends: torch7-nv
+Conflicts: hyperai-devbox-config (<< 3.0.0), torch7
+Description: NVIDIA hyperai webserver
+ This package installs the hyperai webserver as a service.
+ .
+ hyperai is the Deep Learning GPU Training System from NVIDIA. It provides an
+ interactive environment for training, evaluating and experimenting with neural
+ networks.

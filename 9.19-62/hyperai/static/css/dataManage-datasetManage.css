@@ -1,0 +1,35 @@
+/*进度条*/
+body{-webkit-user-select: none;}
+.lt{float: left;}
+.rt{float: right;}
+.preview-dataset-meter{height: 40px;
+	background: #dfe6ea;
+}
+.preview-dataset-meter div{height: 40px;
+	float: left;
+	background: #00b5b8;
+	text-align: center;
+	width: 0;
+	line-height: 40px;
+}
+.btn_all{width: 100%;
+	height: 50px;
+	float: left;
+}
+.btn_all li{width: 130px;height: 40px;	
+	text-align: center;
+	line-height: 40px;
+	/*color: white;*/
+	font-size: 16px;
+	cursor: pointer;
+	display: none;
+}
+.btn_train{background: #00b5b8;color: white;}
+.btn_val{background: #DFE6EA;}
+/*部分iframe*/
+.lis-t{height: 800px;
+	position: relative;
+	display: none;
+}
+iframe{border: none;}
+.right-bottom{margin-top: 225px;}

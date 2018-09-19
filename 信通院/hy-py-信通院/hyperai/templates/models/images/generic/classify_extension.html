@@ -1,0 +1,297 @@
+{% extends 'new/public.html' %}
+
+
+{% block topfile %}
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/bitbug_favicon.ico') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/ZK_last11/public.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/ZK_last11/sub.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/ZK_last11/iconfont.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='plugins/iCheck/skins/minimal/grey.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/ZK_last11/calendar.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='c3/c3.css') }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/index.css') }}"/>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-1.7.2.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/Feffects.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='plugins/iCheck/icheck.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/CustomScrollbar.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jq-datepicker.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.nicescroll.js') }}"></script>
+    <!--<script type="text/javascript" src="js/echarts.min.js"></script>-->   
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jqmeter.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='plugins/jqueryraty/jquery.raty.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/public.js') }}"></script>
+    <!--<script type="text/javascript" src="js/subChart-e.js"></script>--> 
+    <!--[if lt IE 9]>
+      <script src="{{ url_for('static', filename='js/html5shiv.js') }}"></script>
+    <![endif]-->
+ 	<script src="{{ url_for('static', filename='c3/c3.min.js') }}" type="text/javascript" charset="utf-8"></script>
+  	<script src="{{ url_for('static', filename='c3/d3.v3.min.js') }}" type="text/javascript" charset="utf-8"></script>
+  	<script src="{{ url_for('static', filename='js/paging.js') }}" type="text/javascript" charset="utf-8"></script>
+  	<script src="{{ url_for('static', filename='js/model-ForecastSheet.js') }}" type="text/javascript" charset="utf-8"></script>
+	<script src="{{ url_for('static', filename='js/jquery.elevatezoom.js') }}" type="text/javascript" charset="utf-8"></script>
+    <style type="text/css">
+    		.c3-line{
+				  stroke-width: 2px;
+				}
+			.button-group{
+				position: relative;}
+			.dropdown-menu{display: none;
+				position: absolute;
+				z-index: 5;
+				background: white;
+				border:solid 1px #999999;
+				border-radius: 5px;
+			}
+		.btn-default{padding: 0px!important;}
+    </style>
+
+<script type="text/javascript" src="{{ url_for('static', filename='js/3rdparty/angular-1.5.3.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/3rdparty/ngStorage-0.3.10.min.js') }}"></script>
+<script>
+    $('.glyphicon').html('<i class='+'"f-l iconfont plr-5 fz-20"'+'> &#xe68c; </i>')
+    $(window).bind('load',function () {
+        var dropdown_menu_display=false
+        $('.btn-default').on('click',function () {
+            if(dropdown_menu_display){
+                dropdown_menu_display=false;
+                $('.dropdown-menu').css('display','none')
+            }
+            else {
+                dropdown_menu_display=true;
+                $('.dropdown-menu').css('display','block')
+            }
+        })
+        $('.glyphicon').html('<i class='+'"f-l iconfont plr-5 fz-20"'+'> &#xe68c; </i>')
+    })
+</script>
+{% endblock %}
+
+{% block rightcontent %}
+
+            <div class="f-l title">
+            	<h1 class="f-l c-grayblue"> 模型预测 </h1>
+            	<span class="f-l c-gray"> Welcome back, {{request.cookies.username}} </span>
+            </div>
+            
+			      <div class="f-l sub-title bgc-white">
+			      	<a href="{{ url_for('hyperai.views.index') }}" class="f-l c-gray c-aqua-h"><span class="f-l"> Home           </span><em class="f-l c-gray"> / </em></a>
+			      	<a href="{{url_for('hyperai.show.views.model_forecast_new') }}" class="f-l c-gray c-aqua-h"><span class="f-l"> 模型预测       </span><em class="f-l c-gray"> / </em></a>
+			      	<!--<a href="#" class="f-l c-gray c-aqua-h"><span class="f-l"> </span><em class="f-l c-gray"> / </em></a>-->
+			      </div>
+			      
+			      <div class="f-l lis-m bgc-white">
+              <div class="c-box">
+				  <style>
+
+					  .input_text{
+						  width: 70%;
+						  overflow: hidden;
+					  }
+					  table .col-sm-3 b{display: inline-block;
+						  height: 40px;
+						  line-height: 40px;
+						  font-size: 12px;
+						  padding: 0 5px;
+					  }
+				  </style>
+
+
+              	<div class="l-box">
+	                <div class="title">
+	            		  <h3 class="c-grayblue bdr-b">  {{model_job.name()}} </h3>
+	            		  <h4 class="f-l c-gray p-text m-t25"> 测试结果 </h4>
+	            	  </div>
+
+					{% if not keys %}
+<div class="alert alert-danger">
+    <p>Inference failed, see job log</p>
+</div>
+{% endif %}
+					{% if header_html %}
+<div class="row">
+    {{header_html|safe}}
+</div>
+{% endif %}
+
+					{% if app_begin_html %}
+{{app_begin_html|safe}}
+{% endif %}
+
+
+
+
+<div class="row">
+    {% if inference_views_html %}
+    <h3>Output visualizations</h3>
+    {% if keys|length > 1 %}
+    <div class="row">
+        <table class="table">
+            <tr>
+                <th>Index</th>
+                <th>Data</th>
+            </tr>
+            {% for key in keys %}
+            <tr>
+                <td>{{loop.index}}</td>
+                <td>
+                    {% set index=loop.index0 %}
+                    {{ inference_views_html[index]|safe }}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    {% else %}
+    {{ inference_views_html[0]|safe }}
+    {% endif %}
+{% endif %}
+</div>
+
+<script>
+										function drawHistogram1(id, data) {
+														c3.generate({
+														bindto: id,
+														size: {height: 200},
+														data: {
+															columns: [
+															['Count'].concat(data[0]),
+															['Value'].concat(data[1]),
+														],
+														x: 'Value',
+														type: 'area-spline',
+														},
+														axis: {
+															x: {
+									//              		轴线备注
+																label: {
+																text: 'Value',
+																position: 'outer-center',
+																},
+									//                 		 刻度设置
+																tick: {
+																values: data[2],
+																format: d3.format('.3g'),
+																},
+																padding: {left: 0},
+															},
+													y: {
+														padding: {bottom: 0},
+									//             		     刻度削减
+														 tick: {
+															  count:1
+									//							outer: true
+															},
+
+													},
+												},
+												bar: {
+												   width: {ratio: 0.2}
+												},
+												padding: {left: 20, right: 20,bottom:50},
+												legend: {hide: true},
+											});
+										}
+									</script>
+
+              	</div>
+              </div>
+            </div>
+{% if visualizations %}
+            <div class="f-l lis-ab bgc-white">
+              <div class="c-box">
+	              <dl class="f-l">
+					  <style>
+						  .text-classifiaction-style{text-align: left!important;padding-left: 15px;}
+					  </style>
+	            		<dt class="f-l w-30 bgc-gray bdr-t bdr-b text-classifiaction-style"> 网络层   </dt>
+	            		<dt class="f-l w-60 bgc-gray bdr-t bdr-b text-classifiaction-style"> 统计图   </dt>
+	            		<dt class="f-l w-10 bgc-gray bdr-t bdr-b text-classifiaction-style"> 可视化图 </dt>
+	              </dl>
+				   {% for vis in visualizations %}
+	            	<dl class="f-l bdr-b">
+	            		<dd class="f-l w-30 c-grayblue">
+	            			{{vis['name']}} <br/>
+							{{vis['vis_type']}}
+	            			{% if 'layer_type' in vis %}
+							({{vis['layer_type']}} layer)
+							{% endif %}
+							{% if 'param_count' in vis %}
+							{{'{:,}'.format(vis['param_count'])}} learned parameters
+							   {% endif %}
+	            		</dd>
+	            		<dd class="f-l w-60">  
+									  <div class="chart-adbox m-t10">
+									    <div class=" w-100">
+		            	  		<p class="f-l c-gray"> Data Shape：   <span class="c-grayblue"> {{vis['data_stats']['shape']}} </span></p>
+		            	  		<p class="f-l c-gray"> Mean：         <span class="c-grayblue"> {{vis['data_stats']['mean']}}  </span></p>
+		            	  		<p class="f-l c-gray"> Std deviation：<span class="c-grayblue"> {{vis['data_stats']['stddev']}} </span></p>
+		            	  		<div class="f-l chart-box m-t15" id="histogram-{{loop.index}}" style="width:80%">
+								</div>
+											<script>
+                drawHistogram1("#histogram-{{loop.index}}", {{vis['data_stats']['histogram']}});
+            </script>
+		            	  	</div> 
+										</div>            			
+	            		</dd>
+						{% if vis['image_html'] %}
+	            		<dd class="f-l w-10" style="position: relative;bottom: -40px;"><img src="{{vis['image_html']}}" id="vis_{{ loop.index }}" class="f-r pic m-t15" />
+						<script>
+                $('#vis_{{ loop.index }}').elevateZoom({zoomType: "inner", cursor: "crosshair",
+                        zoomWindowFadeIn: 500, zoomWindowFadeOut: 750,
+                        scrollZoom: true, scrollZoomIncrement: 0.025});
+            	</script>
+						</dd>
+						{% else %}
+            <i>Not shown</i>
+	                     {%endif%}
+					</dl>
+				  {%endfor%}
+<tr>
+        <td><i>Totals</i></td>
+        <td>
+            <b>Total learned parameters:</b>
+            {{'{:,}'.format(total_parameters)}}
+        </td>
+    </tr>
+              </div>
+
+
+            </div>
+<style>
+	.pull-right{float:right}
+</style>
+<script>
+//	医疗影像
+console.log('a-1')
+var dropdown_menu_display=true;
+	$('.btn-default').eq(0).on('click',function () {
+	    if(dropdown_menu_display){
+	        $('.dropdown-menu').css('display','block');
+	        dropdown_menu_display=false;
+
+		}
+		else {
+	         $('.dropdown-menu').css('display','none	');
+	        dropdown_menu_display=true;
+
+		}
+		$('.glyphicon-refresh').html('rest')
+
+    })
+</script>
+
+
+{% if app_end_html %}
+{{app_end_html|safe}}
+{% endif %}
+
+{%endif%}
+	       {% endblock %}
+
+
+{% block bottomfile %}
+  	<!--<script src="{{ url_for('static', filename='c3/c3.min.js') }}" type="text/javascript" charset="utf-8"></script>-->
+  	<!--<script src="{{ url_for('static', filename='c3/d3.v3.min.js') }}" type="text/javascript" charset="utf-8"></script>-->
+  	<!--<script src="{{ url_for('static', filename='js/paging.js') }}" type="text/javascript" charset="utf-8"></script>-->
+  	<!--<script src="{{ url_for('static', filename='js/model-ForecastSheet.js') }}" type="text/javascript" charset="utf-8"></script>-->
+{% endblock bottomfile %}

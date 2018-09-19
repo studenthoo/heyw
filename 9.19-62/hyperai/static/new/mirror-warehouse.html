@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	{% include 'new/public/meta.html' %}
+	<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='advance/css/MirrorWarehouse.css')}}"/>
+</head>
+
+<body>
+
+{% include 'new/public/header.html' %}
+
+
+
+
+
+<div class="modal fade" id="newProject" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+					&times;
+				</button>
+				<h4 class="modal-title" id="myModalLabel">
+					新建项目
+				</h4>
+			</div>
+			<div class="modal-body">
+				<div class="form-group">
+					<label for="pjname" class="control-label">项目名称<span class="c-red">*</span></label>
+					<span class="name_tishi c-red f-r" style="padding: 0 5px"></span>
+					<input type="text" class="form-control" id="pjname">
+				</div>
+				<div class="form-group">
+					<label for="pj-manage" class="control-label">项目管理者</label>
+					<select name="" id="pj-manage" class="form-control">
+						<option value="admin">admin</option>
+					</select>
+				</div>
+				<div class="form-group">
+
+					<label for="pjaccess" class="control-label">访问级别</label>
+					<label class="checkbox-inline ml-20">
+						<input type="checkbox" id="pjaccess" value="option1"> 公开
+					</label>
+					<i class="iconfont icon-tishi ml-10 fz-16 c-green"
+						  data-container="body" data-toggle="popover" data-placement="right"
+						  data-content="当项目设为公开后，任何人都有此项目下镜像的读权限。命令行用户不需要“docker login”就可以拉取此项目下的镜像" data-trigger="hover">
+
+					</i>
+					
+
+				</div>
+
+
+
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">取消
+				</button>
+				<button type="button" class="btn-yes bg-green c-white">
+					确认
+				</button>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal -->
+</div>
+
+
+<!--删除提示-->
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="deleteProject">
+	<div class="modal-dialog modal-sm" role="document">
+		<div class="modal-content">
+			<div class="modal-body pd-n h-50 center">
+				确认删除？
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">取消
+				</button>
+				<button type="button" class="btn-yes bg-green c-white">
+					确认
+				</button>
+
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+
+
+<div class="container-fluid" style="margin-top: 51px;">
+	<div class="row" id="row-box" >
+
+		{% include 'new/public/left.html' %}
+
+		<div class="col-sm-11 col-sm-offset-3 col-md-20 col-md-offset-2 main" style="padding: 0px 20px;">
+
+
+			<h4 class="page-header">镜像仓库</h4>
+			<div class="col-md-12 b-nav bg-white" >
+				<ol class="breadcrumb bg-white mb-0 pdtb-15">
+					<li><a href="#" class="c-gray">Home</a></li>
+					<li><a href="{{url_for('hyperai.sysmanager.views.show')}}" class="c-gray">系统管理</a></li>
+					<li class="c-green">镜像仓库</li>
+				</ol>
+			</div>
+			<div class="col-md-12 mt-30" style="background: #FFFFFF; padding:20px 30px;">
+				<span class="create-project" data-toggle="modal" data-target="#newProject">新建项目</span>
+			</div>
+
+
+<!--提示框-->
+			<div class="static">
+				<div id="myAlert" class="alert col-md-6">
+					<a href="#" class="close" data-dismiss="alert">&times;</a>
+					<strong>成功！</strong>
+				</div>
+			</div>
+
+
+			<div class="clone-box">
+				<tr>
+					<td>
+						<input type="checkbox" name="" id="" value="" />
+					</td>
+					<td>
+						<a href="" style="color: #00B5B8;text-decoration: none;">hyperai</a>
+					</td>
+					<td>公开</td>
+					<td>admin</td>
+
+					<td>2018-08-09 12：22：20</td>
+					<tr class="pid"></tr>
+				</tr>
+			</div>
+
+
+			<div class="col-md-12 mt-30 content-list" style="background: #FFFFFF; padding:20px 30px; ">
+
+				<div class="table-responsive">
+					<table class="table table-striped depart-box" id="tableid">
+						<thead>
+						<tr>
+							<th>
+								<input type="checkbox" name="" id="" value="" class="check_all"/>
+								<i class="iconfont icon-shanchu delete-icon" data-toggle="modal" data-target="#deleteProject"></i>
+							</th>
+							<th>项目名称</th>
+							<th>访问级别</th>
+							<th>项目管理者</th>
+
+							<th>创建时间</th>
+
+						</tr>
+						</thead>
+						<tbody class="mirror-list">
+						<tr>
+							<td>
+								<input type="checkbox" name="subcheck" id="" value="" class="check_each" />
+							</td>
+							<td class="project_name c-green">
+
+							</td>
+							<td></td>
+							<td></td>
+
+							<td></td>
+							<td class="pid"></td>
+						</tr>
+						<tr>
+							<td>
+								<input type="checkbox" name="subcheck" id="" value="" class="check_each" />
+							</td>
+							<td class="project_name c-green">
+
+							</td>
+							<td></td>
+							<td></td>
+
+							<td></td>
+							<td class="pid"></td>
+						</tr>
+						<tr>
+							<td>
+								<input type="checkbox" name="subcheck" id="" value="" class="check_each" />
+							</td>
+							<td class="project_name c-green">
+
+							</td>
+							<td></td>
+							<td></td>
+
+							<td></td>
+							<td class="pid"></td>
+						</tr>
+						<tr>
+							<td>
+								<input type="checkbox" name="subcheck" id="" value="" class="check_each" />
+							</td>
+							<td class="project_name c-green">
+
+							</td>
+							<td></td>
+							<td></td>
+
+							<td></td>
+							<td class="pid"></td>
+						</tr>
+						<tr>
+							<td>
+								<input type="checkbox" name="subcheck" id="" value="" class="check_each" />
+							</td>
+							<td class="project_name c-green">
+
+							</td>
+							<td></td>
+							<td></td>
+
+							<td></td>
+							<td class="pid"></td>
+						</tr>
+						<tr>
+							<td>
+								<input type="checkbox" name="subcheck" id="" value="" class="check_each" />
+							</td>
+							<td class="project_name c-green">
+
+							</td>
+							<td></td>
+							<td></td>
+
+							<td></td>
+							<td class="pid"></td>
+						</tr>
+						<tr>
+							<td>
+								<input type="checkbox" name="subcheck" id="" value="" class="check_each" />
+							</td>
+							<td class="project_name c-green">
+
+							</td>
+							<td></td>
+							<td></td>
+
+							<td></td>
+							<td class="pid"></td>
+						</tr>
+						<tr>
+							<td>
+								<input type="checkbox" name="subcheck" id="" value="" class="check_each" />
+							</td>
+							<td class="project_name c-green">
+
+							</td>
+							<td></td>
+							<td></td>
+
+							<td></td>
+							<td class="pid"></td>
+						</tr>
+						<tr>
+							<td>
+								<input type="checkbox" name="subcheck" id="" value="" class="check_each" />
+							</td>
+							<td class="project_name c-green">
+
+							</td>
+							<td></td>
+							<td></td>
+
+							<td></td>
+							<td class="pid"></td>
+						</tr>
+						<tr>
+							<td>
+								<input type="checkbox" name="subcheck" id="" value="" class="check_each" />
+							</td>
+							<td class="project_name c-green">
+
+							</td>
+							<td></td>
+							<td></td>
+
+							<td></td>
+							<td class="pid"></td>
+						</tr>
+
+						</tbody>
+					</table>
+				</div>
+
+
+				<div class="w-100 page_box f-l" style="margin-top: 40px;">
+					<div id="page">
+
+					</div>
+				</div>
+
+			</div>
+
+
+		</div>
+
+		<div class="col-sm-11 col-sm-offset-3 col-md-20 col-md-offset-2 main nav-bottom bg-white" >Copyright © 2017
+			<a href="#">中科弘云科技(北京)有限公司,</a> All rights reserved.</div>
+
+	</div>
+</div>
+
+{% include 'new/public/script.html'%}
+<script src="{{url_for('static', filename='advance/js/paging.js')}}" type="text/javascript" charset="utf-8"></script>
+<script src="{{url_for('static', filename='advance/js/mirror-warehouse.js')}}" type="text/javascript" charset="utf-8"></script>
+<script>
+    $(function () {
+        $("[data-toggle='popover']").popover();
+    });
+
+</script>
+</body>
+
+</html>

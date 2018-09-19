@@ -1,0 +1,658 @@
+{% extends 'job2.html' %}
+<title>{% block title %}
+中科弘云
+{% endblock title %}</title>
+{% block topfile %}
+		<link rel="shortcut icon" href="{{url_for('static', filename='images/bitbug_favicon.ico')}}" />
+		<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/iconfont.css')}}" />
+		<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/public.css')}}" />
+		<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/sub.css')}}" />
+		<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/tuning.css')}}" />
+		<script src="{{ url_for('static', filename='js/jquery-1.7.2.js', ver=dir_hash) }}" type="text/javascript" charset="utf-8"></script>
+		<script src="{{ url_for('static', filename='js/jquery.nicescroll.js', ver=dir_hash) }}" type="text/javascript" charset="utf-8"></script>
+		<script src="{{ url_for('static', filename='js/t-pub.js', ver=dir_hash) }}" type="text/javascript" charset="utf-8"></script>
+{% with namespace = "/jobs" %}
+    {% set room = job.id() %}
+    {% include 'socketio.html' %}
+{% endwith %}
+{% endblock topfile%}
+
+{% block rightcontent %}
+<style>
+	.tuning-box .home_work_state{
+		font-size: 16px;
+		font-weight: 400;
+		height: 30px;
+		line-height: 30px;
+		margin-bottom: 8px;
+		width: 70px;
+		background: #ff6376;
+		text-align: center;
+		color: #fff;
+		border-radius: 5px;
+	}
+</style>
+						<div class="f-l title">
+            				<h1 class="f-l c-grayblue"> 超参调优</h1>
+            				<span class="f-l c-gray"> Welcome back, {{request.cookies.username}} </span>
+            			</div>
+			      		<div class="f-l sub-title bgc-white">
+			      			<a href="index.html" class="f-l c-gray c-aqua-h"><span class="f-l"> Home</span><em class="f-l c-gray"> / </em></a>  
+			      			<a href="#" class="f-l c-gray c-aqua-h"><span class="f-l">调优训练</span><em class="f-l c-gray"> / </em></a> 
+			      		</div>
+			      		<div class="tuning-box f-l">
+			     			<div class="title f-l">
+				      			<h1 class="f-l c-grayblue" style="width: 50%;">训练结果</h1>
+								<h1 class="f-r c-grayblue  " style="width: 50%;" ><span style="font-size: 20px;   font-weight: 400;">作业状态：</span><span class="state home_work_state">{%if 'Dataset' in job.job_type()%}{{job.status.name}}{%elif 'Model' in job.job_type()%}{{job.train_task().status.name}}{% else%}{{job.train_task().status.name}}{%endif%}</span></h1>
+				      		</div>
+							<script>
+                                $(".xitong-h1").toggle(function() {
+                                    $(this).addClass('current-la').siblings().removeClass('current-la')
+                                    $(this).next(".side-div").slideDown(500)
+
+                                }, function() {
+                                    $(this).removeClass('current-la')
+                                    $(this).next(".side-div").slideUp(500)
+                                });
+
+								if($('.home_work_state').text()=='Aborted'){
+									$('.home_work_state').text('终止')
+									console.log('a')
+								}
+								else if($('.home_work_state').text()==='Done'){
+									console.log("d")
+									$('.home_work_state').text('完成')
+								}
+								else if($('.home_work_state').text()=='Error'){
+									$('.home_work_state').text('错误')
+									console.log('e')
+								}
+								else if($('.home_work_state').text()=='Running' ){
+									$('.home_work_state').text('运行中')
+									console.log('r')
+								}
+								else if($('.home_work_state').text()=='Waiting' ){
+									$('.home_work_state').text('等待')
+									console.log('w')
+								}
+								if($('.home_work_state').text() == "运行中"){
+
+									$('.home_work_state').css('backgroundColor','#17d49c')
+								}
+								else if($('.home_work_state').text() == "完成"){
+									$('.home_work_state').css('background-color','#ff6376')
+								}
+								else if($('.home_work_state').text() == "终止"){
+									$('.home_work_state').css('background-color','#9eb7c6')
+								}
+								else if($('.home_work_state').text() == "错误"){
+									$('.home_work_state').css('background-color','#ff976a')
+								}
+								else if($('.home_work_state').text() == "等待"){
+									$('.home_work_state').css('background-color','#ff976a')
+								}
+								else{
+									$('.home_work_state').css('backgroundColor','#17d49c')
+								}
+
+
+
+
+								$('document').ready(function() {
+                        socket.on('job update', function (msg) {
+//                            console.log('socket')
+                            console.log('+++++++++++++++++++++',msg)
+                            if (msg['update'] == 'progress') {
+//                                console.log(msg['percentage']+'::::'+'{{job.id()}}'+'{%if 'Dataset' in job.job_type()%}{{job.status.name}}{%elif 'Model' in job.job_type()%}{{job.train_task().status.name}}{%endif%}')
+                                $('.home_work_state').text(msg['percentage']+'%')
+                            }
+                            else  if(msg['update']=="status"){
+//                                console.log(msg['status']+'::::'+'{{job.id()}}'+'{%if 'Dataset' in job.job_type()%}{{job.status.name}}{%elif 'Model' in job.job_type()%}{{job.train_task().status.name}}{%endif%}')
+//                                $('.home_work_state').text(msg['data']['status'])
+                                $('.home_work_state').text(msg['status'])
+                                $('.home_work_state').css('background','#ff6376')
+                                if(($('.home_work_state').text() == "Error") || ($('.home_work_state').text() == "Done") || ($('.home_work_state').text() == "Aborted")){
+//                                    console.log('+++++++++++')
+                                    $.ajax({
+                                        type:'GET',
+                                        url:'/get_gpu_number',
+                                        success:function (e) {
+                                            console.log(e)
+                                            $('.resources-box strong').eq(0).html( e.gpu_max)
+                                            $('.resources-box strong').eq(1).html(e.gpu_used )
+                                            $('.resources-box strong').eq(2).html(e.total_gpu_count)
+                                            $('.resources-box strong').eq(3).html(e.remaining_gpu_count)
+                                        }
+
+                                    })
+                                }
+                            }
+                            if($('.home_work_state').text()=='Aborted'){
+                                $('.home_work_state').text('终止')
+								console.log('a1')
+                            }
+                            else if($('.home_work_state').text()==='Done'){
+                                console.log("hello")
+                                $('.home_work_state').text('完成')
+                            }
+                            else if($('.home_work_state').text()=='Error'){
+                                $('.home_work_state').text('错误')
+								console.log('e1')
+                            }
+                            else if($('.home_work_state').text()=='Running' ){
+                                $('.home_work_state').text('运行中')
+								console.log('r1')
+                            }
+                            else if($('.home_work_state').text()=='Waiting' ){
+                                $('.home_work_state').text('等待')
+								console.log('w1')
+                            }
+                            if($('.home_work_state').text() == "运行中"){
+
+                                $('.home_work_state').css('backgroundColor','#17d49c')
+                            }
+                            else if($('.home_work_state').text() == "完成"){
+                                $('.home_work_state').css('background-color','#ff6376')
+                            }
+                            else if($('.home_work_state').text() == "终止"){
+                                $('.home_work_state').css('background-color','#9eb7c6')
+                            }
+                            else if($('.home_work_state').text() == "错误"){
+                                $('.home_work_state').css('background-color','#ff976a')
+                            }
+                            else if($('.home_work_state').text() == "等待"){
+                                $('.home_work_state').css('background-color','#ff976a')
+                            }
+                            else{
+                                $('.home_work_state').css('backgroundColor','#17d49c')
+                            }
+
+                        })
+                    })
+
+                    </script>
+			      			<div class="tuning-model f-l" style="margin-bottom: 20px">
+			      				<div class="tuning-l f-l">
+			      					<p>模型训练信息</p>
+			      					<div class="t-info f-l">
+			      						<div class="start-time">
+			      							<span>训练开始时间：</span>
+			      							<span>{{ job.create_time }}</span>
+			      						</div>
+			      						<div class="end-time">
+			      							<span>训练结束时间：</span>
+			      							<span>{{ job.end_time }}</span>
+			      						</div>
+			      						<div class="all-time">
+			      							<span>共用时：</span>
+			      							<span>{{ job.cost_time }}</span>
+			      						</div>
+			      					</div>
+			      				</div>
+			      			</div>
+							<script>
+							</script>
+				      		<div class="tuning-model f-l">
+			      				<div class="t-result f-l">
+			      					<p>超参</p>
+			      					<div class="s-par f-l c-box" style="margin-bottom: 20px">
+				      					<div class="l-box w-20 ml-2 ta-c">
+					                		<h4 class="f-l c-grayblue"></h4>
+											<p>{{ job.train_lr }}</p>
+				                		</div>
+					                	<div class="l-box w-20 ml-2 ta-c">
+					                		<h4 class="f-l c-grayblue"></h4>
+											{% if job.method == 'Adam'%}
+											<p>{{ job.train_beta1 }}</p>
+											{% else %}
+											<p>{{ job.train_momentum }}</p>
+											{%endif%}
+					                	</div>
+					                	<div class="l-box w-20 ml-2 ta-c">
+					                		<h4 class="f-l c-grayblue"></h4>
+											{% if job.method == 'Adam'%}
+											<p>{{ job.train_beta2 }}</p>
+											{% else %}
+											<p>{{ job.train_decay }}</p>
+											{%endif%}
+					                	</div> 
+					                	<div class="l-box w-20 ml-2 ta-c">
+					                		<h4 class="f-l c-grayblue"></h4> 
+											<p></p>
+					                	</div>
+										<div class="l-box w-20 ml-2 ta-c">
+					                		<h4 class="f-l c-grayblue"></h4>
+											<p></p>
+					                	</div>
+			      					</div>
+			      				</div>
+			      			</div>
+							<style>
+								.tuning-table{
+									display: block;
+									width: 100%;
+									margin-top: 10px;
+									border: 1px solid #d9dce1;
+								}
+								.log-box{
+									display: table-row;
+									width: 100%;
+									padding: 0;
+									height: 50px;
+								}
+								.log-bg{
+									background: #F5F7FA;
+								}
+								.log-c{
+									color: #2C3850;
+								}
+								.log-t{
+									display: table-cell;
+									padding: 0;
+									line-height: 50px;
+									font-family: '宋体';
+									font-size: 16px;
+									font-weight: 200;
+									text-align: center;
+									white-space: nowrap;
+									width: 25%;
+								}
+								.log-bdr-l{
+									border-left: 1px solid #D9DCE1;
+								}
+
+								.log-bdr-t{
+									border-top: 1px solid #D9DCE1;
+								}
+								.log-gray{
+									color: #999999;
+								}
+								.log-box .log-name:hover{
+									color: #10C888;
+								}
+								.log-load:hover{
+									color: #FF6376;
+								}
+							</style>
+							<div class="tuning-model f-l"  style="margin-bottom: 50px;">
+								<div class="f-l"style="width:100%;padding: 20px;">
+
+
+									<p>日志</p>
+									<div class="tuning-table f-l">
+
+										<div class="log-box f-l log-bg">
+											<div class="f-l log-t log-c">
+												日志文件
+											</div>
+											<div class="f-l log-t log-c log-bdr-l">
+												产生时间
+											</div>
+											<div class="f-l log-t log-c log-bdr-l">
+												大小
+											</div>
+											<div class="f-l log-t log-c log-bdr-l">
+												下载
+											</div>
+										</div>
+										<div class="log-box f-l">
+											<div class="f-l log-t log-gray log-bdr-t">
+												<a href="{{url_for('hyperai.tuning.views.show_log', job_id=job.id())}}" class="log-gray log-name" target="_blank">日志文件</a>
+											</div>
+											<div class="f-l log-t log-gray log-bdr-l log-bdr-t">
+												{{job.create_time}}
+											</div>
+											<div class="f-l log-t log-gray log-bdr-l log-bdr-t">
+												{{job.getDocSize()}}
+											</div>
+											<div class="f-l log-t  log-bdr-l log-bdr-t">
+												<a href="{{url_for('hyperai.tuning.views.download_log', name='au_tune_output.log', job_id=job.id())}}" class="log-gray log-load">
+													<i class="iconfont fz-24">&#xe600;</i>
+												</a>
+											</div>
+										</div>
+
+									</div>
+								</div>
+							</div>
+			      		</div>
+
+
+						<div class="f-l lis-k bgc-white">
+							<div class="title">
+								<div class="l-box">
+									<h2 class="f-l c-grayblue"><i class="f-l iconfont fz-38 pr-5 m-t5 c-aqua"> &#xe632; </i> 资源使用监控：</h2>
+								</div>
+							</div>
+							<style>
+								.w-5{width: 5%}
+								.w-95{width: 95%}
+								.w-25{width: 25%}
+								.w-15{width: 15%}
+								.sub-table-tr-i1{
+									float: left;
+									display: table-row;
+									width: 100%;
+									padding: 0;
+									height: 70px;
+									vertical-align: middle;
+								}
+								.threm{
+									width: 100%;
+									height: 24px;
+									margin-top: 18px;
+									background: #dfe6ea;
+								}
+								.length_i{
+									height: 24px;
+									line-height: 24px;
+									text-align: center;
+								}
+								.cpu-color{
+									background-color: rgb(252, 125, 70);
+								}
+								.gpu-color{
+									background-color: rgb(0,181,184);
+								}
+
+								.temp-color{
+									background-color: rgb(252, 125, 70);
+								}
+								.gpu-threm div{
+									background-color: rgb(252, 125, 70);
+								}
+							</style>
+							<style>
+
+								@font-face {font-family: "iconfont";
+									src: url('iconfont.eot?t=1529980529900'); /* IE9*/
+									src: url('iconfont.eot?t=1529980529900#iefix') format('embedded-opentype'), /* IE6-IE8 */
+									url('data:application/x-font-woff;charset=utf-8;base64,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') format('woff'),
+									url('iconfont.ttf?t=1529980529900') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
+									url('iconfont.svg?t=1529980529900#iconfont') format('svg'); /* iOS 4.1- */
+								}
+
+								.iconfont {
+									font-family:"iconfont" !important;
+									font-style:normal;
+									-webkit-font-smoothing: antialiased;
+									-moz-osx-font-smoothing: grayscale;
+								}
+
+								.icon-wangluo:before { content: "\e66d"; }
+
+								.icon-IO:before { content: "\e74b"; }
+
+								.icon-wenduji:before { content: "\e67d"; }
+
+
+
+							</style>
+							<!--r容器1-->
+							<!--clone-框架+容器-->
+							<div class="resource-all">
+								<div class="table-tr bdr-t gpu_cpu_all resource-parent" style="display: none;height: 100%;">
+									<div class="bdr-l table-td w-5">
+										<div class="sub-table">
+											<div class="sub-table-tr-i1">
+												<div class="sub-table-td bdr-b ta-c h-70"> 容器  </div>
+											</div>
+										</div>
+									</div>
+
+								</div>
+								<!--clone&#45;&#45;卡-->
+								<div class="bdr-l table-td w-95  resource-children" style="display: none;float: right;">
+									<!--name-->
+									<div class="bdr-l table-td w-25">
+										<div class="sub-table sub-table-ka1">
+											<div class="sub-table-tr-i1">
+												<div class="sub-table-td bdr-b ta-c h-70 sub-table-ka1-name"> 卡  </div>
+											</div>
+										</div>
+									</div>
+									<!--GPU**************************************-->
+									<div class="bdr-l table-td w-10">
+										<div class="sub-table sub-table-ka1">
+											<div class="sub-table-tr-i1">
+												<div class="sub-table-td bdr-b ta-l h-70"><i class="f-l iconfont fz-36 pr-5 c-orange"> &#xe62a; </i> GPU </div>
+											</div>
+										</div>
+									</div>
+									<div class="bdr-l table-td w-15">
+										<div class="sub-table sub-table-ka1">
+											<div class="sub-table-tr-i1">
+												<div class="sub-table-td bdr-b h-70">
+													<div class="f-l m-t5 cpu-meter">
+														<div class="threm cpu-threm">
+															<div class="length_i length_i_g gpu-color">
+
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<!--CPU*9***************************************-->
+									<div class="bdr-l table-td w-10">
+										<div class="sub-table sub-table-ka1">
+											<div class="sub-table-tr-i1">
+												<div class="sub-table-td bdr-b ta-l h-70"><i class="f-l iconfont fz-30 pr-5 c-green"> &#xe670; </i> 显存 </div>
+											</div>
+										</div>
+									</div>
+									<div class="bdr-l table-td w-15">
+										<div class="sub-table sub-table-ka1">
+											<div class="sub-table-tr-i1">
+												<div class="sub-table-td bdr-b h-70">
+													<div class="f-l m-t5 gpu-meter">
+														<div class="threm gpu-threm">
+															<div class="length_i length_i_gm cpu-color">
+
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<!--温度 temperature************************************-->
+									<div class="bdr-l table-td w-10">
+										<div class="sub-table sub-table-ka1">
+											<div class="sub-table-tr-i1">
+												<div class="sub-table-td bdr-b ta-l h-70"><i class="f-l iconfont fz-30 pr-5 c-green icon-wenduji"> </i> 温度 </div>
+
+											</div>
+										</div>
+									</div>
+									<div class="bdr-l table-td w-15">
+										<div class="sub-table sub-table-ka1">
+											<div class="sub-table-tr-i1">
+												<div class="sub-table-td bdr-b h-70">
+													<div class="f-l m-t5 gpu-meter">
+														<div class="threm gpu-threm">
+															<div class="length_i_t length_i">
+
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+
+
+								</div>
+							</div>
+
+
+							<!--资源监控主体-->
+							<style>
+								.s-box{
+									display: block;
+									width:100%;
+									min-height: 50px;
+								}
+							</style>
+							<div class="f-l  m-t15 s-box" style="border: none;padding: 0;margin-bottom: 0;">
+								<div class="table bdr">
+									<div class="table-tr bgc-gray" style="height:100%;">
+										<div class="table-th w-5">容器</div>
+										<div class="table-th w-95">
+											<div class="table-th w-25">显卡</div>
+											<div class="table-th w-10" style="height: 50px"> </div>
+											<div class="table-th w-15">使用率</div>
+											<div class="table-th w-10" style="height: 50px"> </div>
+											<div class="table-th w-15">使用率</div>
+											<div class="table-th w-10" style="height: 50px"> </div>
+											<div class="table-th w-15">温度</div>
+										</div>
+
+									</div>
+									<div class="table-tr bgc-gray  resource-content">
+
+									</div>
+
+
+
+								</div>
+							</div>
+						</div>
+						<style>
+							.tuning-sub .finish{
+								background: #00b5b8;
+								color: #FFFFFF;
+							}
+							.tuning-sub .re-train{
+								background-color: #D2E0E9;
+								color: #2c3850;
+							}
+							.tuning-sub a{
+								display: inline-block;
+								margin-top: 10px;
+								/*background: #00b5b8;*/
+
+							}
+							.tuning-sub a:hover{
+								background: #FF6376;
+							}
+							.re-train:hover{
+								color: #ffffff;
+							}
+						</style>
+
+	<script>
+
+
+
+		$('.finish').on('click',function () {
+			if(($('.home_work_state').html() == '等待')  || ($('.home_work_state').html() == '运行中')){
+			    alert('训练未完成')
+			    return false
+			}else{
+				return true
+			}
+        })
+
+	</script>
+{% if job.method == 'GD' %}
+<script>
+    console.log('-----------------------------------------------')
+    $('.s-par h4').eq(0).html('学习率(lr)')
+</script>
+
+{% endif %}
+{% if job.method == 'Adam'%}
+
+ {% if job.lr and not job.beta1 and not job.beta2 %}
+	<script>
+        console.log('7')
+		$('.s-par h4').eq(0).html('学习率(lr)')
+	</script>
+ {% elif job.beta1 and not job.beta2 and not job.lr %}
+	<script>
+        console.log('6')
+        $('.s-par h4').eq(0).html('指数衰减率1(beta1)')
+        // $(".s-par").find('.l-box').eq(0).hide();
+	</script>
+ {% elif job.beta2 and not job.beta1 and not job.lr %}
+	<script>
+		console.log('1')
+		$('.s-par h4').eq(0).html('指数衰减率2(beta2)')
+        // $(".s-par").find('.l-box').eq(0).hide();
+	</script>
+
+ {% elif job.lr and job.beta1 and not job.beta2 %}
+	<script>
+        console.log('3')
+        $('.s-par h4').eq(0).html('学习率(lr)')
+        $('.s-par h4').eq(1).html('指数衰减率1(beta1)')
+	</script>
+ {% elif job.lr and job.beta2 and not job.beta1 %}
+	<script>
+        console.log('4')
+		$('.s-par').find('.l-box').eq(1).hide()
+		$('.s-par h4').eq(0).html('学习率(lr)')
+		$('.s-par h4').eq(2).html('指数衰减率2(beta2)')
+	</script>
+ {% elif job.beta1 and job.beta2 and not job.lr %}
+	<script>
+        console.log('5')
+        $(".s-par").find('.l-box').eq(0).hide();
+		$('.s-par h4').eq(1).html('指数衰减率1(beta1)')
+		$('.s-par h4').eq(2).html('指数衰减率2(beta2)')
+	</script>
+{% elif job.lr and job.beta1 and job.beta2 %}
+<script>
+    console.log('2')
+	var s = '{{job.beta2}}'
+	console.log(s)
+    $('.s-par h4').eq(0).html('学习率(lr)')
+    $('.s-par h4').eq(1).html('指数衰减率1(beta1)')
+    $('.s-par h4').eq(2).html('指数衰减率2(beta2)')
+</script>
+ {% endif %}
+{% endif %}
+
+{% if job.method == 'RMSProp' %}
+
+	<script>
+		$('.s-par h4').eq(0).html('学习率(lr)')
+	</script>
+
+{% if job.momentum and not job.decay %}
+	<script>
+		console.log('2-1')
+		$('.s-par h4').eq(1).html('动量(momentum)')
+	</script>
+
+{% elif not job.momentum and job.decay %}
+	<script>
+		$('.s-par').find('.l-box').eq(1).hide()
+		console.log('2-2')
+		$('.s-par h4').eq(2).html('梯度衰减因子(decay)')
+
+	</script>
+{% elif job.momentum  and job.decay %}
+	<script>
+		console.log('2')
+		$('.s-par h4').eq(1).html('动量(momentum)')
+		$('.s-par h4').eq(2).html('梯度衰减因子(decay)')
+	</script>
+{% endif %}
+{% endif %}
+
+{% if job.method == 'Momentum' %}
+
+	<script>
+		$('.s-par h4').eq(0).html('学习率(lr)')
+		$('.s-par h4').eq(1).html('动量(momentum)')
+	</script>
+
+{% endif %}
+
+{% endblock rightcontent %}
+{% block bottomfile %}
+
+{% endblock bottomfile %}

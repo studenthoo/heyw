@@ -1,0 +1,235 @@
+{% extends 'new/public.html' %}
+
+
+{% block topfile %}
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/bitbug_favicon.ico') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/ZK_last11/public.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/ZK_last11/sub.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/ZK_last11/iconfont.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='plugins/iCheck/skins/minimal/grey.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/ZK_last11/calendar.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='c3/c3.css') }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/index.css') }}"/>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-1.7.2.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/Feffects.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='plugins/iCheck/icheck.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/CustomScrollbar.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jq-datepicker.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.nicescroll.js') }}"></script>
+    <!--<script type="text/javascript" src="js/echarts.min.js"></script>-->   
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jqmeter.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='plugins/jqueryraty/jquery.raty.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/public.js') }}"></script>
+    <!--<script type="text/javascript" src="js/subChart-e.js"></script>--> 
+    <!--[if lt IE 9]>
+      <script src="{{ url_for('static', filename='js/html5shiv.js') }}"></script>
+    <![endif]-->
+ 	<script src="{{ url_for('static', filename='c3/c3.min.js') }}" type="text/javascript" charset="utf-8"></script>
+  	<script src="{{ url_for('static', filename='c3/d3.v3.min.js') }}" type="text/javascript" charset="utf-8"></script>
+  	<script src="{{ url_for('static', filename='js/paging.js') }}" type="text/javascript" charset="utf-8"></script>
+  	<script src="{{ url_for('static', filename='js/model-ForecastSheet.js') }}" type="text/javascript" charset="utf-8"></script>
+<script src="{{ url_for('static', filename='js/jquery.elevatezoom.js') }}" type="text/javascript" charset="utf-8"></script>
+    <style type="text/css">
+    		.c3-line{
+				  stroke-width: 2px;
+				}
+		.button-group{
+      position: relative;}
+   .dropdown-menu{display: none;
+      position: absolute;
+      z-index: 5;
+      background: white;
+      border:solid 1px #999999;
+      border-radius: 5px;
+   }
+.btn-default{padding: 0px!important;}
+    </style>
+<script type="text/javascript" src="{{ url_for('static', filename='js/3rdparty/angular-1.5.3.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/3rdparty/ngStorage-0.3.10.min.js') }}"></script>
+<script>
+   $('.glyphicon').html('<i class='+'"f-l iconfont plr-5 fz-20"'+'> &#xe68c; </i>')
+   $(window).bind('load',function () {
+      var dropdown_menu_display=false
+      $('.btn-default').on('click',function () {
+         if(dropdown_menu_display){
+            dropdown_menu_display=false;
+            $('.dropdown-menu').css('display','none')
+         }
+         else {
+            dropdown_menu_display=true;
+            $('.dropdown-menu').css('display','block')
+         }
+      })
+      $('.glyphicon').html('<i class='+'"f-l iconfont plr-5 fz-20"'+'> &#xe68c; </i>')
+   })
+
+</script>
+ {% endblock %}
+
+{% block rightcontent %}
+
+            <div class="f-l title">
+            	<h1 class="f-l c-grayblue"> 模型预测 </h1>
+            	<span class="f-l c-gray"> Welcome back, {{request.cookies.username}} </span>
+            </div>
+            
+			      <div class="f-l sub-title bgc-white">
+			      	<a href="{{ url_for('hyperai.views.index') }}" class="f-l c-gray c-aqua-h"><span class="f-l"> Home           </span><em class="f-l c-gray"> / </em></a>
+			      	<a href="{{url_for('hyperai.show.views.model_forecast_new') }}" class="f-l c-gray c-aqua-h"><span class="f-l"> 模型预测       </span><em class="f-l c-gray"> / </em></a>
+			      	<a href="#" class="f-l c-gray c-aqua-h"><span class="f-l"> 模型预测结果单张 </span><em class="f-l c-gray"> / </em></a> 
+			      </div>
+			      
+			      <div class="f-l lis-m bgc-white">
+              <div class="c-box">
+              	<div class="l-box w-48">
+              	  <div class="div-box">
+              	  	<a href="{{url_for('hyperai.show.views.model_forecast_new') }}" class="f-l btn-9 bdr bgc-white c-grayblue c-aqua-h"><i class="fz-14 iconfont "> &#xe6c5; </i> 返回 </a>
+              	    <em class="f-l"></em>
+              	    <img src="{{image_src}}" class="f-l" />
+              	  </div>
+              	</div>
+              	<div class="r-box w-50">
+	                <div class="title">
+	            		  <h3 class="c-grayblue bdr-b">  {{model_job.name()}} </h3>
+	            		  <h4 class="f-l c-gray p-text m-t25"> 测试结果 </h4>
+	            	  </div>
+					{% if header_html %}
+<div class="row">
+    {{header_html|safe}}
+</div>
+{% endif %}
+
+					{% if app_begin_html %}
+{{app_begin_html|safe}}
+{% endif %}
+									<ul class="f-l statistics-box">
+										{% if image_src %}
+<!--<div class="row">-->
+    <!--<h3>Source image</h3>-->
+    <!--<img src="{{image_src}}" style="max-width:100%;" />-->
+<!--</div>-->
+<div class="row">
+    <h3>Inference visualization</h3>
+    {{ inference_view_html|safe }}
+</div>
+{% endif %}
+
+{% if app_end_html %}
+{{app_end_html|safe}}
+{% endif %}
+									</ul> 
+              	</div>
+              </div>
+            </div>
+            
+            <div class="f-l lis-ab bgc-white">
+              <div class="c-box">
+	              <dl class="f-l">
+	            		<dt class="f-l w-30 bgc-gray bdr-t bdr-b"> 网络层   </dt>
+	            		<dt class="f-l w-60 bgc-gray bdr-t bdr-b"> 统计图   </dt>
+	            		<dt class="f-l w-10 bgc-gray bdr-t bdr-b"> 可视化图 </dt>
+	              </dl>
+				   {% for vis in visualizations %}
+	            	<dl class="f-l bdr-b">
+	            		<dd class="f-l w-30 c-grayblue">
+	            			{{vis['name']}} <br/>
+							{{vis['vis_type']}}
+	            			{% if 'layer_type' in vis %}
+							({{vis['layer_type']}} layer)
+							{% endif %}
+							{% if 'param_count' in vis %}
+							{{'{:,}'.format(vis['param_count'])}} learned parameters
+							   {% endif %}
+	            		</dd>
+	            		<dd class="f-l w-60">  
+									  <div class="chart-adbox m-t10">
+									    <div class=" w-100">
+		            	  		<p class="f-l c-gray"> Data Shape：   <span class="c-grayblue"> {{vis['data_stats']['shape']}} </span></p>
+		            	  		<p class="f-l c-gray"> Mean：         <span class="c-grayblue"> {{vis['data_stats']['mean']}}  </span></p>
+		            	  		<p class="f-l c-gray"> Std deviation：<span class="c-grayblue"> {{vis['data_stats']['stddev']}} </span></p>
+		            	  		<div class="f-l chart-box m-t15" id="histogram-{{loop.index}}" style="width:80%">
+									  <script>
+										function drawHistogram1(id, data) {
+														c3.generate({
+														bindto: id,
+														size: {height: 200},
+														data: {
+															columns: [
+															['Count'].concat(data[0]),
+															['Value'].concat(data[1]),
+														],
+														x: 'Value',
+														type: 'area-spline',
+														},
+														axis: {
+															x: {
+									//              		轴线备注
+																label: {
+																text: 'Value',
+																position: 'outer-center',
+																},
+									//                 		 刻度设置
+																tick: {
+																values: data[2],
+																format: d3.format('.3g'),
+																},
+																padding: {left: 0},
+															},
+													y: {
+														padding: {bottom: 0},
+									//             		     刻度削减
+														 tick: {
+															  count:1
+									//							outer: true
+															},
+
+													},
+												},
+												bar: {
+												   width: {ratio: 0.2}
+												},
+												padding: {left: 20, right: 20,bottom:50},
+												legend: {hide: true},
+											});
+										}
+										drawHistogram1("#histogram-{{loop.index}}", {{vis['data_stats']['histogram']}});
+									</script>
+								</div>
+		            	  	</div> 
+										</div>            			
+	            		</dd>
+						{% if vis['image_html'] %}
+	            		<dd class="f-l w-10" style="position: relative;bottom: -40px;"><img src="{{vis['image_html']}}" id="vis_{{ loop.index }}" class="f-r pic m-t15" /></dd>
+						<script>
+                            $('#vis_{{ loop.index }}').elevateZoom({zoomType: "inner", cursor: "crosshair",
+                                zoomWindowFadeIn: 500, zoomWindowFadeOut: 750,
+                                scrollZoom: true, scrollZoomIncrement: 0.025});
+						</script>
+						{% else %}
+						<i>Not shown</i>
+	                     {%endif%}
+					</dl>
+				  {%endfor%}
+<tr>
+        <td><i>Totals</i></td>
+        <td>
+            <b>Total learned parameters:</b>
+            {{'{:,}'.format(total_parameters)}}
+        </td>
+    </tr>
+              </div>
+						  <!--<div class="f-l page-box">-->
+						  	<!--<div id="page" class="page_div">-->
+						  		<!---->
+						  	<!--</div>-->
+							  <!--&lt;!&ndash;<div class="pager"><span class="arrow">首页</span><span class="prev arrow">上一页</span><span><a href="#?page=1" class="current">1</a></span><span><a href="#?page=2">2</a></span><span><a href="#?page=3">3</a></span><span><a href="#?page=4">4</a></span><span><a href="#?page=5">5</a></span><span><a href="#?page=6">6</a></span><span><a href="#?page=7">7</a></span><span><a href="#?page=8">8</a></span><span><a href="#?page=9">9</a></span><span><a href="#?page=10">10</a></span><span class="next arrow">下一页</span><span class="last arrow">尾页</span></div>&ndash;&gt;		        -->
+						  <!--</div>       -->
+            </div>
+	       {% endblock %}
+
+{% block bottomfile %}
+  	<!--<script src="{{ url_for('static', filename='c3/c3.min.js') }}" type="text/javascript" charset="utf-8"></script>-->
+  	<!--<script src="{{ url_for('static', filename='c3/d3.v3.min.js') }}" type="text/javascript" charset="utf-8"></script>-->
+  	<!--<script src="{{ url_for('static', filename='js/paging.js') }}" type="text/javascript" charset="utf-8"></script>-->
+  	<!--<script src="{{ url_for('static', filename='js/model-ForecastSheet.js') }}" type="text/javascript" charset="utf-8"></script>-->
+{% endblock bottomfile %}

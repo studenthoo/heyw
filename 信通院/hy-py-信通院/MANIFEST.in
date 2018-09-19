@@ -1,0 +1,9 @@
+include requirements*.txt
+recursive-include hyperai/templates *
+recursive-include hyperai/static *
+recursive-include hyperai/standard-networks *
+recursive-include hyperai/tools/torch *
+recursive-include hyperai/tools/tensorflow *
+recursive-include hyperai/extensions *.css
+recursive-include hyperai/extensions *.html
+recursive-include hyperai/extensions *.js

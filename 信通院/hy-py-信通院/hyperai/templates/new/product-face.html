@@ -1,0 +1,259 @@
+{% extends 'new/public.html' %}
+{% block topfile %}
+<link rel="shortcut icon" href="{{ url_for('static', filename='images/bitbug_favicon.ico') }}"/>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/ZK_last11/public.css') }}" />
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/ZK_last11/sub.css') }}" />
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/ZK_last11/iconfont.css') }}" />
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/product-train.css') }}" />
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/ZK_last11/calendar.css') }}" />
+<link rel="stylesheet" href="{{ url_for('static', filename='css/modetrain_a.css') }}" />
+<script type="text/javascript" src="{{ url_for('static', filename='js/jquery-1.7.2.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/Feffects.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/CustomScrollbar.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.nicescroll.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/jqmeter.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/public.js') }}"></script>
+{% endblock topfile%}
+
+{% block rightcontent %}
+<div class="f-l title">
+    <h1 class="f-l c-grayblue"> 模型产品 </h1>
+    <span class="f-l c-gray"> Welcome back {{request.cookies.username}}</span>
+</div>
+<div class="f-l sub-title bgc-white">
+    <a href="{{url_for('hyperai.views.index')}}" class="f-l c-gray c-aqua-h"><span class="f-l"> Home</span><em class="f-l c-gray"> / </em></a>
+    <a href="{{url_for('hyperai.ration.views.show')}}" class="f-l c-gray c-aqua-h"><span class="f-l"> 模型产品</span><em class="f-l c-gray"> / </em></a>
+</div>
+<!--<form action="" id="form-product">-->
+<div class="f-l title">
+    <h1 class="f-l c-grayblue"> 基本信息 </h1>
+</div>
+<div class="f-l lis-ad bgc-white">
+    <div class="c-box m-t15">
+        <div class="w-50 f-l">
+            <h3 class="f-l c-grayblue w-12">部署名称</h3>
+            <input type="text" placeholder="人脸识别FD" class="f-l input-info-product bdr w-70">
+        </div>
+        <div class="w-50 f-l">
+            <h3 class="f-l c-grayblue w-12">选择模型</h3>
+            <div class="f-l w-70 product-select">
+                <select class="f-l select-box bdr product-select c-grayblue w-45 model1">
+                    <option value="选择场景">选择场景</option>
+                    <option value="物体识别">物体识别</option>
+                    <option value="图像分类">图像分类</option>
+
+                </select>
+                <select class="f-r select-box bdr product-select c-grayblue w-45 model-name-content model2">
+                    <option value="选择模型">选择模型</option>
+                    <option value="node1">图像分类-face</option>
+                    <option value="node2">物体识别-car</option>
+                </select>
+            </div>
+            <script>
+                $('.model1')[0].selectedIndex=2;
+                $('.model2')[0].selectedIndex=1;
+            </script>
+        </div>
+    </div>
+    <div class="c-box m-t15">
+        <div class="w-50 f-l">
+            <h3 class="f-l c-grayblue w-12">部署方式 </h3>
+            <select class="f-l select-box bdr product-select c-grayblue w-70 model-way">
+                <option value="全新部署">全新部署</option>
+                <option value="更新升级">更新升级</option>
+            </select>
+
+        </div>
+        <div class="w-50 f-l">
+            <h3 class="f-l c-grayblue w-12">版本号 </h3>
+            <input type="text" placeholder="1.0" class="f-l input-info-product bdr w-70 edition-num">
+            <select class="f-l select-box bdr product-select c-grayblue w-70 edition-select" style="display: none;">
+                <option value="1.0">1.0</option>
+                <option value="1.1">1.1</option>
+            </select>
+        </div>
+    </div>
+    <div class="c-box m-t15">
+        <h3 class="f-l c-grayblue w-6"> 概述 </h3>
+        <input class="f-l w-84 c-gray bdr input-info" id="model_desc" name="model_desc" type="text" value="" placeholder="本应用可用于图片人脸识别">
+    </div>
+
+</div>
+<div class="f-l title">
+    <h1 class="f-l c-grayblue"> 部署属性 </h1>
+</div>
+<div class="f-l lis-ad bgc-white">
+    <div class="c-box m-t15">
+        <div class="w-50 f-l">
+            <h3 class="f-l c-grayblue w-12">优化引擎 </h3>
+            <select class="f-l select-box bdr product-select c-grayblue w-70">
+                <option value="TensorRT">TensorRT</option>
+                <option value="TF-serving">TF serving</option>
+            </select>
+        </div>
+        <div class="w-50 f-l">
+            <h3 class="f-l c-grayblue w-12" style="text-align: left">资源部署 </h3>
+            <select class="f-l select-box bdr product-select c-grayblue w-70 model-way-z">
+                <option value="弹性伸缩模式">弹性伸缩模式</option>
+                <option value="固定资源模式">固定资源模式</option>
+
+            </select>
+        </div>
+    </div>
+    <div class="c-box m-t15">
+        <div class="f-l w-50">
+            <h3 class="f-l c-grayblue w-12">单元部署 </h3>
+            <div class="f-l w-70 bdr">
+                <div class="h-40 gcpu_name_mg">
+                    <h4 class="f-l c-grayblue ta-l w-30">CPU(Core)</h4>
+                    <select class="f-l select-box bdr product-select c-grayblue w-50 cpu-i">
+                        <option value="4">4</option>
+                        <option value="8">8</option>
+                        <option value="16">16</option>
+                        <option value="32">32</option>
+                    </select>
+                </div>
+                <div  class="h-40 gcpu_name_mg">
+                    <h4 class="f-l c-grayblue ta-l w-30">内存（GB）</h4>
+                    <select class="f-l select-box bdr product-select c-grayblue w-50 gpu-i">
+                        <option value="16GB">16GB</option>
+                        <option value="32GB">32GB</option>
+                        <option value="64GB">64GB</option>
+                        <option value="128GB">128GB</option>
+                    </select>
+                </div>
+                <div  class="h-40 gcpu_name_mg">
+                    <h4 class="f-l c-grayblue ta-l w-30">GPU（Card)</h4>
+                    <select class="f-l select-box bdr product-select c-grayblue w-50 ggpu-i">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="4">6</option>
+                        <option value="5">7</option>
+                        <option value="5">8</option>
+                    </select>
+                </div>
+                <script>
+                    $('.cpu-i')[0].selectedIndex=1;
+                    $('.gpu-i')[0].selectedIndex=2;
+                    $('.ggpu-i')[0].selectedIndex=2;
+                </script>
+            </div>
+        </div>
+        <div class="f-l w-50">
+            <div class="w-100 h-40">
+                <h4 class="f-l c-grayblue ta-l w-12">实例部署</h4>
+                <input type="text" class="f-l bdr product-select c-grayblue w-20 compute-element-max input-fixation bx-sz" style="display: none;">
+                <input type="text" class="f-l bdr product-select c-grayblue w-20 compute-element-max mr-r-10 input-spring bx-sz" placeholder="1">
+                <span class="f-l h-40 line-h40" style="padding: 0 10px">~</span>
+                <input type="text" class="f-l bdr product-select c-grayblue w-20 compute-element-max input-spring bx-sz" placeholder="10">
+                <!--<select class="f-l select-box bdr product-select c-grayblue w-30 compute-element-max" style="display: none;">-->
+                <!--<option value="图像分类1">1</option>-->
+                <!--<option value="图像分类2">2</option>-->
+                <!--<option value="图像分类3">3</option>-->
+                <!--<option value="图像分类3">4</option>-->
+                <!--<option value="图像分类1">5</option>-->
+                <!--<option value="图像分类2">6</option>-->
+                <!--<option value="图像分类3">7</option>-->
+                <!--<option value="图像分类3">8</option>-->
+                <!--<option value="图像分类1">9</option>-->
+                <!--<option value="图像分类2">10</option>-->
+
+                <!--</select>-->
+            </div>
+            <!--<div class="w-100 h-40">-->
+                <!--<h4 class="f-l c-grayblue ta-l w-30">当前可用GPU个数</h4><h4 class="f-l c-grayblue ta-l w-30">2/2</h4>-->
+            <!--</div>-->
+
+        </div>
+    </div>
+</div>
+<!--</form>-->
+<input type="reset" value="取消" class="f-l btn-8 m-t35 m-r15 c-grayblue bgc-red-h c-white-h bgc-gray-b btn_m"/>
+<input type="button" value="部署" class="f-l btn-8 m-t35 m-r15 c-white bgc-Aqua bgc-red-h btn_m form-product-alert"/>
+{% endblock rightcontent %}
+
+{% block bottomfile %}
+<div class="product-end  h-100vh w-100vw" style="display: none;">
+    <div class="w-100 h-100" style="position: relative;">
+        <div class="product-end-content">
+            <h2 class="f-l m-t30 c-grayblue product-end-text font-w w-100 ta-c">模型推理部署进度</h2>
+            <div class="f-l m-t30 c-grayblue product-end-length-parent w-100 h-40">
+                <div class="w-80 h-20 product-end-length-box bdr">
+                    <div class="product-end-length h-20 line-h20 c-white ta-c">
+                        0
+                    </div>
+                </div>
+            </div>
+            <div class="product-end-btn-box f-l">
+                <div class="w-50 f-l">
+                    <input type="button" value="取消部署" class="f-r btn-8-product  m-r15 c-grayblue bgc-red-h c-white-h bgc-gray-b btn_m product-end-btn-no"/>
+                </div>
+                <div class="w-50 f-l">
+                    <input type="button" value="部署完成" class="f-l btn-8-product m-r15 c-white bgc-Aqua bgc-red-h btn_m product-end-btn-yes"/>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    function formsubmit(){
+        $('#form-product').submit()
+    }
+    var length_i=0
+    $('.form-product-alert').on('click',function(){
+        $('.product-end').css('display','block')
+        var time_for=setInterval(function(){
+            length_i+=10
+            console.log(length_i)
+            $('.product-end-length').css('width',length_i+'%')
+            $('.product-end-length').html(length_i+'%')
+            if(length_i==100){
+                clearInterval(time_for)
+                window.location.href='{{url_for('hyperai.ration.views.monitor')}}'
+            }
+            $('.product-end-btn-no').on('click',function () {
+                clearInterval(time_for)
+                $('.product-end').css('display','none')
+            })
+        },500)
+    })
+    //		部署完成
+    $('.product-end-btn-no').on('click',function(){
+        $('.product-end').css('display','none')
+    })
+    $('.product-end-btn-yes').on('click',function(){
+        window.location.href='{{url_for('hyperai.ration.views.monitor')}}'
+    })
+
+    //		部署方式
+    $('.model-way').on('change',function(){
+        if($(this).val()=='全新部署'){
+            $('.edition-num').css('display','block')
+            $('.edition-select').css('display','none')
+        }else if($(this).val()=='更新升级'){
+            $('.edition-num').css('display','none')
+            $('.edition-select').css('display','block')
+        }
+    })
+    //	    部署资源形式
+    $('.model-way-z').on('change',function(){
+        console.log($(this).val())
+        if($(this).val()== '固定资源模式'){
+//	           $('.compute-element-max').attr('disabled',"disabled")
+            $('.input-fixation').css('display','block')
+            $('.input-spring').css('display','none')
+        }else if($(this).val()== '弹性伸缩模式'){
+//	        	 $('.compute-element-max').removeAttr('disabled')
+            $('.input-fixation').css('display','none')
+            $('.input-spring').css('display','block')
+        }
+    })
+
+</script>
+{% endblock bottomfile %}

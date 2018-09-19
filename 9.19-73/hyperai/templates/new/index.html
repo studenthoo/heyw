@@ -1,0 +1,1183 @@
+{% extends 'new/public.html' %}
+
+
+{% block topfile %}
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/bitbug_favicon.ico') }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/public.css') }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/sub.css') }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/iconfont.css') }}"/>
+    <link rel="stylesheet" type="{{ url_for('static', filename='text/css" href="css/calendar.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='c3/c3.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='data1/css/lq.datetimepick.css') }}"/>
+<script type="text/javascript" src="{{ url_for('static', filename='js/jquery-1.7.2.js') }}"></script>
+    <style>
+        /*.c3-chart {*/
+            /*transform: scale(0.8) translate(50px, 20px);*/
+        /*}*/
+        @media screen and (min-width: 1450px){.c3-chart {
+            transform: scale(0.8) translate(50px, 20px);
+        }
+        }
+        .check_all{
+            margin-left: 20%;
+        }
+        @media screen and (max-width: 1450px){
+            .check_all{
+                margin-left: 27%;
+            }
+        }
+        @media screen and (max-width: 1400px){.c3-chart {
+            transform: scale(0.8) translate(14px, 20px);
+        }
+        }
+        @media screen and (min-width: 1400px) and (max-width: 1450px) {
+            .c3-chart {
+                transform: scale(0.8) translate(36px, 20px);
+            }
+        }
+        @media screen and (max-width: 1300px){
+            .fz-65{font-size: 60px;}
+            .btn{font-size: 14px;
+                height: 35px;
+                line-height: 35px;
+                padding:0 5px;
+            }
+        }
+        .c3-chart-arcs-title {
+            font-size: 30px;
+            font-weight: bold;
+        }
+        .lis_a_all .lis-a-li{width:22%;}
+
+        @font-face {font-family: "iconfont";
+            src: url('iconfont.eot?t=1524710871595'); /* IE9*/
+            src: url('iconfont.eot?t=1524710871595#iefix') format('embedded-opentype'), /* IE6-IE8 */
+            url('data:application/x-font-woff;charset=utf-8;base64,d09GRgABAAAAAAW4AAsAAAAACDAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAABHU1VCAAABCAAAADMAAABCsP6z7U9TLzIAAAE8AAAARAAAAFZW7kjrY21hcAAAAYAAAABbAAABhp08Br5nbHlmAAAB3AAAAeoAAAIY48GXr2hlYWQAAAPIAAAALwAAADYRLgG+aGhlYQAAA/gAAAAcAAAAJAfeA4RobXR4AAAEFAAAAAwAAAAMC+kAAGxvY2EAAAQgAAAACAAAAAgAdgEMbWF4cAAABCgAAAAdAAAAIAEXAGxuYW1lAAAESAAAAUUAAAJtPlT+fXBvc3QAAAWQAAAAJQAAADbv/FDleJxjYGRgYOBikGPQYWB0cfMJYeBgYGGAAJAMY05meiJQDMoDyrGAaQ4gZoOIAgCKIwNPAHicY2Bk/sE4gYGVgYOpk+kMAwNDP4RmfM1gxMjBwMDEwMrMgBUEpLmmMDgwVDxnZG7438AQw9zA0AAUZgTJAQAjgwxueJzFkMENgDAMAy9t6QMxCA8G4sUc3bhjtCYKDyaoJceKYylRgA3I4iUWsAfjxS3X3M/s7hfPVKmRaN3GUP+pIppV16RSWQZbt/qPw+sZnb5CC+rEHiRNUfMLlwB4nB2QP2/TYBDG7943fu2kidP4f+z8seMkbm3jKK7toDSkAiKhFNRGtCCFgdK9sHZh6ILEwMDMhBASG5+gfAN2ZgQjfIMmxeW506PT6W74PcABXP+kl9QAGbZgCDNYACALsCOSJjpeEpEAVYdTdUWknus5vNuJ6B3UO0zR4izp64xnVRSxhTtOnHkR8TBNpmQXY62JWLfMI6nXkOh7LBle6816n3xCte02qtNb63m4p8S2LJyXJakuSe8ExnECIYWqiC91rcgVS2z9maua6mV7m7SxXPfMR8uKbUmnb5NXzZ5eRLy4QNmyxS97NbOW92tTk6U6v1kRDLPidhU8/71hyOVm/xfkKt0Y/UFjsGEO+3AIx/AElvAMnsNJTp1yUxxF6KU5tNvhGd93OzndTakt1Gk8zEb5Raxr+lD7P+ZbhVe0dk6vi8g7+XOSjYaYOnrPc1JHdXs7qpuOHNVJEfB6skB8kNnTg3C2u2VYLSOUDcG32mR5T0WesMixNEJZiepP4/kpIs8KwRgx214r0QSDLvlzdYL0Y3T1jc5wVQvDJXm8+ooxIllMRod8JTiY2mHLFzWl4W52/eT+kqBCBHuIVYKkwAZjJC/mGyLLs8Nx4N+mhbsDb1JZ/f3wHQdnZw99H4MA4B8vP1GzAAB4nGNgZGBgAOJFJ+x/xPPbfGXgZmEAgevscdcR9P+HLAzMRkAuBwMTSBQAPXEKmwB4nGNgZGBgbvjfwBDDwgACQJKRARUwAwBHCQJsBAAAAAPpAAAEAAAAAAAAAAB2AQx4nGNgZGBgYGZIYOBiAAEmIOYCs/+D+QwAEuEBhAAAAHicZY9NTsMwEIVf+gekEqqoYIfkBWIBKP0Rq25YVGr3XXTfpk6bKokjx63UA3AejsAJOALcgDvwSCebNpbH37x5Y08A3OAHHo7fLfeRPVwyO3INF7gXrlN/EG6QX4SbaONVuEX9TdjHM6bCbXRheYPXuGL2hHdhDx18CNdwjU/hOvUv4Qb5W7iJO/wKt9Dx6sI+5l5XuI1HL/bHVi+cXqnlQcWhySKTOb+CmV7vkoWt0uqca1vEJlODoF9JU51pW91T7NdD5yIVWZOqCas6SYzKrdnq0AUb5/JRrxeJHoQm5Vhj/rbGAo5xBYUlDowxQhhkiMro6DtVZvSvsUPCXntWPc3ndFsU1P9zhQEC9M9cU7qy0nk6T4E9XxtSdXQrbsuelDSRXs1JErJCXta2VELqATZlV44RelzRiT8oZ0j/AAlabsgAAAB4nGNgYoAALgbsgJmRiZGZkYWBsYKjsjQvqbQ4o5SBAQAgYgQgAAAA') format('woff'),
+            url('iconfont.ttf?t=1524710871595') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
+            url('iconfont.svg?t=1524710871595#iconfont') format('svg'); /* iOS 4.1- */
+        }
+
+        .iconfont {
+            font-family:"iconfont" !important;
+            font-style:normal;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .icon-yunbushu:before { content: "\e701"; }
+
+    </style>
+{% with namespace = "/jobs" %}
+    {% set room = "job_management" %}
+    {% include 'socketio.html' %}
+{% endwith %}
+{% endblock topfile %}
+
+{% block rightcontent %}
+<!--{{[1,2,3,4,5]|random}}-->
+    <div class="f-l title">
+        <h1 class="f-l c-grayblue"> 控制台 </h1>
+        <span class="f-l c-gray"> Welcome back, {{request.cookies.username}} </span>
+    </div>
+
+    <div class="f-l sub-title bgc-white">
+        <a href="#" class="f-l c-gray c-aqua-h"><span class="f-l"> Home   </span><em
+                class="f-l c-gray"> / </em></a>
+        <a href="{{url_for('hyperai.views.index')}}" class="f-l c-gray c-aqua-h"><span class="f-l"> 控制台 </span><em class="f-l c-gray">
+            / </em></a>
+    </div>
+    <p class="c3_round_ar1" style="display: none;">{{sum_graph}}</p>
+    <div class="lis-a">
+        <h1 class="f-l"> 简单四步，轻松完成模型训练！ </h1>
+        <ul class="f-l lis_a_all">
+            <li class="f-l lis-a-li bgc-Aqua">
+                <div class="f-l bgc-gray-a_i">
+                    <i class="f-l iconfont fz-65"> &#xe605; </i>
+                    <h3 class="f-r">
+                        STEP1
+                        <span> 创建数据集 </span>
+                    </h3>
+                </div>
+                <div class="f-l m-t15">
+                    <a href="{{ url_for('hyperai.views.datasets') }}" class="f-l btn bgc-white c-grayblue c-aqua-h"> 创建 </a>
+                    <a href="{{ url_for('hyperai.views.datasets') }}" class="f-r btn bgc-white c-grayblue c-aqua-h"> 查看已有数据集 </a>
+                </div>
+            </li>
+            <li class="f-l lis-a-li bgc-gray-a">
+                <div class="f-l bgc-gray-a_i">
+                    <i class="f-l iconfont fz-65"> &#xe624; </i>
+                    <h3 class="f-r">
+                        STEP2
+                        <span> 创建模型 </span>
+                    </h3>
+                </div>
+                <div class="f-l m-t15">
+                    <a href="{{url_for('hyperai.model.images.classification.views.new') }}" class="f-l btn bgc-white c-grayblue c-aqua-h"> 创建 </a>
+                    <a href="{{ url_for('hyperai.views.modelmanage') }}" class="f-r btn bgc-white c-grayblue c-aqua-h lis-a-li_1"> 查看已有模型 </a>
+                </div>
+            </li>
+            <li class="f-l lis-a-li bgc-gray-a">
+                <div class="f-l bgc-gray-a_i">
+                    <i class="f-l iconfont fz-65"> &#xe8b5; </i>
+                    <h3 class="f-r">
+                        STEP3
+                        <span> 模型预测 </span>
+                    </h3>
+                </div>
+                <div class="f-l m-t15">
+                    <a href="{{url_for('hyperai.show.views.model_forecast_new') }}" class="btn bgc-white c-grayblue c-aqua-h"> 测试 </a>
+                </div>
+            </li>
+            <li class="f-l lis-a-li bgc-gray-a">
+                <div class="f-l bgc-gray-a_i">
+                    <i class="f-l iconfont fz-65"> &#xe605; </i>
+                    <h3 class="f-r">
+                        STEP4
+                        <span> 创建部署 </span>
+                    </h3>
+                </div>
+                <div class="f-l m-t15">
+                    <a href="{{ url_for('hyperai.ration.views.new') }}" class="f-l btn bgc-white c-grayblue c-aqua-h"> 创建 </a>
+                    <a href="{{ url_for('hyperai.ration.views.show') }}" class="f-r btn bgc-white c-grayblue c-aqua-h"> 查看已有部署 </a>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+<style>
+    .static-delete{
+        z-index: 99999;
+        position: fixed;
+        top: 35%;
+        left: 50%;
+        width: 550px;
+        height: 210px;
+        margin-left: -275px;
+        background-color: #fff;
+        display: none;
+        text-align: center;
+    }
+    .jobs_id,.jobs_url{
+        display: none;
+    }
+</style>
+<div class="static-delete">
+    <div class="f-l popup-title bgc-gray">
+        <!--<h1 class="f-l c-gray"> 新建数据集 </h1>-->
+        <a href="#" class="f-r popup-close bgc-Aqua bgc-red-h c-white"><i class="fz-24 iconfont"> &#xe676; </i></a>
+    </div>
+    <div class="c-box">
+        <p>确定删除</p>
+        <p class="jobs_id"></p>
+        <p class="jobs_url"></p>
+        <div class="c-box m-t150">
+            <a href="#" class="btn-6 m-l15 bgc-red-h bgc-gray-b c-grayblue c-white-h btn_select_no"> 取消 </a>
+            <a href="#" class="btn-6 m-l15 bgc-red-h c-white bgc-Aqua href_data_btn"> 确定 </a>
+
+        </div>
+    </div>
+</div>
+
+
+    <div class="lis-b bgc-white">
+        <div class="title">
+            <div class="l-box"><h2 class="f-l c-grayblue"> 资产统计 </h2></div>
+            <div class="r-box"><a href="#" class="f-l c-gray c-aqua-h">
+                <!--<i class="f-l iconfont m-t5 fz-24">&#xe650; </i>-->
+            </a></div>
+        </div>
+        <div class="f-l lis-b-chart m-t20">
+            <div id="mychart-a" class="f-l chart bdr"></div>
+            <div id="mychart-b" class="f-l chart bdr"></div>
+            <div id="mychart-c" class="f-l chart bdr"></div>
+            <div id="mychart-d" class="f-l chart bdr"></div>
+        </div>
+    </div>
+<style>
+    .delete_btn{
+        height: 30px;
+        line-height: 30px;
+
+        text-align: center;
+
+
+        margin-left: 20px;
+
+        margin-top: 5px;
+        cursor: pointer;
+        visibility: hidden;
+
+    }
+
+
+    .check-box label{
+        margin-top: 2px;
+        /*padding: 0;*/
+        /*width: 60px;*/
+    }
+    .home-scene{
+        width: 36%;
+    }
+    .home-class{
+        width: 30%;
+    }
+
+
+
+    @media screen and (min-width: 1366px) {
+        .home-scene{
+            width:40%;
+        }
+    }
+    @media screen and (min-width: 1450px) {
+        .home-scene{
+            width:55%;
+        }
+    }
+    @media screen and (min-width: 1710px) {
+        .home-scene{
+            width:43%;
+        }
+    }
+    @media screen and (max-width: 1366px) {
+        .home-scene{
+            width:60%;
+        }
+    }
+
+
+</style>
+    <div class="lis-c bgc-white">
+        <div class="title">
+            <div class="l-box">
+                <h2 class="f-l c-grayblue"> 作业管理</h2>
+                <!--<div class="f-l delete_btn">删除</div>-->
+                <a href="#" class="f-l c-more c-gray c-aqua-h lis-ctshow"> More <i
+                        class="iconfont fz-16">
+                    &#xe610; </i></a>
+            </div>
+        <div class="f-l lis-ct">
+            <form action="">
+
+
+                <!--<div class="f-l c-box m-t15">-->
+                    <!--<div class="c-box  f-l home-scene">-->
+                        <!--<h2 class="f-l m-l15 c-grayblue "> 应用场景： </h2>-->
+                        <!--<div class="check-box c-grayblue"><input type="checkbox" id="c-check-s1"/><label-->
+                                <!--for="c-check-s1">图像分类</label></div>-->
+                        <!--<div class="check-box c-grayblue"><input type="checkbox" id="c-check-s2"/><label-->
+                                <!--for="c-check-s2">目标检测</label></div>-->
+                        <!--<div class="check-box c-grayblue"><input type="checkbox" id="c-check-s3"/><label-->
+                                <!--for="c-check-s3">图像分割</label></div>-->
+                        <!--<div class="check-box c-grayblue"><input type="checkbox" id="c-check-s4"/><label-->
+                                <!--for="c-check-s4">医疗影像</label></div>-->
+
+                    <!--</div>-->
+                    <!--<div class="c-box  f-l home-class">-->
+                        <!--<h2 class="f-l m-l15 c-grayblue"> 作业类型： </h2>-->
+                        <!--<div class="check-box c-grayblue"><input type="checkbox" id="c-check-h1"/><label-->
+                                <!--for="c-check-h1">数据集</label></div>-->
+                        <!--<div class="check-box c-grayblue"><input type="checkbox" id="c-check-h2"/><label-->
+                                <!--for="c-check-h2">模型</label></div>-->
+                    <!--</div>-->
+
+                    <!--<div class="f-l c-box ">-->
+
+                        <!--<h2 class="f-l m-l15 c-grayblue"> 运行状态： </h2>-->
+                        <!--<div class="check-box c-grayblue"><input type="checkbox" id="c-check-1"/><label-->
+                                <!--for="c-check-1"> 运行中 </label></div>-->
+                        <!--<div class="check-box c-grayblue"><input type="checkbox" id="c-check-2"/><label-->
+                                <!--for="c-check-2"> 暂停 </label></div>-->
+                        <!--<div class="check-box c-grayblue"><input type="checkbox" id="c-check-3"/><label-->
+                                <!--for="c-check-3"> 错误 </label></div>-->
+                        <!--<div class="check-box c-grayblue"><input type="checkbox" id="c-check-4"/><label-->
+                                <!--for="c-check-4"> 完成 </label></div>-->
+                        <!--<div class="check-box c-grayblue"><input type="checkbox" id="c-check-5"/><label-->
+                                <!--for="c-check-5"> 等待 </label></div>-->
+                    <!--</div>-->
+
+
+                <!--</div>-->
+
+
+
+
+            <div class="f-l c-box m-t15">
+                <h2 class="f-l c-grayblue"> 作业名称： </h2>
+                <input type="text" placeholder="输入作业名称" class="f-l c-info c-gray bdr m-r15 model_name"/>
+                <h2 class="f-l m-l15 c-grayblue"> 运行状态： </h2>
+                <div class="check-box c-grayblue"><input type="checkbox" id="c-check-1"/><label
+                        for="c-check-1"> 运行中 </label></div>
+                <div class="check-box c-grayblue"><input type="checkbox" id="c-check-2"/><label
+                        for="c-check-2"> 终止 </label></div>
+                <div class="check-box c-grayblue"><input type="checkbox" id="c-check-3"/><label
+                        for="c-check-3"> 错误 </label></div>
+                <div class="check-box c-grayblue"><input type="checkbox" id="c-check-4"/><label
+                        for="c-check-4"> 完成 </label></div>
+                <div class="check-box c-grayblue"><input type="checkbox" id="c-check-5"/><label
+                        for="c-check-5"> 等待 </label></div>
+            </div>
+                <script>
+
+                    if ('{{name}}'!= ''){
+                        $('.model_name').val('{{name}}')
+                    }
+                    if({{run}}==true){
+                        $('#c-check-1').attr('checked','checked')
+                    }else{
+                        $('#c-check-1').attr('checked',false)
+                    }
+                    if({{stop}}==true){
+                        $('#c-check-2').attr('checked','checked')
+                    }else{
+                        $('#c-check-2').attr('checked',false)
+                    }
+                    if({{error}}==true){
+                        $('#c-check-3').attr('checked','checked')
+                    }else{
+                        $('#c-check-3').attr('checked',false)
+                    }
+                    if({{done}} == true){
+                        $('#c-check-4').attr('checked','checked')
+                    }else{
+                        $('#c-check-4').attr('checked',false)
+                    }
+                    if({{wait}} == true){
+                        $('#c-check-5').attr('checked','checked')
+                    }else{
+                        $('#c-check-5').attr('checked',false)
+                    }
+                </script>
+            <div class="f-l c-box m-t15">
+                <h2 class="f-l c-grayblue"> 提交时间： </h2>
+                <div class="f-l mycalendar">
+                    <input  onClick="laydate()" type="text" id="datetimepicker3" value=""
+                           class="f-l c-info bdr c-gray m-r15 my-datepicker"/>
+                    <i class="f-l fz-20 iconfont c-gray"> &#xe611; </i>
+                </div>
+                <span class="f-l c-grayblue"> 至 </span>
+                <div class="f-l mycalendar">
+                    <!--datetimepicker4-->
+                    <input type="text" id="demo" value=""
+                           class="f-l c-info bdr c-gray m-r15 my-datepicker"/>
+                    <i class="f-l fz-20 iconfont c-gray"> &#xe611; </i>
+                </div>
+                <input type="button" style="border: none" value="提交" class="f-r f-r btn-1 c-white bgc-Aqua bgc-red-h">
+                <!--<a href="#" class="f-r f-r btn-1 c-white bgc-Aqua bgc-red-h"> 提交 </a>-->
+            </div>
+                </form>
+        </div>
+        <dl class="f-l homework_ul">
+            <style>.w-16{width: 16%;}
+            .w-14{
+                width: 14%;
+            }
+            </style>
+            <dt class="f-l  c-grayblue" style="width: 8%;">
+            <div style="width: 100%;height: 40px;margin-left: 4px;">
+                <input type="checkbox" class="check_all" style="height: 40px;"/>
+                <span class=" delete_btn" style="height: 40px;line-height: 40px;">
+                    <i class="fz-20 iconfont"> &#xe61c; </i>
+                </span>
+
+            </div>
+            </dt>
+            <dt class="f-l w-16 c-grayblue"> 作业名称</dt>
+            <dt class="f-l w-16 c-grayblue" style="width: 12%"> 作业类型</dt>
+            <dt class="f-l w-16 c-grayblue"> 创建时间</dt>
+            <dt class="f-l w-16 c-grayblue" style="width: 13%"> 运行时长</dt>
+            <dt class="f-l w-16 c-grayblue"> 作业状态</dt>
+            <dt class="f-l w-20 c-grayblue" style="width: 19%"> 操作</dt>
+        </dl>
+        <ul class="f-l homework_ul">
+            {%for job in datas.all_jobs%}
+
+            <li class="f-l lis-c-list">
+                <div class="f-l c-view-2" style="width: 8%;"><input type="checkbox" name="subcheck" class="check_each"/></div>
+                <div class="f-l c-view-4 c-grayblue" style="width: 16%;"><a class="c-gray homework_ul_li_a"  href="{%if 'Dataset' in job.job_type()%}{{url_for('hyperai.dataset.views.show', job_id=job.id())}}{%elif 'Model' in job.job_type()%}{{url_for('hyperai.model.views.show', job_id=job.id())}}{%elif 'Para' in job.job_type()%}{{url_for('hyperai.tuning.views.show', job_id=job.id())}}{% else %}{{url_for('hyperai.vip.views.show', job_id=job.id())}}{%endif%}">{{job.name()}}</a></div>
+                <div class="f-l c-view-2 c-gray" style="width: 12%;">{%if 'Dataset' in job.job_type()%}数据集{%elif 'Model' in job.job_type()%}模型{% else %}模型{%endif%}</div>
+                <div class="f-l c-view-2 c-gray" style="width: 16%;">{{job.create_time}}</div>
+                <div class="f-l c-view-2 c-gray" style="width: 13%;">{{job.runtime_of_tasks()|print_time_diff}}</div>
+                <div class="f-l c-view-2" style="width: 16%;"><a id="{{job.id()}}" href="#" class="btn-style btn-normal c-white home_status">{%if 'Dataset' in job.job_type()%}{{job.status.name}}{%elif 'Model' in job.job_type()%}{{job.train_task().status.name}}{% else%}{{job.train_task().status.name}}{%endif%}</a></div>
+                <script>
+                    console.log('----------',$('.home_status').eq(3).html())
+
+                    var e = 0
+                    $('.btn-style').each(function () {
+                        console.log('----------',$(this).html())
+
+                        if($(this).text()=='Aborted' || ($(this).text()==='A')){
+                            $(this).text('终止')
+
+                        }
+                        else if(($(this).text()==='Done') || ($(this).text()==='D')){
+
+                            $(this).text('完成')
+
+                        }
+                        else if($(this).text()=='Error' || ($(this).text()==='E')){
+                            $(this).text('错误')
+
+                        }
+                        else if($(this).text()=='Running' || ($(this).text()==='R')){
+                            $(this).text('运行中')
+
+                        }
+                        else if($(this).text()=='Waiting' || ($(this).text()==='W')){
+                            $(this).text('等待')
+                            e++;
+                            console.log('waiting',e)
+                        }
+
+                    })
+                    $('document').ready(function() {
+                        socket.on('job update', function (msg) {
+//                            console.log('socket')
+//                            console.log(msg)
+                            if (msg['update'] == 'progress') {
+//                                console.log(msg['percentage']+'::::'+'{{job.id()}}'+'{%if 'Dataset' in job.job_type()%}{{job.status.name}}{%elif 'Model' in job.job_type()%}{{job.train_task().status.name}}{%endif%}')
+                                $('#'+msg.job_id).text(msg['percentage']+'%')
+                            }
+                            else  if(msg['update']=="status"){
+                               // console.log(msg['status']+'::::'+'{{job.id()}}'+'{%if 'Dataset' in job.job_type()%}{{job.status.name}}{%elif 'Model' in job.job_type()%}{{job.train_task().status.name}}{%endif%}')
+
+                                $('#'+msg.job_id).text(msg['status'])
+                                $('#'+msg.job_id).css('background','#ff6376')
+                                if(($('#'+msg.job_id).text() == "Error") || ($('#'+msg.job_id).text() == "Done") || ($('#'+msg.job_id).text() == "Aborted")){
+//                                    console.log('+++++++++++')
+                                    $.ajax({
+                                        type:'GET',
+                                        url:'/get_gpu_number',
+                                        success:function (e) {
+                                            console.log(e)
+                                            $('.resources-box strong').eq(0).html( e.gpu_max)
+                                            $('.resources-box strong').eq(1).html(e.gpu_used )
+                                            $('.resources-box strong').eq(2).html(e.total_gpu_count)
+                                            $('.resources-box strong').eq(3).html(e.remaining_gpu_count)
+                                        }
+
+                                    })
+                                }
+                            }
+                            $('.btn-style').each(function () {
+                               console.log($(this).text())
+                                if($(this).text()=='Aborted'){
+                                    $(this).text('终止')
+                                }
+                                else if($(this).text()=='Done'){
+                                    $(this).text('完成')
+                                }
+                                else if($(this).text()=='Error'){
+                                    $(this).text('错误')
+                                }
+                                else if($(this).text()=='Running'){
+                                    $(this).text('运行中')
+                                }
+                                else if($(this).text()=='Waiting'){
+                                    $(this).text('等待')
+                                }
+
+                            })
+                            $('.btn-style').each(function(){
+                                if($(this).text() == "运行中"){
+//		console.log(1)
+                                    $(this).css('backgroundColor','#17d49c')
+                                }
+                                else if($(this).text() == "完成"){
+                                    $(this).css('background-color','#ff6376')
+                                }
+                                else if($(this).text() == "终止"){
+                                    $(this).css('background-color','#9eb7c6')
+                                }
+                                else if($(this).text() == "错误"){
+                                    $(this).css('background-color','#ff976a')
+                                }
+                                else if($(this).text() == "等待"){
+                                    $(this).css('background-color','#ff976a')
+                                }
+                                else{
+                                    $(this).css('backgroundColor','#17d49c')
+                                }
+                            })
+                        })
+                    })
+
+                </script>
+                <div class="f-l c-view-3 home_work_list" style="width: 19%;text-align: center;">
+                    <div class="job_idi" style="display: none">/models/{{job.id()}}</div>
+                    <p style="display: none;">{{job.id()}}</p>
+                    <script>
+                        (function(window){var svgSprite='<svg><symbol id="icon-copy" viewBox="0 0 1024 1024"><path d="M799.3 224.5c52.9 0 96 43.1 96 96v512c0 52.9-43.1 96-96 96h-448c-52.9 0-96-43.1-96-96v-512c0-52.9 43.1-96 96-96h448m0-32h-448c-70.7 0-128 57.3-128 128v512c0 70.7 57.3 128 128 128h448c70.7 0 128-57.3 128-128v-512c0-70.6-57.3-128-128-128z" fill="" ></path><path d="M223.3 799.5c-52.9 0-96-43.1-96-96v-512c0-52.9 43.1-96 96-96h448c52.9 0 96 43.1 96 96v1.1h32v-1.1c0-70.7-57.3-128-128-128h-448c-70.7 0-128 57.3-128 128v512c0 70.7 57.3 128 128 128v-32z" fill="" ></path><path d="M410 432.5h358v32H410z" fill="" ></path><path d="M384 432.5h32v32h-32zM410 560.5h358v32H410z" fill="" ></path><path d="M384 560.5h32v32h-32zM410 688.5h294v32H410z" fill="" ></path><path d="M384 688.5h32v32h-32z" fill="" ></path></symbol></svg>';var script=function(){var scripts=document.getElementsByTagName("script");return scripts[scripts.length-1]}();var shouldInjectCss=script.getAttribute("data-injectcss");var ready=function(fn){if(document.addEventListener){if(~["complete","loaded","interactive"].indexOf(document.readyState)){setTimeout(fn,0)}else{var loadFn=function(){document.removeEventListener("DOMContentLoaded",loadFn,false);fn()};document.addEventListener("DOMContentLoaded",loadFn,false)}}else if(document.attachEvent){IEContentLoaded(window,fn)}function IEContentLoaded(w,fn){var d=w.document,done=false,init=function(){if(!done){done=true;fn()}};var polling=function(){try{d.documentElement.doScroll("left")}catch(e){setTimeout(polling,50);return}init()};polling();d.onreadystatechange=function(){if(d.readyState=="complete"){d.onreadystatechange=null;init()}}}};var before=function(el,target){target.parentNode.insertBefore(el,target)};var prepend=function(el,target){if(target.firstChild){before(el,target.firstChild)}else{target.appendChild(el)}};function appendSvg(){var div,svg;div=document.createElement("div");div.innerHTML=svgSprite;svgSprite=null;svg=div.getElementsByTagName("svg")[0];if(svg){svg.setAttribute("aria-hidden","true");svg.style.position="absolute";svg.style.width=0;svg.style.height=0;svg.style.overflow="hidden";prepend(svg,document.body)}}if(shouldInjectCss&&!window.__iconfont__svg__cssinject__){window.__iconfont__svg__cssinject__=true;try{document.write("<style>.svgfont {display: inline-block;width: 1em;height: 1em;fill: currentColor;vertical-align: -0.1em;font-size:16px;}</style>")}catch(e){console&&console.log(e)}}ready(appendSvg)})(window)
+                    </script>
+                    <style>
+                        .icon {
+                            width: 1em; height: 1em;
+                            vertical-align: -0.15em;
+                            fill: currentColor;
+                            overflow: hidden;
+                        }
+                    </style>
+                    <a href="/clone/{{job.id()}}" class="homework_ul_li_btn c-gray c-aqua-h"><span style="display: none">克隆</span><svg class="fz-20 icon" aria-hidden="true"> <use xlink:href="#icon-copy"></use></svg></a>
+                    <a href="#" class="homework_ul_li_btn c-gray c-aqua-h abord"><span style="display: none">终止</span><i class="fz-20 iconfont"> &#xe633; </i></a>
+                    <a href="{%if job.status in ['I', 'R','W', 'P']%}/abort/{{job.id()}}{%else%}#{%endif%}" style="display: none"></a>
+                    <!--<a href="#" class="homework_ul_li_btn c-gray c-aqua-h jobb_i"><span style="display: none">删除</span><i class="fz-20 iconfont"> &#xe61c; </i></a>-->
+<a {%if 'Dataset' in job.job_type() %}href="{{url_for('hyperai.views.log_new',job_id=job.id())}}"{%elif 'Model' in job.job_type() %}href="{{url_for('hyperai.views.log_new', job_id=job.id())}}"{%elif 'Para' in job.job_type() %}href="{{url_for('hyperai.views.log_new',job_id=job.id())}}"{%else%}href="{{url_for('hyperai.views.log_new',job_id=job.id())}}"{%endif%} class="homework_ul_li_btn c-gray c-aqua-h"><span  style="display: none">日志下载</span><i class="fz-20 iconfont"> &#xe600; </i></a>
+                    <style>
+
+                        @font-face {font-family: "iconfont";
+                            src: url('iconfont.eot?t=1528094031350'); /* IE9*/
+                            src: url('iconfont.eot?t=1528094031350#iefix') format('embedded-opentype'), /* IE6-IE8 */
+                            url('data:application/x-font-woff;charset=utf-8;base64,d09GRgABAAAAAAXUAAsAAAAACJgAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAABHU1VCAAABCAAAADMAAABCsP6z7U9TLzIAAAE8AAAARAAAAFZW7kf/Y21hcAAAAYAAAABeAAABhpmMBr5nbHlmAAAB4AAAAf4AAAJ8F+AADWhlYWQAAAPgAAAALwAAADYRlUCxaGhlYQAABBAAAAAcAAAAJAfeA4RobXR4AAAELAAAAAwAAAAMC+kAAGxvY2EAAAQ4AAAACAAAAAgAdgE+bWF4cAAABEAAAAAfAAAAIAEVAJRuYW1lAAAEYAAAAUUAAAJtPlT+fXBvc3QAAAWoAAAAKgAAADvAO8VQeJxjYGRgYOBikGPQYWB0cfMJYeBgYGGAAJAMY05meiJQDMoDyrGAaQ4gZoOIAgCKIwNPAHicY2Bk/sE4gYGVgYOpk+kMAwNDP4RmfM1gxMjBwMDEwMrMgBUEpLmmMDgwVDwTZW7438AQw9zA0AAUZgTJAQAk6wyBeJzFkMENgDAMAy9t6QPx7Q48GIgXc3TirlFMKA8mqCXHimMpUYAFiOIhJrAL48Ep19yPrO4nz2SpEait9K7+U0U0y65BJTMNNm/1H5vXfXT6CnVQJ7byknADgzcL4wAAeJx1kL9v00AUx++da8fOOTb+nbi2E9skThXqCNsJA6q7ACJtJZCgQ7ohpiIBYwcYuiAYkOBvQEhIdGLvygQDC38AgpU/IYZ3DSun03vvPt939+49IhLy54dwLnSJRcbkKrlB7hIC0gQSjYYQZ1VOJ+DEouPZmpClWdxKk1zYAS+RbLeYVyNPakk6aBBBGRfzLKcZzKqaXofCDQF6m/49cxiYwltod7PoRbNH34HTTwO93m4WV3btYmDJJ6pp9kzztSyJokzphq7BY89VRKUtNe9F3XfO+1u0D2ov8w+WncGm+eBV9SQcegrA6SlYmwPtw67hG7if+65l9lqXOnLX76SXbTj5xbqWGo5+Elwy9vpFeCTsE49skyU5Ig/JU/KMvMSO42SUzWq4VqIpXM8pIwjBloZxDjiL0Q7kkEgh9oknCZBmBs+OMGeCtGVE4MVIDFTSZFTNueYZGkC6nlMiWfEFj/mdFr5QzXFiLo85X8f0e3NbZgB5ehPK/QJuJVPW3Ic3G66+VBgEWwEw+Uh34fNqNa0prafHCmPKcTQGGEdUWPs1u9Cbb92O08H9u7nDKXzi9j8xPVBlNclhNizL4Qw/wRQ21ixVXthBYC8UZq0WWJIe4tPADIalVmf/Sh+i5wj11dm0Fqy2ptma1nzlkCsfueFe5U4l5C/atGC+AAB4nGNgZGBgAOIFi9jq4/ltvjJwszCAwHWrf/4I+v9pFgZmbyCXg4EJJAoAJ5cKWgB4nGNgZGBgbvjfwBDDwgACQJKRARUwAwBHCQJsBAAAAAPpAAAEAAAAAAAAAAB2AT54nGNgZGBgYGboYOBgAAEmIOYCQgaG/2A+AwAWmwGqAHicZY9NTsMwEIVf+gekEqqoYIfkBWIBKP0Rq25YVGr3XXTfpk6bKokjx63UA3AejsAJOALcgDvwSCebNpbH37x5Y08A3OAHHo7fLfeRPVwyO3INF7gXrlN/EG6QX4SbaONVuEX9TdjHM6bCbXRheYPXuGL2hHdhDx18CNdwjU/hOvUv4Qb5W7iJO/wKt9Dx6sI+5l5XuI1HL/bHVi+cXqnlQcWhySKTOb+CmV7vkoWt0uqca1vEJlODoF9JU51pW91T7NdD5yIVWZOqCas6SYzKrdnq0AUb5/JRrxeJHoQm5Vhj/rbGAo5xBYUlDowxQhhkiMro6DtVZvSvsUPCXntWPc3ndFsU1P9zhQEC9M9cU7qy0nk6T4E9XxtSdXQrbsuelDSRXs1JErJCXta2VELqATZlV44RelzRiT8oZ0j/AAlabsgAAAB4nGNgYoAALgbsgJmRiZGZkYWBsYK3PDUvKzMxL700MS8nk4EBAD3MBg4AAA==') format('woff'),
+                            url('iconfont.ttf?t=1528094031350') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
+                            url('iconfont.svg?t=1528094031350#iconfont') format('svg'); /* iOS 4.1- */
+                        }
+
+                        .iconfont {
+                            font-family:"iconfont" !important;
+                            font-style:normal;
+                            -webkit-font-smoothing: antialiased;
+                            -moz-osx-font-smoothing: grayscale;
+                        }
+
+                        .icon-wenjianguanli:before { content: "\e615"; }
+
+
+                    </style>
+
+                    <a target="_blank" href="{%if request.cookies.username == 'Administrator'%}http://{{jupyter_ip}}:{{jupyter_port}}/tree/{{job.username}}/jobs/{{job.id()}}{%else%}http://{{jupyter_ip}}:{{jupyter_port}}/tree/{{request.cookies.username}}/jobs/{{job.id()}}{%endif%}" class="homework_ul_li_btn c-gray c-aqua-h"><span style="display: none">Jupyter</span><i class="fz-20 iconfont icon-wenjianguanli"></i></a>
+                </div>
+                <style>
+                    .home_work_list a{position: relative;}
+                    .home_work_list span{position: absolute;top: -2px;left: -14px;
+                        height: 20px;line-height: 20px;font-size: 12px;
+                        float: left;
+                        width: 50px;
+                        text-align: center;
+                    }
+                    .home_work_list a:hover span{display: block!important;}
+                </style>
+            </li>
+          {%endfor%}
+        </ul>
+        <style>
+            .homework_ul{width: 100%;}
+            .homework_ul_li_a:hover{color:#00b5b8;}
+            .homework_ul_li_btn{display: block;}
+        </style>
+        <div class="f-l page-box">
+            <div id="page" class="page_div">
+             <ul class="pagination">
+       {% if datas.show_shouye_status==1%}
+           <li class=''><a href='/index?p=1&name={{name}}&run={{run}}&stop={{stop}}&error={{error}}&done={{done}}&data_begin={{data_begin}}&data_end={{data_end}}'>首页</a></li>
+           <li class=''><a href='/index?p={{datas.p-1}}&name={{name}}&run={{run}}&stop={{stop}}&error={{error}}&done={{done}}&data_begin={{data_begin}}&data_end={{data_end}}'>上一页</a></li>
+      {%endif%}
+
+       {% for dic in datas.dic_list %}
+           {% if dic==datas.p%}
+             <li class="active"><a href="/index?p={{dic}}&name={{name}}&run={{run}}&stop={{stop}}&error={{error}}&done={{done}}&data_begin={{data_begin}}&data_end={{data_end}}">{{dic}}</a></li>
+           {%else%}
+               <li class=""><a href="/index?p={{dic}}&name={{name}}&run={{run}}&stop={{stop}}&error={{error}}&done={{done}}&data_begin={{data_begin}}&data_end={{data_end}}">{{dic}}</a></li>
+           {%endif%}
+        {%endfor%}
+
+       {% if datas.p < datas.total%}
+            <li class=''><a href='/index?p={{datas.p+1}}&name={{name}}&run={{run}}&stop={{stop}}&error={{error}}&done={{done}}&data_begin={{data_begin}}&data_end={{data_end}}'>下一页</a></li>
+            <li class=''><a href='/index?p={{datas.total}}&name={{name}}&run={{run}}&stop={{stop}}&error={{error}}&done={{done}}&data_begin={{data_begin}}&data_end={{data_end}}'>尾页</a></li>
+       {%endif%}
+            <!--<li class='f-l'>共{{datas.total}}页</li>-->
+ </ul>
+            </div>
+        </div>
+    </div>
+        </div>
+<style>
+   .prompt-box, .alert-box,.abort-box{    z-index: 99998;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, .6);
+        display: none;
+    }
+    .alert-div{
+        width: 400px;
+        height: 240px;
+        background: white;
+        margin: 0 auto;
+        margin-top: 10%;
+        position: relative;
+    }
+    .alert-div-nav{
+        height:40px;
+    }
+    .alert-div-nav i{
+        background: #00b5b8;
+        color: white;
+    }
+    .alert-div-content h3{height: 40px;
+        line-height: 40px;
+        text-align: center;
+        margin-top: 35px;
+    }
+    .alert-btn{height: 40px;
+        text-align: center;
+        position: absolute;
+        bottom: 35px;
+        width: 100%;
+    }
+    .alert-btn div{display: inline-block; }
+    .alert-btn  h3{
+        height:40px;
+        width: 100%;
+        /*padding: 0 30px;*/
+        line-height: 40px;
+    }
+    .alert-btn-no{
+        color: #2c3850;
+        background: #d2e0e9;
+        margin-right: 20px;
+        width:100px;
+    }
+    .alert-btn-yes{background: #00b5b8;
+        color: white;
+        width:100px;
+    }
+    .hover-red:hover{color: white;
+        background: #ff6376;
+    }
+</style>
+<div class="alert-box">
+    <div class="alert-div">
+        <div class="alert-div-nav">
+            <!--<i class="fz-24 iconfont f-r hover-red"> &#xe676; </i>-->
+        </div>
+        <div class="alert-div-content">
+            <h3>确认删除？</h3>
+        </div>
+        <div class="alert-btn">
+            <div class="alert-btn-no hover-red">
+                <h3>取消</h3>
+            </div>
+            <div class="alert-btn-yes hover-red">
+                <h3>确认</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="prompt-box">
+    <div class="alert-div">
+        <div class="alert-div-nav">
+            <!--<i class="fz-24 iconfont f-r hover-red"> &#xe676; </i>-->
+        </div>
+        <div class="alert-div-content">
+            <h3></h3>
+        </div>
+        <div class="alert-btn">
+            <!--<div class="alert-btn-no hover-red">-->
+                <!--&lt;!&ndash;<h3>取消</h3>&ndash;&gt;-->
+            <!--</div>-->
+            <div class="alert-btn-yes hover-red">
+                <h3>确定</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="abort-box">
+    <div class="alert-div">
+        <div class="alert-div-nav">
+            <!--<i class="fz-24 iconfont f-r hover-red"> &#xe676; </i>-->
+        </div>
+        <div class="alert-div-content">
+            <h3>确认终止？</h3>
+        </div>
+        <div class="alert-btn">
+            <div class="alert-btn-no hover-red">
+                <h3>取消</h3>
+            </div>
+            <div class="alert-btn-yes hover-red">
+                <h3><a href="" style="display:inline-block;width: 100%;height:100%;color: #ffffff;">确认</a></h3>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var delete_url=null;
+    var delete_id=null;
+    $('.alert-btn-no').on('click',function () {
+        $('.alert-box').css('display','none')
+        $('.abort-box').css('display','none')
+    })
+    $('.prompt-box .alert-btn-yes').on('click',function () {
+        $('.prompt-box').css('display','none')
+        location.reload()
+    })
+    $('.alert-div-nav').on('click',function () {
+        $('.alert-box').css('display','none')
+        $('.abort-box').css('display','none')
+    })
+//    $('.jobb_i').on('click',function () {
+//        $('.alert-box').css('display','block')
+//        delete_url=$(this).siblings('div').text();
+//        delete_id=$(this).siblings('p').text();
+//        $('.alert-box .alert-btn-yes').on('click',function () {
+//            $('.alert-box').css('display','none')
+//            $.ajax({
+//                type:'DELETE',
+//                url:delete_url,
+//                data:{id:delete_id},
+//                success:function (res) {
+//                    console.log(res)
+//                    if(res.res==2){
+//                        alert('该数据集已被模型占用、不能删除!')
+//                    }
+//                    else {
+//                        location.reload()
+//                    }
+//                }
+//            })
+//        })
+//
+//    })
+
+//    终止
+        $('.abord').on('click',function () {
+            console.log('click',$(this).parents('.c-view-3').prev('script').prev('.c-view-2').find('a').html())
+            console.log('click',$(this).parents('.c-view-3').prev('script').prev('.c-view-2').find('a').attr('href'))
+
+            if($(this).parents('.c-view-3').prev('script').prev('.c-view-2').find('a').html() == '错误' || $(this).parents('.c-view-3').prev('script').prev('.c-view-2').find('a').html() == '完成' || $(this).parents('.c-view-3').prev('script').prev('.c-view-2').find('a').html() == '终止' ){
+
+            }else{
+                $('.abort-box').css('display','block')
+                console.log('aborted',$(this).next('a').attr('href'))
+                var abort_url = $(this).next('a').attr('href')
+                $('.abort-box .alert-btn-yes a').attr('href',abort_url)
+                $('.abort-box .alert-btn-yes').on('click',function () {
+                    $('.abort-box').css('display','none')
+                })
+            }
+
+        })
+
+
+//    删除
+    var job_ids = []
+
+    $('.check_all').on('click',function () {
+
+        if($(this).is(':checked') == true){
+            $('.delete_btn').css('visibility','visible')
+            $('.check_each').each(function () {
+                $(this).attr('checked','checked')
+            })
+            $('.jobs_num').html($(":checkbox[name=subcheck]:checked").size())
+        }else {
+            $('.delete_btn').css('visibility','hidden')
+            $('.check_each').each(function () {
+                $(this).removeAttr('checked','checked')
+            })
+            $('.jobs_num').html($(":checkbox[name=subcheck]:checked").size())
+
+        }
+    })
+
+
+    $('.check_each').on('click',function () {
+        $('.check_each').each(function () {
+//            console.log($(":checkbox[name=subcheck]:checked").size())
+            if($(":checkbox[name=subcheck]:checked").size() == 0){
+                $('.delete_btn').css('visibility','hidden')
+                $('.check_all').removeAttr('checked','checked')
+                $('.jobs_num').html($(":checkbox[name=subcheck]:checked").size())
+            }else{
+                $('.delete_btn').css('visibility','visible')
+                $('.jobs_num').html($(":checkbox[name=subcheck]:checked").size())
+            }
+        })
+    })
+    $('.delete_btn').on('click',function () {
+
+        job_ids = []
+//        delete_url = $(this).parents('.c-view-2').siblings('.home_work_list').find('div').html()
+        $('.alert-box').css('display','block')
+        $('.check_each').each(function () {
+            if($(this).is(':checked') == true){
+                job_ids.push($(this).parents('.c-view-2').siblings('.home_work_list').find('p').html())
+
+            }
+
+        })
+
+
+    })
+    $('.alert-box .alert-btn-yes').on('click',function () {
+        console.log('job_ids',job_ids)
+        $.ajax({
+            type:'POST',
+            url:'/delete_select_job',
+            data:{job_all:job_ids},
+            success:function (e) {
+                console.log('delete',e)
+                if(e.res == 2){
+                    $('.prompt-box').css('display','block')
+                    $('.prompt-box .alert-div-content h3').html('数据集已被模型占用、不能删除!')
+
+
+                }else if(e.res == 4){
+                    console.log(e.err[0])
+                    if(e.err[0] == 0){
+                        $('.prompt-box').css('display','block')
+                        $('.prompt-box .alert-div-content h3').html(e.err[1]+'个数据集被占用,'+'不能删除')
+                    }else if(e.err[1] == 0){
+                        $('.prompt-box').css('display','block')
+                        $('.prompt-box .alert-div-content h3').html(e.err[0]+'个运行或等待的作业,'+ '请先终止')
+                    }else{
+                        $('.prompt-box').css('display','block')
+                        $('.prompt-box .alert-div-content h3').html(e.err[0]+'个运行或等待的作业,'+ '请先终止;' + e.err[1]+'个数据集被占用,'+'不能删除')
+                    }
+                }
+                else{
+                    location.reload()
+                }
+            }
+        })
+        $('.alert-box').css('display','none')
+    })
+
+
+
+
+</script>
+<style>
+    /*.pagination{margin: 0 auto;min-width: 180px}*/
+    /*.pagination li{display: inline-block;}*/
+    .pagination{text-align: center}
+    .pagination li{display: inline-block;}
+    .active li{color: red}
+    .active a{background: #00b5b8;color: white;border: none}
+</style>
+{% endblock rightcontent %}
+
+{% block bottomfile %}
+<script type="text/javascript" src="{{ url_for('static', filename='laydate/laydate.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/Feffects.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.nicescroll.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='c3/d3.v3.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='c3/c3.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/public.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/paging.js') }}"></script>
+<script>
+
+////////////////////////////////////////////////表格/
+var round_fun=function(a,b,c,d,f){
+			var chart = c3.generate({
+				bindto:a,
+				title:{text:f},//标题
+                tooltip: {
+                   show: true,
+                    format: {
+        //               title: function (d) { return 'Data ' + d; },
+                       value: function (value, ratio, id) {
+                           var format = id === 'data1' ? d3.format(',') : d3.format('');
+                           return format(value);
+                       }
+                   }
+               },
+			    data: {
+				        columns: b,
+//				        [
+//				            ['图像', 130],
+//				            ['文本', 170],
+//				            ['语音', 110],
+//				            ['啊啊', 50],
+//				            ['啊啊啊', 30]
+//				        ],
+				        type : 'donut'
+				},
+		//		汉字显示
+				donut: {
+					 title: c,
+//					 环厚度
+					 width:18,
+			        label: {
+			            format: function (value, ratio, id) {
+		//	                 return d3.format('$')(value);
+			            }
+			        }
+			    },
+			    legend: {
+			        hide: false,
+			        position: 'bottom',
+//			        图例点击事件
+			         item: {
+					    onclick: function () {}
+					  }
+			    },
+				color: {
+					pattern: d
+		        },
+
+		})
+	}
+//表格1
+//	var arr1=[
+//			['图像', 130],
+//			['文本', 170],
+//			['语音', 110],
+//			['视频', 50],
+//			['音频', 30]
+//		]
+
+var arr1=null;
+if({{sum_graph[0]|safe}}==0){
+    arr1=[['分类',1],['分割',0],['检测',0]]
+}
+else {
+    arr1={{sum_graph[0]|safe}}
+}
+console.log('==============',{{sum_graph[0]|safe}})
+var arr1_length=0;
+for(var i=0;i<{{sum_graph[0]|length}};i++){
+    arr1_length+=arr1[i][1]
+}
+for(var i=0;i<{{sum_graph[0]|length}};i++){
+    if({{sum_graph[0]|safe}}[i][0]=='image-processing'){
+        arr1[i][0]='处理'
+    }
+else if({{sum_graph[0]|safe}}[i][0]=='image-segmentation'){
+        arr1[i][0]='分割'
+    }
+else if({{sum_graph[0]|safe}}[i][0]=='image-object-detection'){
+        arr1[i][0]='检测'
+    }
+else if({{sum_graph[0]|safe}}[i][0]=='classification'){
+        arr1[i][0]='分类'
+    }
+ else if({{sum_graph[0]|safe}}[i][0]=="image-sunnybrook"){
+        arr1[i][0]='医疗'
+    }
+else if({{sum_graph[0]|safe}}[i][0]=='text-classification'){
+        arr1[i][0]='文本'
+    }
+}
+var color1=['#0e9aef', '#fe9868', '#11c888', '#ababab','#e5e6e8','#00b5b9']
+round_fun("#mychart-a",arr1,arr1_length,color1,'应用场景')
+$('#mychart-a').children().eq(0).children().eq(3).attr('transform','translate(0,200)')
+//表格2
+//var arr2=[
+//			['LMDB', 10],
+//			['HDF5',5],
+//			['TFRECORDS', 3]
+//
+//		]
+//var arr2=null;
+//if({{sum_graph[1]|safe}}.length==0){
+//    arr2=[['LMDB', 1], ['HDF5',0], ['TFRECORDS', 0]]
+//}
+//else {
+//    arr2={{sum_graph[1]|safe}}
+//}
+//var arr2_length=0;
+//for(var i=0;i<{{sum_graph[1]|length}};i++){
+//    arr2_length+=arr2[i][1]
+//}
+//for(var i=0;i<{{sum_graph[1]|length}};i++){
+//    if({{sum_graph[1]|safe}}[i][0]=='hdf5'){
+//        arr2[i][0]='HDF5'
+//    }
+//else if({{sum_graph[1]|safe}}[i][0]=='lmdb'){
+//        arr2[i][0]='LMDB'
+//    }
+//else if({{sum_graph[1]|safe}}[i][0]=='tfrecords'){
+//        arr2[i][0]='TFRECORDS'
+//    }
+//}
+
+
+
+var arr2=null;
+if({{sum_graph[1]|safe}}.length==0){
+    arr2=[['分类', 1], ['分割',0], ['检测', 0]]
+}
+else {
+    arr2={{sum_graph[1]|safe}}
+}
+var arr2_length=0;
+for(var i=0;i<{{sum_graph[1]|length}};i++){
+    arr2_length+=arr2[i][1]
+}
+console.log('dataset',{{sum_graph[0]|safe}})
+for(var i=0;i<{{sum_graph[1]|length}};i++){
+    if({{sum_graph[1]|safe}}[i][0]=='image-processing'){
+        arr2[i][0]='处理'
+    }
+else if({{sum_graph[1]|safe}}[i][0]=='image-segmentation'){
+        arr2[i][0]='分割'
+    }
+else if({{sum_graph[1]|safe}}[i][0]=='image-object-detection'){
+        arr2[i][0]='检测'
+    }
+else if({{sum_graph[1]|safe}}[i][0]=='classification'){
+        arr2[i][0]='分类'
+    }
+else if({{sum_graph[1]|safe}}[i][0]=="image-sunnybrook"){
+        arr2[i][0]='医疗'
+    }
+else if({{sum_graph[1]|safe}}[i][0]=='text-classification'){
+        arr2[i][0]='文本'
+    }
+}
+
+
+
+
+var color2=['#10c787', '#ffcc33', '#e5e6e8', '#ababab','#e5e6e8']
+round_fun("#mychart-b",arr2,arr2_length,color2,'数据集');
+$('#mychart-b').children().eq(0).children().eq(3).attr('transform','translate(0,200)')
+
+//表格3
+//var arr3=[
+//			['TensorFlow', 160],
+//			['Torch', 60],
+//			['Caffe', 90]
+//
+//		]
+var arr3=null
+if({{sum_graph[2]|safe}}.length==0){
+    arr3=[['TensorFlow', 1], ['Torch',0], ['Caffe', 0]]
+}
+else {
+    arr3={{sum_graph[2]|safe}}
+}
+var arr3_length=0;
+for(var i=0;i<{{sum_graph[2]|length}};i++){
+    arr3_length+=arr3[i][1]
+}
+var color3=['#fe6375', '#2674b6', '#03ded6', '#acacac','#e5e6e8']
+round_fun("#mychart-c",arr3,arr3_length,color3,'模型');
+$('#mychart-c').children().eq(0).children().eq(3).attr('transform','translate(0,200)')
+
+////表格4
+//var arr4=[
+//			['完成', done],
+//			['错误', error],
+//			['运行中', running],
+//			['未提交', 1]
+//		]
+var arr4={{sum_graph[3]|safe}}
+if({{sum_graph[3]|safe}}.length==0){
+    arr4=[['完成', 1], ['错误',0], ['运行中', 0], ['终止', 0], ['等待', 0]]
+}
+else {
+    arr4={{sum_graph[3]|safe}}
+}
+var arr4_length=0;
+for(var i=0;i<{{sum_graph[3]|length}};i++){
+    arr4_length+=arr4[i][1]
+}
+for(var i=0;i<{{sum_graph[3]|length}};i++){
+    if({{sum_graph[3]|safe}}[i][0]=='Done'){
+        arr4[i][0]='完成'
+    }
+else if({{sum_graph[3]|safe}}[i][0]=='Error'){
+        arr4[i][0]='错误'
+    }
+else if({{sum_graph[3]|safe}}[i][0]=='Running'){
+        arr4[i][0]='运行中'
+    }
+else if({{sum_graph[3]|safe}}[i][0]=='Aborted'){
+        arr4[i][0]='终止'
+    }
+else if({{sum_graph[3]|safe}}[i][0]=='Waiting'){
+        arr4[i][0]='等待'
+    }
+}
+
+var color4=['#0dc999', '#bbcdd9', '#ff6276', '#ababab','#e5e6e8']
+//	round_fun("#mychart-d",arr4,{{sum_graph[3]|length}},color4,'作业');
+round_fun("#mychart-d",arr4,arr4_length,color4,'作业');
+$('#mychart-d').children().eq(0).children().eq(3).attr('transform','translate(0,200)')
+
+
+var href_all_select=null;
+$('.bgc-red-h').on('click',function(){
+	$(this).parent().parent().parent().slideUp();
+    href_all_select='index?name=' +encodeURI($('.model_name').val()) + '&run=' +$('#c-check-1').prop('checked')
+            + '&stop=' +$('#c-check-2').prop('checked')+ '&error=' +$('#c-check-3').prop('checked')+
+            '&done=' +$('#c-check-4').prop('checked') +'&wait='+$('#c-check-5').prop('checked')+ '&data_begin='
+            +$('#datetimepicker3').val()+ '&data_end=' +$('#demo').val()+'&p=1'
+    console.log(href_all_select)
+    window.location.href=href_all_select
+})
+//顶部tab选择
+//顶部简单三步切换
+$('.lis_a_all li').on('click',function(){
+	$(this).addClass('bgc-Aqua').siblings().removeClass('bgc-Aqua');
+	$(this).removeClass('bgc-gray-a').siblings().addClass('bgc-gray-a');
+})
+//日历
+
+;!function(){
+    laydate({
+        elem: '#demo'
+    })
+}();
+
+//状态颜色
+$('.btn-style').each(function(){
+    console.log('----------',$('.home_status').eq(3).html())
+	if($(this).text() == "运行中"){
+		console.log(1)
+	$(this).css('backgroundColor','#17d49c')
+	}
+	else if($(this).text() == "完成"){
+		$(this).css('background-color','#ff6376')
+	}
+	else if($(this).text() == "终止"){
+		$(this).css('background-color','#9eb7c6')
+	}
+	else if($(this).text() == "错误"){
+		$(this).css('background-color','#ff976a')
+	}
+    else if($(this).text() == "等待"){
+        $(this).css('background-color','#ff976a')
+    }
+	else{
+	    $(this).css('backgroundColor','#17d49c')
+    }
+})
+
+//    删除
+//    $('.jobb_i').on('click',function () {
+//	console.log($(this).siblings('p').text()+':id')
+//	console.log($(this).siblings('div').text()+':url')
+//        // $('.static-delete').css('display','block');
+//        // $('.jobs_url').html($(this).siblings('div').text())
+//     //   $('.jobs_id').html($(this).siblings('p').text())
+//	$(this).parent().parent().remove()
+//	$.ajax({
+//		type:'DELETE',
+//		url:$(this).siblings('div').text(),
+//		data:{id:$(this).siblings('p').text()},
+//		success:function (res) {
+//			console.log(res)
+//			if(res.res==2){
+//				alert('该数据集已被模型占用、不能删除!')
+//			}
+//        }
+//	})
+//})
+// $('.btn_select_no').on('click',function () {
+//     $('.static-delete').css('display','none')
+//
+// })
+// $('.href_data_btn').on('click',function () {
+//
+//     $('.static-delete').css('display','none')
+//
+// })
+</script>
+{% endblock bottomfile %}

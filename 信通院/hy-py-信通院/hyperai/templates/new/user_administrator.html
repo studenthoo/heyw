@@ -1,0 +1,1648 @@
+{% extends 'new/public.html' %}
+
+
+{% block topfile %}
+<link rel="shortcut icon" href="{{ url_for('static', filename='images/bitbug_favicon.ico') }}"/>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/public.css') }}"/>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/sub.css') }}"/>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/iconfont.css') }}"/>
+<link rel="stylesheet" type="{{ url_for('static', filename='text/css" href="css/calendar.css') }}"/>
+<link rel="stylesheet" href="{{ url_for('static', filename='c3/c3.css') }}"/>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}"/>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/user_admin.css') }}"/>
+<link rel="stylesheet" href="{{ url_for('static', filename='data1/css/lq.datetimepick.css') }}"/>
+<script type="text/javascript" src="{{ url_for('static', filename='js/jquery-1.7.2.js') }}"></script>
+<script type="text/javascript" src="{{url_for('static', filename='js/paging.js')}}" ></script>
+<style>
+    /*.c3-chart {*/
+    /*transform: scale(0.8) translate(50px, 20px);*/
+    /*}*/
+    @media screen and (min-width: 1450px){.c3-chart {
+        transform: scale(0.8) translate(50px, 20px);
+    }
+    }
+    .check_all,.check_each{
+        margin-left: 20%;
+    }
+    @media screen and (max-width: 1450px){
+        .check_all{
+            margin-left: 27%;
+        }
+    }
+    @media screen and (max-width: 1366px){
+        .check_all{
+            margin-left: 21%;
+        }
+    }
+    @media screen and (max-width: 1400px){.c3-chart {
+        transform: scale(0.8) translate(14px, 20px);
+    }
+    }
+    @media screen and (min-width: 1400px) and (max-width: 1450px) {
+        .c3-chart {
+            transform: scale(0.8) translate(36px, 20px);
+        }
+    }
+    @media screen and (max-width: 1300px){
+        .fz-65{font-size: 60px;}
+        .btn{font-size: 14px;
+            height: 35px;
+            line-height: 35px;
+            padding:0 5px;
+        }
+    }
+    .c3-chart-arcs-title {
+        font-size: 30px;
+        font-weight: bold;
+    }
+    .lis_a_all .lis-a-li{width:22%;}
+
+    /*@font-face {font-family: "iconfont";*/
+    /*src: url('iconfont.eot?t=1524710871595'); !* IE9*!*/
+    /*src: url('iconfont.eot?t=1524710871595#iefix') format('embedded-opentype'), !* IE6-IE8 *!*/
+    /*url('data:application/x-font-woff;charset=utf-8;base64,d09GRgABAAAAAAW4AAsAAAAACDAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAABHU1VCAAABCAAAADMAAABCsP6z7U9TLzIAAAE8AAAARAAAAFZW7kjrY21hcAAAAYAAAABbAAABhp08Br5nbHlmAAAB3AAAAeoAAAIY48GXr2hlYWQAAAPIAAAALwAAADYRLgG+aGhlYQAAA/gAAAAcAAAAJAfeA4RobXR4AAAEFAAAAAwAAAAMC+kAAGxvY2EAAAQgAAAACAAAAAgAdgEMbWF4cAAABCgAAAAdAAAAIAEXAGxuYW1lAAAESAAAAUUAAAJtPlT+fXBvc3QAAAWQAAAAJQAAADbv/FDleJxjYGRgYOBikGPQYWB0cfMJYeBgYGGAAJAMY05meiJQDMoDyrGAaQ4gZoOIAgCKIwNPAHicY2Bk/sE4gYGVgYOpk+kMAwNDP4RmfM1gxMjBwMDEwMrMgBUEpLmmMDgwVDxnZG7438AQw9zA0AAUZgTJAQAjgwxueJzFkMENgDAMAy9t6QMxCA8G4sUc3bhjtCYKDyaoJceKYylRgA3I4iUWsAfjxS3X3M/s7hfPVKmRaN3GUP+pIppV16RSWQZbt/qPw+sZnb5CC+rEHiRNUfMLlwB4nB2QP2/TYBDG7943fu2kidP4f+z8seMkbm3jKK7toDSkAiKhFNRGtCCFgdK9sHZh6ILEwMDMhBASG5+gfAN2ZgQjfIMmxeW506PT6W74PcABXP+kl9QAGbZgCDNYACALsCOSJjpeEpEAVYdTdUWknus5vNuJ6B3UO0zR4izp64xnVRSxhTtOnHkR8TBNpmQXY62JWLfMI6nXkOh7LBle6816n3xCte02qtNb63m4p8S2LJyXJakuSe8ExnECIYWqiC91rcgVS2z9maua6mV7m7SxXPfMR8uKbUmnb5NXzZ5eRLy4QNmyxS97NbOW92tTk6U6v1kRDLPidhU8/71hyOVm/xfkKt0Y/UFjsGEO+3AIx/AElvAMnsNJTp1yUxxF6KU5tNvhGd93OzndTakt1Gk8zEb5Raxr+lD7P+ZbhVe0dk6vi8g7+XOSjYaYOnrPc1JHdXs7qpuOHNVJEfB6skB8kNnTg3C2u2VYLSOUDcG32mR5T0WesMixNEJZiepP4/kpIs8KwRgx214r0QSDLvlzdYL0Y3T1jc5wVQvDJXm8+ooxIllMRod8JTiY2mHLFzWl4W52/eT+kqBCBHuIVYKkwAZjJC/mGyLLs8Nx4N+mhbsDb1JZ/f3wHQdnZw99H4MA4B8vP1GzAAB4nGNgZGBgAOJFJ+x/xPPbfGXgZmEAgevscdcR9P+HLAzMRkAuBwMTSBQAPXEKmwB4nGNgZGBgbvjfwBDDwgACQJKRARUwAwBHCQJsBAAAAAPpAAAEAAAAAAAAAAB2AQx4nGNgZGBgYGZIYOBiAAEmIOYCs/+D+QwAEuEBhAAAAHicZY9NTsMwEIVf+gekEqqoYIfkBWIBKP0Rq25YVGr3XXTfpk6bKokjx63UA3AejsAJOALcgDvwSCebNpbH37x5Y08A3OAHHo7fLfeRPVwyO3INF7gXrlN/EG6QX4SbaONVuEX9TdjHM6bCbXRheYPXuGL2hHdhDx18CNdwjU/hOvUv4Qb5W7iJO/wKt9Dx6sI+5l5XuI1HL/bHVi+cXqnlQcWhySKTOb+CmV7vkoWt0uqca1vEJlODoF9JU51pW91T7NdD5yIVWZOqCas6SYzKrdnq0AUb5/JRrxeJHoQm5Vhj/rbGAo5xBYUlDowxQhhkiMro6DtVZvSvsUPCXntWPc3ndFsU1P9zhQEC9M9cU7qy0nk6T4E9XxtSdXQrbsuelDSRXs1JErJCXta2VELqATZlV44RelzRiT8oZ0j/AAlabsgAAAB4nGNgYoAALgbsgJmRiZGZkYWBsYKjsjQvqbQ4o5SBAQAgYgQgAAAA') format('woff'),*/
+    /*url('iconfont.ttf?t=1524710871595') format('truetype'), !* chrome, firefox, opera, Safari, Android, iOS 4.2+*!*/
+    /*url('iconfont.svg?t=1524710871595#iconfont') format('svg'); !* iOS 4.1- *!*/
+    /*}*/
+
+    /*.iconfont {*/
+    /*font-family:"iconfont" !important;*/
+    /*font-style:normal;*/
+    /*-webkit-font-smoothing: antialiased;*/
+    /*-moz-osx-font-smoothing: grayscale;*/
+    /*}*/
+
+    /*.icon-yunbushu:before { content: "\e701"; }*/
+
+
+
+
+
+    @font-face {font-family: "iconfont";
+        src: url('iconfont.eot?t=1531910157023'); /* IE9*/
+        src: url('iconfont.eot?t=1531910157023#iefix') format('embedded-opentype'), /* IE6-IE8 */
+        url('data:application/x-font-woff;charset=utf-8;base64,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') format('woff'),
+        url('iconfont.ttf?t=1531910157023') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
+        url('iconfont.svg?t=1531910157023#iconfont') format('svg'); /* iOS 4.1- */
+    }
+
+    .iconfont {
+        font-family:"iconfont" !important;
+
+        font-style:normal;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    .icon-bushufangan:before { content: "\e64e"; }
+
+    .icon-bj:before { content: "\e620"; }
+
+    .icon-yonghuguanli:before { content: "\e617"; }
+
+    .icon-tongguo:before { content: "\e698"; }
+
+    .icon-butongguo:before { content: "\e633"; }
+
+    .icon-tongguo1:before { content: "\e65b"; }
+
+    .user_alert_btn_yer i,.user_alert_btn_no i{
+        font-size: 18px !important;
+    }
+
+    .right-bottom{
+        /*margin-top: 350px;*/
+        position: fixed;
+        bottom: 0px;
+    }
+    .static-depart{
+        display: none;
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 99998;
+        background-color: rgba(0,0,0,0.6);
+        overflow: auto;
+    }
+    .make-user2{
+        display: block;
+    }
+    .user-all_box{
+        display: none;
+    }
+    .user-select_box{
+        display: block;
+    }
+    .editor-box i{
+
+        display: inline-block;
+        width: 50px;
+        height: 25px;
+        line-height: 25px;
+        border: 1px solid #00b5b8;
+        color: #00b5b8;
+        border-radius: 5px;
+        font-size: 14px;
+        cursor: pointer;
+    }
+    .do-permiss span{
+        height: 25px;
+        line-height: 25px;
+        border-radius: 5px;
+        text-align: center;
+    }
+    .modify-permiss{
+        width:50px;
+
+        border: 1px solid #00b5b8;
+
+    }
+    .user-delete{
+        width:50px;
+
+        border: 1px solid #ff6376;
+
+    }
+</style>
+{% with namespace = "/jobs" %}
+{% set room = "job_management" %}
+{% include 'socketio.html' %}
+{% endwith %}
+{% endblock topfile %}
+
+{% block rightcontent %}
+
+
+
+<!--创建部门-->
+<div class="static-depart depart">
+    <div class="add-hosts">
+        <div class="cancel-1">
+            <a href="#"><i class="iconfont fz-16"> &#xe676; </i></a>
+        </div>
+        <!--<form action="#" method="post">-->
+
+        <div class="host-box">
+            <div class="txt-1">
+                <label for="input1" class="f-l" style="width: 21%;">部门名称</label>
+                <p class="f-l format_departname" style="margin-left: 20px;"></p>
+                <input type="text" name="" id="input1" value="" class="name1" />
+            </div>
+            <div class="txt-1">
+                <label for="priority">优先级</label>
+                <select  name="" id="priority" value="" class="name1" style="width: 100%;height: 36px;margin-bottom: 15px;" >
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                </select>
+            </div>
+            <div class="txt-2" style="margin-top: 10px;">
+                <label for="input2" class="f-l" style="width: 32%">设置资源配额</label>
+                <p class="f-l format_gpu" style="margin-left: 20px">不能超过系统总GPU 8</p>
+                <div style="width: 100%" class="f-l">
+                    <strong style="font-weight: 400">GPU使用上限为</strong>
+                    <input type="text" id="input2" style="width: 125px;"/>
+                    <strong style="font-weight: 400">个</strong>
+                </div>
+            </div>
+            <div class="host-btn">
+                <!--<span class="submit-btn s-btn5">确定</span>-->
+
+                <span class="cancel-btn c-btn3">取消</span>
+                <!--<input type="submit" name="" id="sbmit" value="确定" class="submit-btn" />-->
+                <span class="submit-btn">确定</span>
+            </div>
+        </div>
+
+        <!--</form>-->
+    </div>
+</div>
+
+<!--添加用户-->
+<style>
+    .format_email,.format_phone,.format_name,.format_gpu,.format_departname{
+        display: none;
+        font-size: 14px;
+        color: red;
+
+    }
+</style>
+<div class="static-depart user">
+    <div class="add-hosts">
+        <div class="cancel-1">
+            <a href="#"><i class="iconfont fz-16"> &#xe676; </i></a>
+        </div>
+        <!--<form action="#" method="post">-->
+
+        <div class="host-box">
+            <div class="txt-1">
+                <label for="username" class="f-l" style="width: 20%;">用户名</label>
+                <p class="f-l format_name" style="">字母开头6-16位字母、数字、下划线</p>
+                <input type="text" name="" id="username" value="" class="name1" />
+            </div>
+            <!--<div class="txt-2">-->
+            <!--<label for="pwd">密码</label>-->
+            <!--<input type="password" id="pwd"/>-->
+            <!--</div>-->
+            <div class="txt-2">
+                <label for="select2">部门</label>
+                <select id="select2" style="width: 100%;height: 36px;margin-bottom: 10px;">
+                    <!--<option value="depart1">depart1</option>-->
+                </select>
+
+
+            </div>
+
+            <div class="txt-2">
+                <label for="email" class="f-l" style="width: 20%;">邮箱</label>
+                <p class="f-l format_email" style="">邮箱格式不正确!</p>
+                <input type="email" id="email"/>
+
+
+            </div>
+            <div class="txt-2">
+                <label for="phone" class="f-l" style="width: 20%;">手机号</label>
+                <p class="f-l format_phone">手机号格式不正确!</p>
+                <input type="text" id="phone"/>
+
+
+            </div>
+            <div class="host-btn">
+                <!--<span class="submit-btn s-btn5">确定</span>-->
+
+                <span class="cancel-btn c-btn3">取消</span>
+                <!--<input type="submit" name="" id="sbmit" value="确定" class="submit-btn" />-->
+                <span class="submit-btn">确定</span>
+            </div>
+        </div>
+
+        <!--</form>-->
+    </div>
+</div>
+
+
+
+<!--编辑用户-->
+
+<div class="static-depart editor-user">
+    <div class="add-hosts">
+        <div class="cancel-1">
+            <a href="#"><i class="iconfont fz-16"> &#xe676; </i></a>
+        </div>
+        <!--<form action="#" method="post">-->
+
+        <div class="host-box">
+            <!--<div class="txt-1">-->
+            <!---->
+            <!--<label for="usernames">用户名</label>-->
+            <!--<input type="text" name="" id="usernames" value="" class="name1" readonly/>-->
+            <!--</div>-->
+            <div class="txt-1" style="margin-bottom: 20px;">
+                <em style="display: inline-block;margin-right: 20px;">用户名:</em>
+                <em id="usernames"  class="name1" ></em>
+            </div>
+            <!--<div class="txt-1">-->
+            <!--<label for="userpwd">密码</label>-->
+            <!--<input type="text" name="" id="userpwd" value="" class="name1" />-->
+            <!--</div>-->
+            <div class="txt-2">
+                <label for="select3">部门</label>
+                <select id="select3" style="width: 100%;height: 36px;margin-bottom: 10px;">
+                    <!--<option value="depart1">1</option>-->
+                    <!--<option value="depart2">2</option>-->
+                    <!--<option value="depart3">3</option>-->
+                </select>
+
+            </div>
+            <div class="txt-2">
+                <label for="editor-email" class="f-l" style="width: 20%;">邮箱</label>
+                <p class="f-l format_email">邮箱格式不正确!</p>
+                <input type="email" id="editor-email" value=""/>
+
+
+            </div>
+            <div class="txt-2">
+                <label for="editor-phone" class="f-l" style="width: 20%;">手机号</label>
+                <p class="f-l format_phone">手机号格式不正确!</p>
+                <input type="text" id="editor-phone" value=""/>
+
+
+            </div>
+            <div class="host-btn">
+                <!--<span class="submit-btn s-btn5">确定</span>-->
+
+                <span class="cancel-btn c-btn3">取消</span>
+                <!--<input type="submit" name="" id="sbmit" value="确定" class="submit-btn" />-->
+                <span class="submit-btn">确定</span>
+            </div>
+        </div>
+
+        <!--</form>-->
+    </div>
+</div>
+
+
+<!--修改部门-->
+
+<div class="static-depart depart_quota">
+    <div class="add-hosts">
+        <div class="cancel-1">
+            <a href="#"><i class="iconfont fz-16"> &#xe676; </i></a>
+        </div>
+        <!--<form action="#" method="post">-->
+
+        <div class="host-box">
+            <div class="txt-1" style="margin-bottom: 20px;">
+                <em style="display: inline-block;margin-right: 20px;">部门名称:</em>
+                <em id="editor-departname" value="" class="name1" ></em>
+            </div>
+            <div class="txt-1">
+                <label for="editor-priority">优先级</label>
+                <select  name="" id="editor-priority" value="" class="name1" style="width: 100%;height: 36px;margin-bottom: 15px;" >
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                </select>
+            </div>
+            <!--<div class="txt-1">-->
+            <!--<label for="quota">设置资源配额</label>-->
+            <!--&lt;!&ndash;<textarea name="" id="input2" value="" class="name2"></textarea>&ndash;&gt;-->
+            <!--<strong style="font-weight: 400">GPU使用上限为</strong>-->
+            <!--<input type="text" id="quota" style="width: 125px;"/>-->
+            <!--<strong style="font-weight: 400">个</strong>-->
+            <!--</div>-->
+            <div class="txt-2" style="margin-top: 10px;">
+                <label for="quota" class="f-l" style="width: 32%">设置资源配额</label>
+                <p class="f-l format_gpu" style="margin-left: 20px">不能超过系统总GPU 8</p>
+                <div style="width: 100%" class="f-l">
+                    <strong style="font-weight: 400">GPU使用上限为</strong>
+                    <input type="text" id="quota" style="width: 125px;"/>
+                    <strong style="font-weight: 400">个</strong>
+                </div>
+            </div>
+
+            <div class="host-btn">
+                <!--<span class="submit-btn s-btn5">确定</span>-->
+
+                <span class="cancel-btn c-btn3">取消</span>
+                <!--<input type="submit" name="" id="sbmit" value="确定" class="submit-btn" />-->
+                <span class="submit-btn">确定</span>
+            </div>
+        </div>
+
+        <!--</form>-->
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+<!--{{[1,2,3,4,5]|random}}-->
+<div class="f-l title">
+    <h1 class="f-l c-grayblue"> 用户管理 </h1>
+    <span class="f-l c-gray"> Welcome back, {{request.cookies.username}} </span>
+</div>
+
+<div class="f-l sub-title bgc-white">
+    <a href="#" class="f-l c-gray c-aqua-h"><span class="f-l"> Home   </span><em
+            class="f-l c-gray"> / </em></a>
+    <a href="#" class="f-l c-gray c-aqua-h"><span class="f-l"> 用户管理 </span><em class="f-l c-gray">
+        / </em></a>
+</div>
+<!--警告弹窗-->
+<style>
+    .prompt-box, .alert-box,.abort-box,.alert-box-user,.alert-box-user2,.depart-delete,.success-box{    z-index: 99998;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, .6);
+        display: none;
+    }
+    .alert-div{
+        width: 400px;
+        height: 240px;
+        background: white;
+        margin: 0 auto;
+        margin-top: 10%;
+        position: relative;
+    }
+    .alert-div-nav{
+        height:40px;
+    }
+    .alert-div-nav i{
+        background: #00b5b8;
+        color: white;
+    }
+    .alert-div-content h3{height: 40px;
+        line-height: 40px;
+        text-align: center;
+        margin-top: 35px;
+    }
+    .alert-btn{height: 40px;
+        text-align: center;
+        position: absolute;
+        bottom: 35px;
+        width: 100%;
+    }
+    .alert-btn div{display: inline-block; }
+    .alert-btn  h3{
+        height:40px;
+        width: 100%;
+        /*padding: 0 30px;*/
+        line-height: 40px;
+    }
+    .alert-btn-no,.user-btn-no{
+        color: #2c3850;
+        background: #d2e0e9;
+        margin-right: 20px;
+        width:100px;
+    }
+    .alert-btn-yes,.user-btn-yes{background: #00b5b8;
+        color: white;
+        width:100px;
+    }
+    .hover-red:hover{color: white;
+        background: #ff6376;
+    }
+</style>
+<div class="alert-box">
+    <div class="alert-div">
+        <div class="alert-div-nav">
+            <!--<i class="fz-24 iconfont f-r hover-red"> &#xe676; </i>-->
+        </div>
+        <div class="alert-div-content">
+            <h3>确认删除？</h3>
+        </div>
+        <div class="alert-btn">
+            <div class="alert-btn-no hover-red">
+                <h3>取消</h3>
+            </div>
+            <div class="alert-btn-yes hover-red">
+                <h3>确认</h3>
+            </div>
+        </div>
+    </div>
+</div>
+<!--删除部门-->
+<div class="depart-delete">
+    <div class="alert-div">
+        <div class="alert-div-nav">
+            <!--<i class="fz-24 iconfont f-r hover-red"> &#xe676; </i>-->
+        </div>
+        <div class="alert-div-content">
+            <h3>确认删除？</h3>
+        </div>
+        <div class="alert-btn">
+            <div class="alert-btn-no hover-red">
+                <h3>取消</h3>
+            </div>
+            <div class="alert-btn-yes hover-red">
+                <h3>确认</h3>
+            </div>
+        </div>
+    </div>
+</div>
+<!--添加/修改用户，部门点击确定-->
+<div class="success-box">
+    <div class="alert-div">
+        <div class="alert-div-nav">
+            <!--<i class="fz-24 iconfont f-r hover-red"> &#xe676; </i>-->
+        </div>
+        <div class="alert-div-content">
+            <h3></h3>
+        </div>
+        <div class="alert-btn">
+            <!--<div class="alert-btn-no hover-red">-->
+            <!--<h3>取消</h3>-->
+            <!--</div>-->
+            <div class="alert-btn-yes hover-red">
+                <h3>确认</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--注册判断弹窗-->
+<div class="alert-box-user">
+    <div class="alert-div">
+        <div class="alert-div-nav">
+            <!--<i class="fz-24 iconfont f-r hover-red"> &#xe676; </i>-->
+        </div>
+        <div class="alert-div-content">
+            <h3 class="user_alert_content">确认通过？</h3>
+        </div>
+        <div class="alert-btn">
+            <div class="user-btn-no hover-red">
+                <h3>取消</h3>
+            </div>
+            <div class="user-btn-yes hover-red">
+                <h3>确认</h3>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="alert-box-user2">
+    <div class="alert-div">
+        <div class="alert-div-nav">
+            <!--<i class="fz-24 iconfont f-r hover-red"> &#xe676; </i>-->
+        </div>
+        <div class="alert-div-content">
+            <h3 class="user_alert_content">确认通过？</h3>
+        </div>
+        <div class="alert-btn">
+            <div class="user-btn-no hover-red">
+                <h3>取消</h3>
+            </div>
+            <div class="user-btn-yes hover-red">
+                <h3>确认</h3>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    /*icon css*/
+
+    /*@font-face {font-family: "iconfont";*/
+    /*src: url('iconfont.eot?t=1531795637272'); !* IE9*!*/
+    /*src: url('iconfont.eot?t=1531795637272#iefix') format('embedded-opentype'), !* IE6-IE8 *!*/
+    /*url('data:application/x-font-woff;charset=utf-8;base64,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') format('woff'),*/
+    /*url('iconfont.ttf?t=1531795637272') format('truetype'), !* chrome, firefox, opera, Safari, Android, iOS 4.2+*!*/
+    /*url('iconfont.svg?t=1531795637272#iconfont') format('svg'); !* iOS 4.1- *!*/
+    /*}*/
+
+    /*.iconfont {*/
+    /*font-family:"iconfont" !important;*/
+    /*font-style:normal;*/
+    /*-webkit-font-smoothing: antialiased;*/
+    /*-moz-osx-font-smoothing: grayscale;*/
+    /*}*/
+
+    /*.icon-queren-:before { content: "\e524"; }*/
+
+    /*.icon-shanchu:before { content: "\e505"; }*/
+
+    /*.icon-quxiao:before { content: "\e64e"; }*/
+
+    /*.icon-bj:before { content: "\e620"; }*/
+
+    .c-grayblue{color: #2c3850;}
+    .t-center{text-align: center;}
+    .user_box{
+        display: inline-block;
+        width: 100%;
+        margin: 15px 0;
+        padding: 0;
+    }
+    /*.user-i i{*/
+    /*display: ;*/
+    /*}*/
+    .user-i,.user_nav,.user-select-i{width: 100%;
+        height: 40px;
+        line-height: 40px;
+    }
+    /*.user_nav{border-bottom: 1px solid #d9dce1;;}*/
+    .user-i li,.user_nav li,.user-select-i li{
+        height: 40px;
+    }
+    .w-10{width: 10%}
+    .w-30{width: 30%}
+    .fz-20{font-size: 20px;}
+    .user_li_btn{text-align: center;}
+    .user_li_btn div{
+        display: inline-block;
+        position: relative;
+        width: 40px;
+        cursor: pointer;
+    }
+    .user_li_btn span{
+        position: absolute;
+        top: 17px;
+        left: 11px;
+        display: none;
+        color: #00b5b8;
+    }
+    .editor-box{
+        position: relative;
+    }
+    .editor-box span{
+        position: absolute;
+        top: 15px;
+        left: 230px;
+        display: none;
+        color: #00b5b8;
+    }
+    .editor-box:hover span{display: block}
+    .user_li_btn div:hover span{display: block;}
+    .user_li_btn div:hover i{color: #00b5b8;}
+    .w-100{width: 100%;}
+    /*.page_box{margin: 20px;}*/
+    /*.user-select_box{*/
+    /*display: none;*/
+    /*}*/
+    .active_span{
+        color: #00b5b8;
+    }
+
+    #page a {
+        min-width: 30px;
+        height: 28px;
+        border: 1px solid #dce0e0!important;
+        text-align: center;
+        margin: 0 4px;
+        cursor: pointer;
+        line-height: 28px;
+        color: #666666;
+        font-size: 13px;
+        display: inline-block;
+        font-family: '微软雅黑';
+    }
+
+    .w-17{
+        width:17%;
+    }
+
+</style>
+<!--克隆模板-->
+<div class="clone_box" style="display:none;">
+    <!--注册审批-->
+    <ul class="f-l user-select-i fz-16">
+        <!--<li class="f-l w-10">-->
+        <!--</li>-->
+        <li class="f-l w-30 t-center user_name">用户名</li>
+        <li class="f-l t-center w-30">
+            申请注册账户
+        </li>
+        <li class="f-l user_li_btn w-30 t-center">
+            <div class="user_alert_btn_yer">
+                <i class="iconfont icon-tongguo1"></i>
+                <span class="fz-12 ">通过</span>
+            </div>
+            <div class="user_alert_btn_no">
+                <i class="iconfont icon-butongguo"></i>
+                <span class="fz-12 ">驳回</span>
+            </div>
+        </li>
+        <p style="display: none"></p>
+    </ul>
+    <!--已经完成-->
+    <ul class="f-l user-i fz-16">
+        <li class="f-l w-10">
+            <input type="checkbox" name="subcheck" class="check_each">
+        </li>
+        <li class="f-l w-15 user_name"></li>
+        <li class="f-l t-center w-17"></li>
+        <li class="f-l t-center w-17"></li>
+        <li class="f-l t-center w-17"></li>
+        <li class="f-l t-center w-17">
+            <div class="editor-box">
+                <i class="">编辑</i>
+            </div>
+        </li>
+        <p style="display: none"></p>
+
+    </ul>
+    <!--部门-->
+    <ul class="f-l depart-detail">
+        <li class="f-l li-first">
+            <a href="#" class="c-blue" style="color:#1e90ff;">test</a>
+        </li>
+        <li class="f-l">GPU使用上限为<i style="color: #ff6376;display: inline-block;margin: 0 10px;">5</i>个</li>
+        <li class="f-l"></li>
+        <li class="f-l">
+            <div class="f-r do-permiss" style="width: 100%;text-align: center">
+                <span class="modify-permiss" style="margin-right: 16px;"><a href="#" class="c-green2" style="color: #00b5b8;width: 50px;">编辑</a></span>
+                <span class="user-delete c-red">删除</span>
+            </div>
+        </li>
+        <p style="display: none"></p>
+    </ul>
+
+
+</div>
+<!--用户-->
+<div class="lis-c bgc-white" style="margin-bottom: 70px;z-index: 0;">
+    <div class="title">
+        <div class="l-box user_odiv user-title">
+            <h2 class="f-l c-grayblue active user-identify" style="margin-top: 2px;">用户</h2><h2 class="f-l c-grayblue active"style="margin-top: 2px;">部门</h2>
+            <h2 class="make-depart c-white f-r">
+                创建部门
+            </h2>
+            <h2 class="make-user c-white f-r">
+                添加用户
+            </h2>
+        </div>
+
+        <div class="make-user1 f-l">
+            <ul class="f-l depart-name c-gray">
+                <li class="f-l li-first ">部门名称</li>
+                <li class="f-l">资源配额</li>
+                <li class="f-l">优先级</li>
+                <li class="f-l" style="width: 25%;text-align: center;">操作</li>
+
+            </ul>
+            <div class="depart_list f-l" style="width: 100%">
+
+            </div>
+            <!--<ul class="f-l depart-detail">-->
+            <!--<li class="f-l li-first">-->
+            <!--<a href="#" class="c-blue" style="color:#1e90ff;">test</a>-->
+            <!--</li>-->
+            <!--<li class="f-l">GPU使用上限为5核</li>-->
+            <!--<li class="f-l">-->
+            <!--<div class="f-r do-permiss" style="width: 100%;text-align: center">-->
+            <!--<span class="modify-permiss" style="margin-right: 16px;"><a href="#" class="c-green2" style="color: #00b5b8;">修改配额</a></span>-->
+            <!--<span class="user-delete c-red">删除</span>-->
+            <!--</div>-->
+            <!--</li>-->
+            <!--</ul>-->
+        </div>
+
+
+        <style>
+            .user-span span{
+                display: inline-block;
+                width: 70px;
+                text-align: center;
+            }
+        </style>
+        <div class="make-user2 f-l" style="width: 100%;">
+            <div class="user-span">
+                <span class="active_span">待审核</span>
+                <span>已审核</span>
+            </div>
+
+            <!--用户审批-->
+            <div class="f-l user_box user-select_box c-grayblue">
+                <ul class="user_nav c-gray">
+                    <!--<li  class="f-l w-10">-->
+                    <!--&lt;!&ndash;<input type="checkbox" class="check_all">&ndash;&gt;-->
+                    <!--&lt;!&ndash;<i class="iconfont icon-shanchu fz-20 delete_btn" style="visibility: hidden"></i>&ndash;&gt;-->
+                    <!--</li>-->
+                    <li  class="f-l w-30 t-center">用户名</li>
+                    <li class="f-l t-center w-30">
+                        申请部门
+                    </li>
+                    <li class="f-l t-center w-30">
+                        操作
+                    </li>
+                </ul>
+                <!--用户审批锚点-->
+                <div class="f-l w-100 user_all_select">
+
+                </div>
+            </div>
+            <!--用户管理-->
+            <div class="f-l user_box user-all_box c-grayblue" style="display: none">
+                <ul class="user_nav c-gray">
+                    <li  class="f-l w-10">
+                        <input type="checkbox" class="check_all">
+                        <i class="iconfont  fz-20 delete_btn" style="visibility: hidden">&#xe61c;</i>
+                    </li>
+                    <li  class="f-l w-15">用户名</li>
+                    <li class="f-l t-center w-17">
+                        部门
+                    </li>
+                    <li class="f-l t-center w-17">
+                        邮箱
+                    </li>
+                    <li class="f-l t-center w-17">
+                        手机号
+                    </li>
+                    <li class="f-l t-center w-17">
+                        操作
+                    </li>
+                </ul>
+                <!--注册完成用户锚点-->
+                <div class="f-l w-100 user_all">
+
+                </div>
+                <div class="w-100 page_box f-l" style="margin-top: 80px;">
+                    <div  id="page">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    //    页码
+    var page=function (a) {
+        $("#page").paging({
+            pageNo:1,    //显示页面
+            totalPage: a,   //总页数
+            totalSize: 300,
+            callback: function(num) {
+
+                console.log('---------',num)
+
+                $.ajax({
+                    type:'POST',
+                    url:'/user_manage_load',
+                    data:{'num':num},
+                    success:function (e) {
+                        console.log('-----------',e)
+
+                        $('.user_all .user-i').remove()
+
+                        for(var i = 0; i < e.examined_user.length; i++){
+                            $('.clone_box .user-i').clone().appendTo($('.user_all'))
+                            $('.user_all ul').eq(i).children().eq(1).html(e.examined_user[i]['name'])
+                            $('.user_all ul').eq(i).children().eq(2).html(e.examined_user[i]['department'])
+                            $('.user_all ul').eq(i).children().eq(3).html(e.examined_user[i]['email'])
+                            $('.user_all ul').eq(i).children().eq(4).html(e.examined_user[i]['phone'])
+                            $('.user_all ul').eq(i).children().eq(6).html(e.examined_user[i]['id'])
+                        }
+                    }
+                })
+
+            }
+        })
+    }
+
+    //    交互加载
+    $.get('/user_manage_load',function (e) {
+//        已经完成的账户
+        console.log(e)
+        for(var i=0;i<e.examined_user.length;i++){
+            $('.clone_box .user-i').clone().appendTo($('.user_all'))
+            $('.user_all ul').eq(i).children().eq(1).html(e.examined_user[i]['name'])
+            $('.user_all ul').eq(i).children().eq(2).html(e.examined_user[i]['department'])
+            $('.user_all ul').eq(i).children().eq(3).html(e.examined_user[i]['email'])
+            $('.user_all ul').eq(i).children().eq(4).html(e.examined_user[i]['phone'])
+            $('.user_all ul').eq(i).children().eq(6).html(e.examined_user[i]['id'])
+        }
+        page(e.examined_pages)
+//        账户审批
+        for(var i=0;i<e.no_examined_user.length;i++){
+            console.log(i)
+            $('.clone_box .user-select-i').clone().appendTo($('.user_all_select'))
+            $('.user_all_select ul').eq(i).children().eq(0).html(e.no_examined_user[i]['name'])
+            $('.user_all_select ul').eq(i).children().eq(1).html(e.no_examined_user[i]['department'])
+            $('.user_all_select ul').eq(i).children().eq(3).html(e.no_examined_user[i]['id'])
+        }
+    })
+
+    //    部门交互
+    $.get('/department_load',function (e) {
+        console.log('depart',e)
+        $('#select2').children().remove();
+        $('#select3').children().remove();
+        for(var i = 0; i< e.department_list.length;i++){
+            $('.clone_box .depart-detail').clone().appendTo($('.depart_list'))
+            $('.depart_list ul').eq(i).children().eq(0).find('a').html(e.department_list[i]['name'])
+            $('.depart_list ul').eq(i).children().eq(1).find('i').html( e.department_list[i]['gpu'] )
+            $('.depart_list ul').eq(i).children().eq(2).html(e.department_list[i]['power'])
+            $('.depart_list ul').eq(i).children().eq(4).html( e.department_list[i]['id'] )
+
+            $('#select2').append('<option value="' + e.department_list[i]['name'] + '">' + e.department_list[i]['name'] + '</option>');
+            $('#select3').append('<option value="' + e.department_list[i]['name'] + '">' + e.department_list[i]['name'] + '</option>')
+        }
+
+
+    })
+
+
+
+
+
+</script>
+<style>
+    .user_odiv h2{padding: 0 10px;}
+    .user_odiv .active{
+        /*color: white;*/
+        /*background: #00b5b8;*/
+    }
+    .page_box{text-align: center}
+    #page{
+        display: inline-block;
+    }
+    #page .totalPages,#page .totalSize{display: none;}
+    #page a{padding: 0 5px;margin: 0 1px;}
+    #page a:hover{color: white;
+        background: #00b5b8;
+    }
+    #page .current{background: #00b5b8;
+        color:white;
+    }
+
+</style>
+
+<script>
+    <!--创建部门-->
+    var gpu_pattern = /^\+?[1-9][0-9]*$/;
+    var pattern1 = /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/
+    var pattern2 = /^[1][3,4,5,7,8][0-9]{9}$/;
+    var pattern3 = /^[a-zA-Z][a-zA-Z0-9_]{5,16}$/;
+
+    $('.cancel-1').on('click',function () {
+        $('.static-depart').css('display','none')
+    })
+
+    $('.make-depart').on('click',function () {
+        $('#input1').val('');
+        $('#priority').val($('#priority')[0].defaultValue);
+        $('#input2').val('')
+        $('.depart').css('display','block')
+    })
+    $('.depart .c-btn3').on('click',function () {
+        $('.depart').css('display','none')
+    })
+    $('#input2').focus(function () {
+        $('.format_gpu').css('display','none')
+    })
+    $('#input1').focus(function () {
+        $('.format_departname').css('display','none')
+    })
+    $('#input1').blur(function () {
+//        if(!pattern3.test($(this).val())){
+//
+//
+//        }
+//        else{
+        console.log('=========',$(this).val())
+        $.post('/department_name',{'name':$(this).val()},function(e){
+            console.log('-----',e)
+            if(e.res==1){
+                $('.format_departname').css('display','block')
+                $('.format_departname').html('该部门已存在')
+            }
+            else if(e.res==0){
+
+            }
+            console.log(e.res)
+        },'json')
+//        }
+    })
+
+
+
+
+
+    $('.depart .submit-btn').on('click',function () {
+        var depart_name = $('#input1').val()
+        var depart_gpu = $('#input2').val()
+        var priority = $('#priority').val()
+
+        var total_gpu = null;
+
+
+//        获取系统总gpu
+        $.ajax({
+            type:'GET',
+            url:'/get_gpu_number',
+            success:function (e) {
+                console.log('gpu',e.total_gpu_count)
+                total_gpu = e.total_gpu_count
+
+
+
+
+
+
+                console.log('total_gpu',total_gpu)
+
+                if (depart_gpu > total_gpu) {
+                    $('.depart .format_gpu').html('不能超过系统总GPU ' + total_gpu)
+                    $('.depart .format_gpu').css('display', 'block')
+                }
+
+                else if(!gpu_pattern.test(depart_gpu)){
+                    $('.depart .format_gpu').html('GPU数为整数')
+                    $('.depart .format_gpu').css('display', 'block')
+                }
+                else {
+
+                    $.ajax({
+                        type: 'POST',
+                        url: '/department_add',
+                        data: {'depart_name': depart_name, 'depart_gpu': depart_gpu, 'priority': priority},
+                        success: function (data) {
+                            console.log('make depart', data)
+                            if (data.errmsg == 'ok') {
+                                $('.depart').css('display', 'none')
+                                $('.success-box').css('display', 'block')
+                                $('.success-box .alert-div-content').find('h3').html('部门添加成功')
+
+
+                                $.get('/department_load',function (e) {
+                                    $('.depart_list').children().remove()
+                                    console.log('depart',e)
+                                    $('#select2').children().remove()
+                                    $('#select3').children().remove()
+                                    for(var i = 0; i< e.department_list.length;i++){
+                                        $('.clone_box .depart-detail').clone().appendTo($('.depart_list'))
+                                        $('.depart_list ul').eq(i).children().eq(0).find('a').html(e.department_list[i]['name'])
+                                        $('.depart_list ul').eq(i).children().eq(1).find('i').html( e.department_list[i]['gpu'] )
+                                        $('.depart_list ul').eq(i).children().eq(2).html(e.department_list[i]['power'])
+                                        $('.depart_list ul').eq(i).children().eq(4).html( e.department_list[i]['id'] )
+
+                                        $('#select2').append('<option value="' + e.department_list[i]['name'] + '">' + e.department_list[i]['name'] + '</option>');
+                                        $('#select3').append('<option value="' + e.department_list[i]['name'] + '">' + e.department_list[i]['name'] + '</option>')
+                                    }
+
+
+                                })
+
+                            }else{
+                                $('.depart').css('display', 'none')
+                                $('.success-box').css('display', 'block')
+                                $('.success-box .alert-div-content').find('h3').html('部门添加失败')
+                            }
+                        }
+                    })
+                }
+
+
+
+            }
+
+        })
+
+
+
+    })
+
+
+
+
+
+
+
+
+
+    //    var pattern1 = /^([0-9A-Za-z\-_\.]+)@([0-9a-z]+\.[a-z]{2,3}(\.[a-z]{2})?)$/g;
+
+
+
+    $('#username').focus(function () {
+        $('.format_name').css('display','none')
+    })
+    $('#email').focus(function () {
+        $('.format_email').css('display','none')
+    })
+    $('#phone').focus(function () {
+        $('.format_phone').css('display','none')
+    })
+    $('#editor-email').focus(function () {
+        $('.format_email').css('display','none')
+    })
+    $('#editor-phone').focus(function () {
+        $('.format_phone').css('display','none')
+    })
+
+    //    添加用户
+    $('.make-user').on('click',function () {
+        $('#username').val('')
+        $('#select2').val($('#select2')[0].defaultValue)
+        $('#email').val('')
+        $('#phone').val('')
+        $('.user').css('display','block')
+
+    })
+    $('.user .c-btn3').on('click',function () {
+        $('.user').css('display','none')
+    })
+
+
+
+    $('#username').blur(function () {
+        if(!pattern3.test($(this).val())){
+            $('.user .format_name').html('字母开头6-16位字母、数字、下划线')
+            $('.user .format_name').css('display','block')
+        }else{
+            $.post('/user/name',{'name':$(this).val()},function(e){
+                if(e.res==1){
+                    $('.user .format_name').html('该用户已存在')
+                    $('.user .format_name').css('display','block')
+                }
+                else if(e.res==0){
+
+                }
+                console.log(e.res)
+            },'json')
+        }
+    })
+
+
+
+    $('.user .submit-btn').on('click',function () {
+        var user_name = $('#username').val()
+        var user_depart = $('#select2').val()
+        var user_email = $('#email').val()
+        var user_phone = $('#phone').val()
+        console.log(user_email)
+
+
+
+        if(!pattern1.test(user_email)){
+            $('.user .format_email').css('display','block')
+
+        }else if(!pattern2.test(user_phone)){
+            $('.user .format_phone').css('display','block')
+        }
+        else{
+
+
+
+            console.log('1111111')
+            $.ajax({
+                type:'POST',
+                url:'/user_add',
+                data:{'user_name':user_name,'user_depart':user_depart,'user_email':user_email,'user_phone':user_phone},
+                success:function (data) {
+                    console.log('添加用户',data)
+                    if(data.errmsg == 'ok'){
+                        console.log(data.errmsg)
+                        $('.user').css('display','none')
+                        $('.success-box').css('display','block')
+                        $('.success-box .alert-div-content').find('h3').html('用户添加成功')
+
+
+                        $.get('/user_manage_load',function (e) {
+//        已经完成的账户
+                            $('.user_all').children().remove()
+                            console.log(e)
+                            for(var i=0;i<e.examined_user.length;i++){
+                                $('.clone_box .user-i').clone().appendTo($('.user_all'))
+                                $('.user_all ul').eq(i).children().eq(1).html(e.examined_user[i]['name'])
+                                $('.user_all ul').eq(i).children().eq(2).html(e.examined_user[i]['department'])
+                                $('.user_all ul').eq(i).children().eq(3).html(e.examined_user[i]['email'])
+                                $('.user_all ul').eq(i).children().eq(4).html(e.examined_user[i]['phone'])
+                                $('.user_all ul').eq(i).children().eq(6).html(e.examined_user[i]['id'])
+                            }
+                            page(e.examined_pages)
+                        })
+
+
+                    }else{
+                        $('.user').css('display','none')
+                        $('.success-box').css('display','block')
+                        $('.success-box .alert-div-content').find('h3').html('用户添加失败')
+                    }
+                }
+            })
+        }
+//        $('.user').css('display','none')
+    })
+
+    $('.success-box .alert-btn-yes').on('click',function () {
+        $('.success-box').css('display','none')
+    })
+
+
+    //    编辑用户
+    var users_id = null
+    $('.make-user2').on('click','.editor-box i',function () {
+
+        $('.editor-user').css('display','block')
+        var usernames = $(this).parents('.user-i').find('li').eq(1).html();
+        var userdeparts = $(this).parents('.user-i').find('li').eq(2).html();
+        var useremail = $(this).parents('.user-i').find('li').eq(3).html();
+        var userphone = $(this).parents('.user-i').find('li').eq(4).html();
+        users_id = $(this).parents('.user-i').find('p').html();
+        $('#usernames').html(usernames)
+//        $('#select3').val('2').attr('selected','selected')
+        $('#select3').find("option[value=" +userdeparts+"]").attr('selected',true)
+        $('#editor-email').val(useremail)
+        $('#editor-phone').val(userphone)
+        console.log('123',usernames)
+
+    })
+    $('.editor-user .c-btn3').on('click',function () {
+        $('.editor-user').css('display','none')
+    })
+    $('.editor-user .submit-btn').on('click',function () {
+
+
+
+
+        if(!pattern1.test($('#editor-email').val())){
+            console.log('email',$('#editor-email').val())
+            $('.editor-user .format_email').css('display','block')
+
+        }else
+        if(!pattern2.test($('#editor-phone').val())){
+            $('.editor-user .format_phone').css('display','block')
+        }else {
+
+            console.log($('#editor-phone').val(),$('#editor-email').val())
+
+            $.ajax({
+                type: 'POST',
+                url: '/user_update',
+                data: {
+                    'depart_name': $('#select3').val(),
+                    'user_id': users_id,
+                    'phone': $('#editor-phone').val(),
+                    'email': $('#editor-email').val()
+                },
+                success: function (data) {
+                    console.log(data)
+                    if (data.errmsg == 'ok') {
+                        $('.editor-user').css('display', 'none')
+                        $('.success-box').css('display', 'block')
+                        $('.success-box .alert-div-content').find('h3').html('修改成功')
+
+                        $('.user_all p').each(function () {
+
+
+                            if($(this).html() == data.user_id){
+
+                                $(this).parents('.user-i').find('li').eq(2).html($('#select3').val())
+                                $(this).parents('.user-i').find('li').eq(3).html($('#editor-email').val())
+                                $(this).parents('.user-i').find('li').eq(4).html($('#editor-phone').val())
+
+                            }
+                        })
+
+
+                    }
+                }
+            })
+        }
+//        $('.editor-user').css('display','none')
+    })
+
+
+    //    删除部门
+    var depart_id = null;
+    $('.depart_list').on('click','.user-delete',function () {
+        $('.depart-delete').css('display','block')
+        depart_id = $(this).parents('li').next('p').html()
+        console.log(depart_id)
+    })
+
+    $('.depart-delete .alert-btn-yes').on('click',function () {
+        $.ajax({
+            type:'POST',
+            url:'/department_delete',
+            data:{'id':depart_id},
+            success:function (e) {
+                console.log('delete-depart',e)
+                if(e.errmsg == 'ok'){
+                    $('.depart-delete').css('display','none')
+
+                    $('.depart_list p').each(function () {
+                        if($(this).html() == e.department_id){
+                            $(this).parents('.depart-detail').remove()
+                        }
+                    })
+
+
+
+                    $.get('/department_load',function (e) {
+
+                        $('#select2').children().remove();
+                        $('#select3').children().remove();
+                        for(var i = 0; i< e.department_list.length;i++){
+
+                            $('#select2').append('<option value="' + e.department_list[i]['name'] + '">' + e.department_list[i]['name'] + '</option>');
+                            $('#select3').append('<option value="' + e.department_list[i]['name'] + '">' + e.department_list[i]['name'] + '</option>')
+                        }
+
+
+                    })
+
+
+
+
+                }else{
+                    $('.depart-delete').css('display','none')
+                    $('.success-box').css('display','block')
+                    $('.success-box .alert-div-content').find('h3').html(e.errmsg)
+                }
+            }
+        })
+
+    })
+
+
+
+    //    修改部门
+    var deparid = null
+    $('.depart_list').on('click','.modify-permiss',function () {
+        $('.depart_quota').css('display','block')
+        $('#editor-departname').html($(this).parents('.depart-detail').find('li').eq(0).find('a').html())
+        $('#quota').val($(this).parents('.depart-detail').find('li').eq(1).find('i').html())
+        var editor_priority = $(this).parents('.depart-detail').find('li').eq(2).html()
+//        $('#editor-priority').val($(this).parents('.depart-detail').find('li').eq(2).html())
+        $('#editor-priority').find("option[value=" + editor_priority +"]").attr('selected',true)
+
+        departid = $(this).parents('li').next('p').html()
+        console.log($(this).parents('.depart-detail').find('li').eq(0).find('a').html())
+    })
+    $('.depart_quota .c-btn3').on('click',function () {
+        $('.depart_quota').css('display','none')
+    })
+    $('#quota').focus(function () {
+        $('.format_gpu').css('display', 'none')
+    })
+    $('.depart_quota .submit-btn').on('click',function () {
+        var quota = $('#quota').val()
+        var priority = $('#editor-priority').val()
+        console.log('departid', departid)
+
+
+        $.ajax({
+            type: 'GET',
+            url: '/get_gpu_number',
+            success: function (e) {
+                console.log('gpu', e.total_gpu_count)
+
+
+
+
+                if (quota > e.total_gpu_count) {
+                    $('.depart_quota .format_gpu').html('不能超过系统总GPU '+ e.total_gpu_count)
+                    $('.depart_quota .format_gpu').css('display', 'block')
+                } else if (!gpu_pattern.test(quota)) {
+                    $('.depart_quota .format_gpu').html('GPU数为整数')
+                    $('.depart_quota .format_gpu').css('display', 'block')
+                }
+                else {
+                    $.ajax({
+                        type: 'POST',
+                        url: '/department_update',
+                        data: {'gpu': quota, 'id': departid, 'priority': priority},
+                        success: function (e) {
+                            console.log('e', e)
+                            if (e.errmsg == 'ok') {
+                                $('.depart_quota').css('display', 'none')
+                                $('.success-box').css('display', 'block')
+                                $('.success-box .alert-div-content').find('h3').html('修改成功')
+                                $('.depart_list p').each(function () {
+
+
+                                    if ($(this).html() == e.depart_id) {
+                                        $(this).parents('.depart-detail').find('li').eq(2).html($('#editor-priority').val())
+                                        $(this).parents('.depart-detail').find('li').eq(1).find('i').html($('#quota').val())
+                                    }
+                                })
+                            } else {
+                                $('.depart_quota').css('display', 'none')
+                                $('.success-box').css('display', 'block')
+                                $('.success-box .alert-div-content').find('h3').html('修改失败')
+                            }
+                        }
+                    })
+                }
+
+
+            }
+        })
+
+    })
+
+
+
+    //  tab切换
+    $('.user_odiv .active').on('click',function () {
+        $(this).addClass('user-identify').siblings().removeClass('user-identify')
+        if($(this).html()=='部门'){
+            $('.make-user1').css('display','block')
+            $('.make-depart').css('display','block')
+            $('.make-user').css('display','none')
+            $('.make-user2').css('display','none')
+            $('.user-select_box').css('display','none')
+            $('.user-all_box').css('display','none')
+        }else if($(this).html()=='用户'){
+            $('.make-user1').css('display','none')
+            $('.make-depart').css('display','none')
+            $('.make-user').css('display','block')
+            $('.make-user2').css('display','block')
+            $('.user-span span:first-child').addClass('active_span')
+            $('.user-span span:last-child').removeClass('active_span')
+            $('.user-select_box').css('display','block')
+//            $('.user-all_box').css('display','block')
+        }
+    })
+    $('.user-span span').on('click',function () {
+        $(this).addClass('active_span').siblings().removeClass('active_span')
+        if($(this).html()=='待审核'){
+
+            $('.user-select_box').css('display','block')
+            $('.user-all_box').css('display','none')
+        }else if($(this).html()=='已审核'){
+
+            $('.user-select_box').css('display','none')
+            $('.user-all_box').css('display','block')
+
+
+
+
+            $.get('/user_manage_load',function (e) {
+//        已经完成的账户
+                console.log(e)
+                $('.user_all ul').remove();
+                for(var i=0;i<e.examined_user.length;i++){
+                    $('.clone_box .user-i').clone().appendTo($('.user_all'))
+                    $('.user_all ul').eq(i).children().eq(1).html(e.examined_user[i]['name'])
+                    $('.user_all ul').eq(i).children().eq(2).html(e.examined_user[i]['department'])
+                    $('.user_all ul').eq(i).children().eq(3).html(e.examined_user[i]['email'])
+                    $('.user_all ul').eq(i).children().eq(4).html(e.examined_user[i]['phone'])
+                    $('.user_all ul').eq(i).children().eq(6).html(e.examined_user[i]['id'])
+                }
+                page(e.examined_pages)
+
+            })
+
+
+
+
+        }
+    })
+
+
+
+
+    //    注册判断
+    var examined_id = null
+    $('.make-user2').on('click','.user_alert_btn_yer',function () {
+        examined_id = $(this).parents('.user_li_btn').next('p').html()
+        console.log('yes',examined_id)
+        $('.alert-box-user .user_alert_content').html('确认通过？')
+        $(".alert-box-user").css('display','block')
+        $('.alert-box-user .user-btn-no').on('click',function () {
+            $(".alert-box-user").css('display','none')
+        })
+        $('.alert-box-user .user-btn-yes').on('click',function () {
+            $.ajax({
+                type:'POST',
+                url:"/user_examined",
+                data:{'user_id':examined_id},
+                success:function (data) {
+                    console.log('审核',data)
+                    if(data.errmsg == 'ok'){
+                        console.log('11111')
+                        $(".alert-box-user").css('display','none')
+
+                        $('.user_all_select p').each(function () {
+                            console.log('pppp',deparid)
+
+                            if($(this).html() == data.id){
+                                console.log('pppp')
+                                $(this).parents('.user-select-i').find('.user_li_btn').html('通过审核')
+                            }
+                        })
+                    }
+                }
+            })
+//        $(".alert-box-user").css('display','none')
+        })
+    })
+    $('.make-user2').on('click','.user_alert_btn_no',function () {
+
+        examined_id = $(this).parents('.user_li_btn').next('p').html()
+        console.log('no',examined_id)
+        $('.alert-box-user2 .user_alert_content').html('确认驳回？')
+        $(".alert-box-user2").css('display','block')
+        $('.alert-box-user2.user-btn-no').on('click',function () {
+            $(".alert-box-user2").css('display','none')
+        })
+        $('.alert-box-user2 .user-btn-yes').on('click',function () {
+            $.ajax({
+                type:'POST',
+                url:"/user_noexamined",
+                data:{'user_id':examined_id},
+                success:function (data) {
+                    console.log('待审核',data.errmsg)
+                    if(data.errmsg == 'ok'){
+                        console.log('11111')
+                        $(".alert-box-user2").css('display','none')
+                        $('.user_all_select p').each(function () {
+                            console.log('pppp',deparid)
+
+                            if($(this).html() == data.id){
+                                console.log('pppp')
+                                $(this).parents('.user-select-i').find('.user_li_btn').html('未通过审核')
+                            }
+                        })
+                    }
+                }
+            })
+//        $(".alert-box-user").css('display','none')
+        })
+    })
+</script>
+
+<script>
+    var delete_url=null;
+    var delete_id=null;
+
+    //    删除
+    var user_id = []
+
+    $('.check_all').on('click',function () {
+
+        if($(this).is(':checked') == true){
+            $('.delete_btn').css('visibility','visible')
+            $('.check_each').each(function () {
+                $(this).attr('checked','checked')
+            })
+        }else {
+            $('.delete_btn').css('visibility','hidden')
+            $('.check_each').each(function () {
+                $(this).removeAttr('checked','checked')
+            })
+
+
+        }
+    })
+    $('.user_all').on('click','.check_each',function () {
+        $('.check_each').each(function () {
+            if($(":checkbox[name=subcheck]:checked").size() == 0){
+                $('.delete_btn').css('visibility','hidden')
+                $('.check_all').removeAttr('checked','checked')
+
+            }else{
+                $('.delete_btn').css('visibility','visible')
+            }
+        })
+    })
+    $('.delete_btn').on('click',function () {
+        user_id = []
+//        delete_url = $(this).parents('.c-view-2').siblings('.home_work_list').find('div').html()
+        $('.alert-box').css('display','block')
+        $('.check_each').each(function () {
+            if($(this).is(':checked') == true){
+                user_id.push($(this).parents('li').siblings('p').html())
+
+            }
+
+        })
+        console.log(user_id)
+
+    })
+    $('.alert-box .alert-btn-yes').on('click',function () {
+        console.log('job_id',user_id)
+        $.ajax({
+            type:'POST',
+            url:'/user_delete',
+            data:{'user_id':user_id},
+            success:function (e) {
+                console.log('delete',e)
+                if(!e.errmsg =='ok'){
+                    $('.success-box').css('display','block')
+                    $('.success-box .alert-div-content h3').html('该部门不能删除!')
+
+                }
+                else{
+                    $('.check_each').each(function () {
+                        if($(this).is(':checked') == true){
+                            $(this).parents('.user-i').remove()
+                            $('.delete_btn').css('visibility','hidden')
+                        }
+
+                    })
+//                    location.reload()
+                }
+            }
+        })
+        $('.alert-box').css('display','none')
+    })
+    $('.alert-btn-no').on('click',function () {
+        $('.alert-box').css('display','none')
+        $('.depart-delete').css('display','none')
+    })
+
+
+
+
+
+    //部门详情
+    $('.make-user1').on('click','.li-first',function () {
+        localStorage.clear()
+        var department_id = $(this).parents('.depart-detail').find('p').html()
+        localStorage.setItem('depart_id',department_id)
+
+        window.location.href='/department_details'
+
+    })
+
+
+
+</script>
+
+{% endblock rightcontent %}
+
+{% block bottomfile %}
+<script type="text/javascript" src="{{ url_for('static', filename='laydate/laydate.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/Feffects.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.nicescroll.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='c3/d3.v3.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='c3/c3.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/public.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/paging.js') }}"></script>
+
+{% endblock bottomfile %}

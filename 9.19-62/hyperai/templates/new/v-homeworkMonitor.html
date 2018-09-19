@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		{% include 'new/public/meta.html'%}
+		<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='advance/css/homeworkMinitor.css')}}"/>
+		<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='advance/css/c3.min.css')}}"/>
+
+	</head>
+
+	<style>
+		@font-face {font-family: "iconfont";
+			src: url('iconfont.eot?t=1537249376681'); /* IE9*/
+			src: url('iconfont.eot?t=1537249376681#iefix') format('embedded-opentype'), /* IE6-IE8 */
+			url('data:application/x-font-woff;charset=utf-8;base64,d09GRgABAAAAAAUwAAsAAAAAB9wAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAABHU1VCAAABCAAAADMAAABCsP6z7U9TLzIAAAE8AAAARAAAAFY8m0gjY21hcAAAAYAAAABWAAABhmVX0RhnbHlmAAAB2AAAAVYAAAG0ML6rjWhlYWQAAAMwAAAALwAAADYSrKZ+aGhlYQAAA2AAAAAcAAAAJAfeA4RobXR4AAADfAAAAAwAAAAMDAAAAGxvY2EAAAOIAAAACAAAAAgAOgDabWF4cAAAA5AAAAAfAAAAIAEVAHpuYW1lAAADsAAAAUUAAAJtPlT+fXBvc3QAAAT4AAAANwAAAEjFyvDMeJxjYGRgYOBikGPQYWB0cfMJYeBgYGGAAJAMY05meiJQDMoDyrGAaQ4gZoOIAgCKIwNPAHicY2BkYWCcwMDKwMHUyXSGgYGhH0IzvmYwYuRgYGBiYGVmwAoC0lxTGByeqT4zZG7438AQw9zA0AAUZgTJAQDj0Qw5eJztkLENgDAMBM9OSIFYA4mCJttQMX7WCB8HtuCl88tvVw8sQBKnyGA3xtCl1CJPrJHn+Clyw9veau/wuWS6lXDXKPzaYh7v5qOtyWi21Qn+AFw5Dp4AAHicZU3LTsJQEJ25BUrSpEkrLYEqcFssSAMJlFKDCtwN8ZGYADExusK4gIU7P6DyB7Jx62+41A9wZ+KGvR9hqy2iiTqPc2YyJ2eAhzC4B7IADngQQIEMbAAFcKlE1ySaQYU6rmI7VDIUW0JbMdxVd8mrXy6QO386C3F88/7G2C1jc8Y2iRoIaAQLfJnPn2bjQCsQM/ALUYTvkgAfXgw4Bi3owyEcwxDO4RKuAKih10izQ+xGy6kvOa2mc9jBklkyDZ0XkU9EIGIqR3aw0WqaSMNdymGadtCVashR5yf5lBpJ9ITyb8B7rzro6XpvUBVlazRp9/d2y8msEkvWD45O9ln3IqvG66fFLSs6eqIsEznwtCJiUcMVBx563+3J6/KfCr3Pwhey2J4OrXzeEWJSRmCmqWnjnr0drxiVyfVkZIVKApEbfLmSkP1HrxeluLR6/kWfy15T6QAAeJxjYGRgYADif+//K8Tz23xl4GZhAIHrxzYmIOj/DSwMzI5ALgcDE0gUAGv+C+oAeJxjYGRgYG7438AQw8IAAkCSkQEVMAMARwkCbAQAAAAEAAAABAAAAAAAAAAAOgDaeJxjYGRgYGBmyGPgYAABJiDmAkIGhv9gPgMAFBEBkAB4nGWPTU7DMBCFX/oHpBKqqGCH5AViASj9EatuWFRq911036ZOmyqJI8et1ANwHo7ACTgC3IA78EgnmzaWx9+8eWNPANzgBx6O3y33kT1cMjtyDRe4F65TfxBukF+Em2jjVbhF/U3YxzOmwm10YXmD17hi9oR3YQ8dfAjXcI1P4Tr1L+EG+Vu4iTv8CrfQ8erCPuZeV7iNRy/2x1YvnF6p5UHFockikzm/gple75KFrdLqnGtbxCZTg6BfSVOdaVvdU+zXQ+ciFVmTqgmrOkmMyq3Z6tAFG+fyUa8XiR6EJuVYY/62xgKOcQWFJQ6MMUIYZIjK6Og7VWb0r7FDwl57Vj3N53RbFNT/c4UBAvTPXFO6stJ5Ok+BPV8bUnV0K27LnpQ0kV7NSRKyQl7WtlRC6gE2ZVeOEXpc0Yk/KGdI/wAJWm7IAAAAeJxjYGKAAC4G7ICZkYmRmZGFgb+qNL8yNSszMS87Py/dwJAnrbS8tDAzvTQxLyeTgQEAwBQLRgA=') format('woff'),
+			url('iconfont.ttf?t=1537249376681') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
+			url('iconfont.svg?t=1537249376681#iconfont') format('svg'); /* iOS 4.1- */
+		}
+
+		.iconfont {
+			font-family:"iconfont" !important;
+			font-size:16px;
+			font-style:normal;
+			-webkit-font-smoothing: antialiased;
+			-moz-osx-font-smoothing: grayscale;
+		}
+
+		.icon-zuoyejiankong01:before { content: "\e625"; }
+
+		.icon-fuwuqiguanli:before { content: "\e631"; }
+	</style>
+
+	{% include 'new/public/header.html'%}
+
+		<div class="container-fluid" style="margin-top: 51px;">
+			<div class="row" id="row-box">
+
+				{% include 'new/public/left.html'%}
+
+				<div class="col-sm-11 col-sm-offset-3 col-md-20 col-md-offset-2 main" style="padding: 0px 20px;">
+			
+				<h4 class="page-header bdr-n  h-50" style="margin: 0;">作业监控</h4>
+					<div class="col-md-12 c-gray pd-n "> Welcome back, <span>{{request.cookies.username}}</span></div>
+					<div class="col-md-12 b-nav bg-white mt-30">
+						<ol class="breadcrumb bg-white mb-0 pdtb-15">
+							<li>
+								<a href="/index" class="c-gray">Home</a>
+							</li>
+
+							<li class="c-green">作业监控</li>
+						</ol>
+					</div>
+			
+					<div class="col-md-12 mt-30" style="background: #FFFFFF; padding:20px 30px;">
+
+						<div class="title">
+							<h4 class="col-md-3 pd-n h-40"><i class="iconfont icon-zuoyejiankong01 fz-36 c-green"></i>作业名称：<em class="homework-name">caffe</em></h4>
+							<h4 class="col-md-3 pd-n h-40">作业状态：<em class="home-state">完成</em></h4>
+						</div>
+						
+						<div class="col-md-12 bdr h-40 pd-n">
+							<div class="col-md-2 bg-z bdr-r h-40 pd-n">
+								
+							</div>
+							<div class="col-md-10 center h-40">
+								基本信息
+							</div>
+						</div>
+						<div class="col-md-12 h-40 pd-n bdr-b bdr-l bdr-r">
+							<div class="col-md-2 bg-z bdr-r bdr-b bdr-t h-40 ">
+								用户名
+							</div>
+							<div class="col-md-2 bdr-r h-40 username">
+								
+							</div>
+							<div class="col-md-2 bdr-r bg-z bdr-b h-40">
+								创建时间
+							</div>
+							<div class="col-md-3 bdr-r h-40 create-time">
+								
+							</div>
+							<div class="col-md-2 bdr-r bg-z bdr-b h-40">
+								运行时长
+							</div>
+							<div class="col-md-2 h-40 all-time">
+								
+							</div>
+						</div>
+					</div>
+
+					
+					<div class="col-md-12 mt-30" style="background: #FFFFFF; padding:20px 30px;">
+						<div class="title">
+							<span class="train-btn tab-color">训练监控</span>
+							<span class="train-btn">日志</span>
+						</div>
+						<div class="col-md-12 chart-box mt-30" style="position: relative;">
+							<div id="mychart-a2" style="height: 500px;"></div>
+							<h4 class="f-l y-title l-title" style="left: 0px;">准确率</h4>
+							<h4 class="f-l y-title clone-box" style="left: 0px;top: 22px; height: 240px;">每秒处理样本数量</h4>
+							<h4 class="f-r y-title" style="right: 0px;">损失率</h4>
+						</div>
+						<div class="col-md-12 log-box mt-30">
+							<div class="log-content">
+								
+							</div>
+						</div>
+						
+					</div>
+
+
+
+					<div class="clone-box resource-all">
+						<div class="col-md-12  resource-parent pd-n">
+							<div class="bdr-l table-td col-md-1 pd-n" style="width: 5%;">
+								<div class="sub-table">
+									<div class="sub-table-tr-i1">
+										<div class="sub-table-td bdr-b ta-c h-70"> 容器 </div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+
+						<div class="container-info col-md-11 pd-n resource-children">
+
+							<!--卡-->
+							<div class="bdr-l table-td col-md-2" style="width: 25%;">
+								<div class="sub-table sub-table-ka1">
+									<div class="sub-table-tr-i1">
+										<div class="sub-table-td bdr-b ta-c h-70 sub-table-ka1-name"> 卡  </div>
+									</div>
+								</div>
+							</div>
+
+							<!--GPU-->
+
+							<div class="bdr-l table-td col-md-1" style="width: 10%;">
+								<div class="sub-table sub-table-ka1">
+									<div class="sub-table-tr-i1">
+										<div class="sub-table-td bdr-b ta-l h-70"><i class="f-l iconfont fz-24 icon-GPU pr-5 c-orange">  </i> GPU </div>
+									</div>
+								</div>
+							</div>
+							<div class="bdr-l table-td col-md-3" style="width: 15%;">
+								<div class="sub-table sub-table-ka1">
+									<div class="sub-table-tr-i1">
+										<div class="sub-table-td bdr-b h-70">
+											<div class="f-l m-t5 cpu-meter col-md-12 pd-n">
+												<div class="threm cpu-threm">
+													<div class="length_i length_i_g">
+
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+
+							<!--显存-->
+							<div class="bdr-l table-td col-md-1" style="width: 10%;">
+								<div class="sub-table sub-table-ka1">
+									<div class="sub-table-tr-i1">
+										<div class="sub-table-td bdr-b ta-l h-70"><i class="f-l iconfont fz-28 pr-5 c-green1"> &#xe670; </i> 显存 </div>
+									</div>
+								</div>
+							</div>
+							<div class="bdr-l table-td col-md-3" style="width:15%">
+								<div class="sub-table sub-table-ka1">
+									<div class="sub-table-tr-i1">
+										<div class="sub-table-td bdr-b h-70">
+											<div class="f-l m-t5 gpu-meter col-md-12 pd-n">
+												<div class="threm gpu-threm">
+													<div class="length_i length_i_gm">
+
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+
+							<!--温度-->
+							<div class="bdr-l table-td col-md-1" style="width: 10%;">
+								<div class="sub-table sub-table-ka1">
+									<div class="sub-table-tr-i1">
+										<div class="sub-table-td bdr-b ta-l h-70"><i class="f-l iconfont fz-28 pr-5 c-green1 icon-wenduji"> </i> 温度 </div>
+									</div>
+								</div>
+							</div>
+							<div class="bdr-l table-td col-md-1" style="width: 15%;">
+								<div class="sub-table sub-table-ka1">
+									<div class="sub-table-tr-i1">
+										<div class="sub-table-td bdr-b h-70">
+											<div class="f-l m-t5 gpu-meter  col-md-12 pd-n">
+												<div class="threm " style="background: #ff976a;">
+													<div class="length_i_t length_i">
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+
+
+
+						</div>
+					</div>
+
+
+
+					<div class="col-md-12 mt-30" style="background: #FFFFFF; padding:20px 30px;">
+						<div class="title col-md-12">
+							<h4 class="col-md-3 pd-n"><i class="iconfont icon-fuwuqiguanli c-green fz-36"></i>资源使用监控</h4>
+						</div>
+						
+						<div class="col-md-12 pd-n mt-15 bdr">
+							<div class="sour-title bgc-gray w-100 h-50 bdr-b">
+								<div class="col-md-1 h-50 center pd-n" style="width: 5%;">
+									容器
+								</div>
+								<div class="col-md-3 center h-50 pd-n">
+									显卡
+								</div>
+								<div class="col-md-3 center h-50 pd-n">
+									使用率
+								</div>
+								<div class="col-md-3 center h-50 pd-n">
+									使用率
+								</div>
+								<div class="col-md-2 center h-50 pd-n">
+									温度
+								</div>
+							</div>
+							
+							<div class="sour-list col-md-12 w-100 pd-n">
+							  
+							  
+							  
+							    <div class="container-box col-md-12  resource-content pd-n">
+
+							    
+							    </div>
+							 
+							 
+							 
+							 
+							</div>
+						</div>
+					</div>
+					
+				</div>
+
+				<div class="col-sm-11 col-sm-offset-3 col-md-20 col-md-offset-2 main nav-bottom bg-white">Copyright © 2017
+					<a href="#">中科弘云科技(北京)有限公司,</a> All rights reserved.</div>
+
+			</div>
+		</div>
+
+		{% include 'new/public/script.html'%}
+	<script src="{{url_for('static', filename='advance/js/c3.min.js')}}" type="text/javascript" charset="utf-8"></script>
+	<script src="{{url_for('static', filename='advance/js/d3.v3.min.js')}}" type="text/javascript" charset="utf-8"></script>
+	<script src="{{url_for('static', filename='advance/js/homeworkMinitor.js')}}" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" src="{{ url_for('static', filename='js/3rdparty/socket.io-1.4.5.min.js', ver=dir_hash) }}"></script>
+	<script>
+        var obj = JSON.parse(localStorage.getItem('data'))
+        // $('.homework-name').html(obj['job_name'])
+        // $('.home-state').html(obj['statue'])
+        // $('.create-time').html(obj['create_time'])
+        // $('.username').html(obj['name'])
+
+        if(obj['job_framework'] == 'mxnet'){
+            $('.l-title').hide()
+            $('.l-title').next('.clone-box').show()
+        }
+
+
+		var jobid = obj['job_id']
+        if( $('.home-state').html() == 'Waiting'){
+            $('.home-state').html('等待')
+            $('.home-state').css('background','#ff976a')
+        }else if( $('.home-state').html() == 'Running'){
+            $('.home-state').html('运行中')
+            // $('.home-state').addClass('bg-green1').removeClass('bg-red','bgc-gray','bg-orangle')
+            $('.home-state').css('background','#0dc999')
+        }else if( $('.home-state').html() == 'Aborted'){
+            $('.home-state').html('终止')
+            // $('.home-state').addClass('bgc-gray').removeClass('bg-red','bg-green1','bg-orangle')
+            $('.home-state').css('background','rgb(158, 183, 198)')
+        }else if( $('.home-state').html() == 'Done'){
+            $('.home-state').html('完成')
+            // $('.home-state').addClass('bg-red').removeClass('bgc-gray','bgc-gray','bg-orangle')
+            $('.home-state').css('background','#ff6376')
+        }else if( $('.home-state').html() == 'Error'){
+            $('.home-state').html('错误')
+            // $('.home-state').addClass('bg-red').removeClass('bgc-gray','bgc-gray','bg-orangle')
+            $('.home-state').css('background','#ff976a')
+        }
+	</script>
+
+	{% with namespace = "/jobs" %}
+	 <!--{% set room = jobid %}-->
+	{% include 'socketio.html' %}
+	<script>
+        socket.on('connect', function () {
+            socket.emit('join', {'room': jobid});
+        });
+	</script>
+
+	{% endwith %}
+	{% include 'job2.html' %}
+		<script>
+
+            var c3_aa=function(a,b,c){
+                c3.generate($.extend({
+                        bindto: '#mychart-a2',
+                        axis: {
+                            x: {
+                                tick: {
+                                    format: function(x) { return Math.round(x * 1000) / 1000; },
+//                                    fit: false,
+
+                                },
+                                min: 0,
+                                padding: {left: 0},
+                                label: {
+                                    text: '[迭代次数]',
+                                    position: 'outer-right',
+                                },
+                            },
+                            y: {
+                                min: 0,
+                                padding: {bottom: 0},
+
+                            },
+                            y2: {
+                                show: true,
+                                //                 		 最值
+                                min: 0,
+//                                max: 10,
+                                padding: {top: 0, bottom: 0},
+                            },
+
+                        },
+                        color: {
+                            pattern: ['#0e9aef', 'red', '#11c888', '#ababab','#e5e6e8']
+
+                        },
+                        point: {
+                            r: 2,
+                        },
+                        grid: {x: {show: true},
+                            y: {show: true}
+                        },
+                        legend: {position: 'bottom'},
+                    },
+                    {
+                        data: {
+                            xs:b,
+                            columns:a,
+                            axes:c
+
+                        },
+
+                        transition: {
+                            duration: 0,
+                        },
+                        subchart: {
+                            show: true,
+                        },
+                        zoom: {
+                            rescale: true,
+                        },
+                    }
+                ));
+            }
+            var arry1 = ["accuracy"]
+            var arry2 = ['loss']
+            var arry3 = ['cost']
+            var arry4 = ['accuracy(test)']
+            var arry5 = ['loss(train)']
+            var arry6 = ['loss(test)']
+            var arry7 = ['loss_bbox(train)']
+            var arry8 = ['loss_coverage(train)']
+            var arry9 = ['loss_bbox(val)']
+            var arry10 = ['loss_coverage(val)']
+            var arry11 = ['mAP(val)']
+            var arry12 = ['precision(val)']
+            var arry13 = ['recall(val)']
+            var arry14 = ['test_x']
+            var arry15 = ['train_x']
+            var arry16 = ['x']
+            var arry17 = ['accuracy(val)']
+            var arry18 = ['accuracy(train)']
+            var arry19 = ['speed']
+
+
+
+
+
+
+			$.ajax({
+				type:'POST',
+				url:'/vip/get_data',
+				data:{'job_id':jobid},
+				success:function (e) {
+					console.log('----d----',e)
+
+					if(e.graph_data == null){
+
+					}else{
+                        var drawComb = e.graph_data
+                        for (var i = 0; i < drawComb.length; i++){
+                            if('accuracy' in drawComb[i]){
+                                arry1.push(drawComb[i]['accuracy'])
+                            }
+                            if('loss' in drawComb[i]){
+                                arry2.push(drawComb[i]['loss'])
+                            }
+
+                            if('cost' in drawComb[i]){
+                                arry3.push(drawComb[i]['cost'])
+                            }
+                            if('accuracy_test' in drawComb[i]){
+                                arry4.push(drawComb[i]['accuracy_test'])
+
+                            }
+                            if('loss_train' in drawComb[i]){
+                                arry5.push(drawComb[i]['loss_train'])
+                            }
+                            if('loss_test' in drawComb[i]) {
+                                arry6.push(drawComb[i]['loss_test'])
+
+                            }
+                            if('train_loss_bbox' in drawComb[i]){
+                                arry7.push(drawComb[i]['train_loss_bbox'])
+                            }
+                            if('train_loss_coverage' in drawComb[i]){
+                                arry8.push(drawComb[i]['train_loss_coverage'])
+                            }
+                            if('test_loss_bbox' in drawComb[i]){
+                                arry9.push(drawComb[i]['test_loss_bbox'])
+                            }
+                            if('test_loss_coverage' in drawComb[i]){
+                                arry10.push(drawComb[i]['test_loss_coverage'])
+                            }
+                            if('mAP' in drawComb[i]){
+                                arry11.push(drawComb[i]['mAP'])
+                            }
+                            if('precision' in drawComb[i]){
+                                arry12.push(drawComb[i]['precision'])
+                            }
+                            if('recall' in drawComb[i]){
+                                arry13.push(drawComb[i]['recall'])
+                            }
+                            if('test_step' in drawComb[i]){
+                                arry14.push(drawComb[i]['test_step'])
+                            }
+                            if('train_step' in drawComb[i]){
+                                arry15.push(drawComb[i]['train_step'])
+                            }
+                            if('step' in drawComb[i]){
+                                arry16.push(drawComb[i]['step'])
+                            }
+                            if('epoch' in drawComb[i]){
+                                arry15.push(drawComb[i]['epoch'])
+                            }
+                            if('val_epoch' in drawComb[i]){
+                                arry14.push(drawComb[i]['val_epoch'])
+                            }
+                            if('val_accuracy' in drawComb[i]){
+                                arry17.push(drawComb[i]['val_accuracy'])
+                            }
+                            if('train_accuracy' in drawComb[i]){
+                                arry18.push(drawComb[i]['train_accuracy'])
+                            }
+                            if('speed' in drawComb[i]){
+
+                                arry19.push(drawComb[i]['speed'])
+                            }
+
+
+                        }
+                        var arry_step = arryF(arry14)
+                        c3_a([arry1,arry2,arry3,arry4,arry5,arry6,arry7,arry8,arry9,arry10,arry11,arry12,arry13,arry_step])
+                        console.log('***********',arry15)
+                        var test_step = arryF(arry14)
+                        var train_step = arryF(arry15)
+                        var step = arryF(arry16)
+
+                        var data_obj = {
+                            columns:[arry1,arry2,arry3,arry4,arry5,arry6,arry7,arry8,arry9,arry10,arry11,arry12,arry13,arry17,arry18,arry19,test_step,train_step,step],
+                            xs:{accuracy:'x',loss:'x',cost:'x','accuracy(test)':'test_x','loss(test)':'test_x',
+                                'loss(train)':'train_x','loss_bbox(train)':'train_x','loss_coverage(train)':'train_x','loss_bbox(val)':'test_x','loss_coverage(val)':'test_x',
+                                'mAP(val)':'test_x','precision(val)':'test_x','recall(val)':'test_x','accuracy(val)':'test_x','accuracy(train)':'train_x','speed':'train_x'},
+                            axes:{
+                                accuracy: 'y2',
+                                loss:'y',
+                                'mAP(val)':'y2',
+                                'precision(val)':'y2',
+                                'recall(val)':'y2',
+                                'accuracy(test)':'y2',
+                                'loss(train)':'y',
+                                'loss(test)':'y',
+                                cost: 'y',
+                                'accuracy(val)':'y2',
+                                'accuracy(train)':'y2'
+                            }
+                        }
+
+                        c3_a(data_obj.columns,data_obj.xs,data_obj.axes)
+					}
+
+
+					if(e.log_data == null){
+
+					}else {
+                        var log = e.log_data
+                        for (var i = 0;i<log.length;i++){
+                            $("<p>" + log[i] +"</p>").appendTo($(".log-content"))
+                            $('.log-content')[0].scrollTop = $('.log-content')[0].scrollHeight
+                        }
+					}
+
+
+                    $('.homework-name').html(e.job_name)
+                    $('.home-state').html(e.statue)
+                    $('.create-time').html(e.create_time)
+                    $('.username').html(e.name)
+					$('.all-time').html(e.runtime_of_tasks)
+                    if( $('.home-state').html() == 'Waiting'){
+                        $('.home-state').html('等待')
+                        $('.home-state').css('background','#ff976a')
+                    }else if( $('.home-state').html() == 'Running'){
+                        $('.home-state').html('运行中')
+                        $('.home-state').css('background','#0dc999')
+                    }else if( $('.home-state').html() == 'Aborted'){
+                        $('.home-state').html('终止')
+                        $('.home-state').css('background','rgb(158, 183, 198)')
+                    }else if( $('.home-state').html() == 'Done'){
+                        $('.home-state').html('完成')
+                        $('.home-state').css('background','#ff6376')
+                    }else if( $('.home-state').html() == 'Error'){
+                        $('.home-state').html('错误')
+                        $('.home-state').css('background','#ff976a')
+                    }
+
+
+                    if(e.job_framework == 'mxnet'){
+					    $('.l-title').hide()
+                        $('.l-title').next('.clone-box').show()
+					}else{
+                        $('.l-title').show()
+                        $('.l-title').next('.clone-box').hide()
+					}
+
+
+                }
+			})
+
+
+
+
+
+
+		</script>
+	</body>
+
+</html>

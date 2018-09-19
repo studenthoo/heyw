@@ -1,0 +1,66 @@
+.create-project,.push-btn{
+	display: inline-block;
+	height: 40px;
+	line-height: 40px;
+	padding: 0 20px;
+	background: #00B5B8;
+	color: #FFFFFF;
+	cursor: pointer;
+}
+.push-btn a:hover{
+	text-decoration: none;
+	color: #FFFFFF;
+}
+/*.table>thead>tr>th {
+    text-align: center;
+}
+.table>tbody>tr>td {
+    text-align: center;
+}*/
+.delete-img,.editor-img,.push-img{
+	display: inline-block;
+	position: relative;
+	width: 40px;
+}
+.delete-img em,.editor-img em,.push-img em{
+	
+	position: absolute;
+	width: 30px;
+	top: -12px;
+    left: 0;
+    display: none;
+}
+.img-do span:hover{
+	color: #00b5b8;
+}
+.img-do span:hover em{
+	display: inline-block;
+}
+.delete-icon{
+	visibility: hidden;
+}
+.r-box .form-control{
+	/*border-radius: 0;*/
+	-webkit-box-shadow: inherit;
+}
+.r-box .form-control:focus{
+
+/*border: none !important;*/
+
+box-shadow: none !important;
+
+}
+.project_name{
+	cursor: pointer;
+}
+.btn_select_i:hover {
+	color: #00b5b8;
+	text-decoration: none;
+}
+.autocomplete-suggestions{
+	background: #ffffff;
+	height: 80px;
+	overflow: auto;
+	padding: 0 5px;
+	border: 1px solid #ddd;
+}

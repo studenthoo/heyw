@@ -1,0 +1,815 @@
+{% extends 'new/public.html' %}
+{% block topfile %}
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/bitbug_favicon.ico') }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/ZK_last11/public.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/ZK_last11/sub.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/ZK_last11/iconfont.css') }}" />
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/product-train.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/ZK_last11/calendar.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/modetrain_a.css') }}" />
+	<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/style.css')}}" />
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/load_style.css') }}" />
+
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-1.7.2.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/Feffects.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/CustomScrollbar.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.nicescroll.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jqmeter.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/public.js') }}"></script>
+	<script src="{{url_for('static', filename='js/3rdparty/jquery.autocomplete-1.2.21.min.js')}}" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/load_index.js') }}"></script>
+{% endblock topfile%}
+
+{% block rightcontent %}
+<style>
+.alert_box{
+position: fixed;
+width: 100vw;
+height: 100vh;
+background: rgba(0,0,0,0.3);
+left: 0;
+top:0;
+z-index: 9999;
+}
+.alert_div{width: 400px;
+height: 240px;
+margin:0 auto;
+background: white;
+margin-top: 200px;
+}
+.alert_text{
+	line-height: 100px;
+	text-align: center;
+	height: 150px;
+	line-height: 150px;
+	font-size: 18px;
+}
+.alert_btn{  width:100px;
+	height: 40px;
+	line-height: 40px;
+	font-family: "微软雅黑";
+	font-size: 20px;
+	font-weight: 300;
+	text-align: center;
+	/*padding:0 40px;*/
+	background: #00b5b8;
+	color: white;
+	/*margin-right: 20px;*/
+	margin: 0 auto;
+	margin-top: 15px;
+}
+.alert_btn:hover{background: #FF6376;}
+	@media screen and (max-width:1500px){
+		.w-12{width: 18%}
+	}
+</style>
+<div class="alert_box" style="display: none">
+	<div class="alert_div">
+		<h3 class="alert_text">
+			请输入内容为数字与小数点的本版号
+		</h3>
+		<div class="alert_btn ">确定</div>
+	</div>
+</div>
+<style>
+	.load_box{
+		position: fixed;
+		width: 100vw;
+		height: 100vh;
+		background: #161616;
+		z-index: 9999;
+		left: 200px;
+		top: 65px;
+	}
+	#ajaxloader3{margin-right: 200px;
+		margin-top: 10%;
+	}
+	.load_txt{line-height: 40px;
+		text-align: center;
+		color: white;
+		font-size: 18px;
+		font-weight: bold;
+		margin-right: 200px;
+	}
+</style>
+<div class="load_box" style="display: none;">
+	<div id="ajaxloader3">
+		<div class="outer" style="width: 60px;height: 60px;"></div>
+		<div class="inner" style="width: 40px;height: 40px;"></div>
+	</div>
+	<div class="load_txt">
+		加载中...
+	</div>
+</div>
+	            <div class="f-l title">
+	            	<h1 class="f-l c-grayblue"> 模型产品 </h1>
+	            	<span class="f-l c-gray"> Welcome back {{request.cookies.username}}</span>
+	            </div>
+				<div class="f-l sub-title bgc-white">
+				      	<a href="{{url_for('hyperai.views.index')}}" class="f-l c-gray c-aqua-h"><span class="f-l"> Home</span><em class="f-l c-gray"> / </em></a>
+				      	<a href="{{url_for('hyperai.ration.views.show')}}" class="f-l c-gray c-aqua-h"><span class="f-l"> 模型产品</span><em class="f-l c-gray"> / </em></a>
+				</div>
+			<form action="{{url_for('hyperai.ration.views.monitor')}}" id="form-product" method="post" enctype="multipart/form-data">
+				<div class="f-l title">
+	            	<h1 class="f-l c-grayblue"> 基本信息 </h1>
+	            </div>
+	            <div class="f-l lis-ad bgc-white">
+	            	<div class="c-box m-t15">
+	            		<div class="w-50 f-l">
+	            			<h3 class="f-l c-grayblue w-12">部署名称</h3>
+	            			<input type="text" placeholder="user-data-D001" class="text_indent10 f-l input-info-product bdr w-70" name="deployment_name">
+	            		</div>
+						<div class="w-50 f-l">
+							<h3 class="f-l c-grayblue w-12"> 概述 </h3>
+							<input class="text_indent10 f-l input-info-product bdr w-70" id="model_desc" name="model_desc" type="text" value="" placeholder="提示：可填写基于模型部署之后，所提供的功能，以及更新版本所带来的功能更新等内容">
+						</div>
+	            	</div>
+	            	<div class="c-box m-t15">
+	            		<!--<div class="w-50 f-l">-->
+	            			<!--<h3 class="f-l c-grayblue w-12">部署方式 </h3>-->
+	            			<!--<select class="f-l select-box bdr product-select c-grayblue w-70 model-way" name="deployment_ways">-->
+					 					<!--<option value="全新部署">全新部署</option>-->
+					 					<!--<option value="更新升级">更新升级</option>-->
+					 			<!--</select>-->
+
+	            		<!--</div>-->
+	            		<div class="w-50 f-l">
+	            			<h3 class="f-l c-grayblue w-12">版本号 </h3>
+	            			<input type="text" placeholder="请输入数字版本号" class="text_indent10 f-l input-info-product bdr w-70 edition-num" name="version_new">
+	            			<select class="f-l select-box bdr product-select c-grayblue w-70 edition-select" style="display: none;" name="version_update">
+					 					<option value="1.0">1.0</option>
+					 					<option value="1.1">1.1</option>
+					 		</select>
+							<script>
+								$(".edition-num").on('blur',function () {
+									if(/^\d+(\.\d+)?$/.test($(this).val())==false){
+										$('.alert_text').html('请输入内容为数字与小数点的本版号')
+										$('.alert_box').css('display','block')
+									}
+
+								})
+								$('.alert_btn').on('click',function () {
+									$('.alert_box').css('display','none')
+								})
+							</script>
+	            		</div>
+						<div class="w-50 f-l">
+							<h3 class="f-l c-grayblue w-12">推理引擎</h3>
+							<select class="f-l select-box bdr product-select engine_select c-grayblue w-70" name="optimization_engine">
+								<option value="TensorRT">TensorRT</option>
+								<!--<option value="TF-serving">TF serving</option>-->
+							</select>
+						</div>
+						<!--<div class="w-50 f-l">-->
+							<!--<h3 class="f-l c-grayblue w-12">API封面</h3>-->
+							<!--<input type="text" class="AIP_img_name f-l input-info-product bdr w-50" placeholder="API封面图片上传">-->
+							<!--<div class="f-l w-20 AIP_img_btn_box">-->
+								<!--<p class="AIP_img_btn f-l">上传图片</p>-->
+								<!--<input type="file" class="AIP_img_updata" name="AIP_img_updata">-->
+							<!--</div>-->
+						<!--</div>-->
+	            	</div>
+					<!--<div  class="c-box m-t15">-->
+						<!--<div class="w-50 f-l">-->
+							<!--<h3 class="f-l c-grayblue w-12">推理引擎</h3>-->
+							<!--<select class="f-l select-box bdr product-select engine_select c-grayblue w-70" name="optimization_engine">-->
+								<!--<option value="TensorRT">TensorRT</option>-->
+								<!--&lt;!&ndash;<option value="TF-serving">TF serving</option>&ndash;&gt;-->
+							<!--</select>-->
+						<!--</div>-->
+						<!--<div class="w-50 f-l">-->
+							<!--<h3 class="f-l c-grayblue w-12">API封面</h3>-->
+							<!--<input type="text" class="AIP_img_name f-l input-info-product bdr w-50" placeholder="API封面图片上传">-->
+							<!--<div class="f-l w-20 AIP_img_btn_box">-->
+								<!--<p class="AIP_img_btn f-l">上传图片</p>-->
+								<!--<input type="file" class="AIP_img_updata" name="AIP_img_updata">-->
+							<!--</div>-->
+						<!--</div>-->
+					<!--</div>-->
+					<style>
+						.AIP_img_btn_box{position: relative;}
+						.AIP_img_updata{position: absolute;
+							width: 100%;
+							height: 100%;
+							top:0;
+							left:0;
+							opacity: 0;
+						}
+						.AIP_img_btn{
+							padding: 0;
+							width: 100%;
+							height: 44px;
+							line-height: 40px;
+							position: relative;
+							cursor: pointer;
+							font-family: "宋体";
+							font-size: 14px;
+							font-weight: 200;
+							overflow: hidden;
+							text-align: center;
+							color: #FFFFFF;
+							background-color: #FF6376;
+						}
+						.AIP_img_btn:hover{background: #00B5B8}
+					</style>
+					<script>
+						$('.AIP_img_updata').on('change',function (e) {
+//							console.log(e.currentTarget.files[0].name)
+							$('.AIP_img_name').val(e.currentTarget.files[0].name)
+						})
+//						tf_serveing，tf_rt切换
+//						$('.engine_select').on('change',function () {
+//							if($(this).val()=='TensorRT'){
+//								$('.tf_rt').css('display','block')
+//								$('.tf_serveing').css('display','none')
+//							}else if($(this).val()=='TF-serving'){
+//								$('.tf_rt').css('display','none')
+//								$('.tf_serveing').css('display','block')
+//							}
+//						})
+					</script>
+	            </div>
+				<div class="tf_rt f-l w-100">
+					<div class="f-l w-100 model_select_btn m-t15">
+						<h1 class="f-l c-grayblue select-i">模型选择</h1>
+						<h1 class="f-l c-grayblue">模型上传</h1>
+					</div>
+					<input type="hidden" value="select" id="model_select_name" name="model_select_name">
+					<script>
+						$('.model_select_btn').children().on('click',function () {
+							$(this).addClass('select-i').siblings().removeClass('select-i')
+
+							if($(this).text()=='模型上传'){
+								$('.model_update').css('display','block')
+								$('.model_select').css('display','none')
+								$('#model_select_name').val('upload')
+							}
+							else if($(this).text()=='模型选择'){
+								$('.model_select').css('display','block')
+								$('.model_update').css('display','none')
+								$('#model_select_name').val('select')
+							}
+						})
+					</script>
+					<div class="w-100 f-l model_update" style="display: none">
+						<div class="f-l lis-ad bgc-white">
+							<div class="c-box m-t15">
+								<div class="c-box m-t15 w-50">
+									<h3 class="f-l c-grayblue">选择场景：</h3>
+									<input type="hidden" value="classification" class="scene-select-content" name="scene">
+									<div class="f-l scene-select">
+										<p class="c-grayblue select-i">图像分类<span style="display: none;">classification</span></p>
+										<!--<p class="c-grayblue">目标检测<span style="display: none;">image-object-detection</span></p>-->
+									</div>
+									<style>
+										.model_select_btn h1{
+											height: 40px;
+											line-height: 40px;
+											padding: 0 20px;
+											font-family: "微软雅黑";
+											font-weight: 400;
+											text-align: center;
+										}
+										.scene-select p{display: inline-block;
+											height: 40px;
+											line-height: 40px;
+											padding: 0 20px;
+											font-family: "微软雅黑";
+											font-size: 16px;
+											font-weight: 400;
+											text-align: center;
+										}
+										.scene-select .select-i,.txt_load_select .select-i,.model_select_btn .select-i{
+											color: #FFFFFF!important;
+											background-color: #00B5B8!important;
+										}
+									</style>
+									<script>
+		//								选择场景
+										$('.scene-select p').on('click',function () {
+											$(this).addClass('select-i').siblings().removeClass('select-i')
+											$('.scene-select-content').val($(this).children().text())
+											console.log($('.scene-select-content').val())
+											if($(this).children().text()=='classification'){
+												$('.frame-select p').css('visibility','visible')
+												$('.frame-select p').eq(0).addClass('select-i').siblings().removeClass('select-i')
+												$('.url_i').css('display','block')
+												$('.load_i').css('display','block')
+											}
+											else if($(this).children().text()=='image-object-detection'){
+												$('.frame-select-content').val('caffe')
+												console.log($('.frame-select-content').val())
+												$('.frame-select p').eq(0).siblings().css('visibility','hidden')
+												$('.frame-select p').eq(0).addClass('select-i').siblings().removeClass('select-i')
+												$('.url_i').css('display','block')
+												$('.load_i').css('display','block')
+												$('.url_3').css('display','none')
+												$('.load_3').css('display','none')
+											}
+										})
+										//选择框架
+									</script>
+								</div>
+							</div>
+							<div class="c-box m-t15 w-50">
+									<h3 class="f-l c-grayblue">选择框架：</h3>
+									<input type="hidden" value="caffe" class="frame-select-content" name="frame">
+									<div class="f-l frame-select">
+										<p class="c-grayblue select-i">caffe</p>
+										<p class="c-grayblue">tensorflow</p>
+										<p class="c-grayblue">onnx</p>
+									</div>
+									<style>
+										.frame-select p,.txt_load_select p{display: inline-block;
+											height: 40px;
+											line-height: 40px;
+											padding: 0 20px;
+											font-family: "微软雅黑";
+											font-size: 16px;
+											font-weight: 400;
+											text-align: center;
+										}
+										.frame-select .select-i{
+											color: #FFFFFF!important;
+											background-color: #00B5B8!important;
+										}
+									</style>
+									<script>
+										$('.frame-select p').on('click',function () {
+											$(this).addClass('select-i').siblings().removeClass('select-i')
+											$('.frame-select-content').val($(this).text())
+											console.log($('.scene-select-content').val())
+											if($('.scene-select-content').val() == 'classification'){
+												if($(this).text()=='caffe'){
+													console.log(1)
+													$('.url_i').css('display','block')
+													$('.load_i').css('display','block')
+												}
+												else{
+													$('.url_2').css('display','none')
+													$('.load_2').css('display','none')
+												}
+											}
+											else if($('.scene-select-content').val()=='image-object-detection'){
+
+											}
+										})
+									</script>
+								</div>
+							<div class="c-box m-t15 w-100">
+								<div class="c-box">
+									<div class="f-l model-text w-50">
+										<h3 class="f-l c-grayblue">本地上传：</h3>
+									</div>
+									<div class="f-r model-text w-50">
+										<h3 class="f-l c-grayblue">服务器选择：</h3>
+									</div>
+								</div>
+							</div>
+							<div class="f-l w-100">
+								<div class="c-box f-l m-t15 w-50 txt_load_select_update">
+									<style>
+										.model-text .file-lis{
+											display: inline-block;
+											width: 20rem;
+											height: 38px;
+											padding: 0 10px;
+											border: none;
+											border: 1px solid #D9DCE1;
+										}
+									</style>
+									<div class="f-l model-text w-100 m-t15 load_1 load_i">
+										<h3 class="f-l c-grayblue w-12">模型文件</h3>
+										<div class="f-l input-info-product bdr w-70" style="border: none">
+											<input style="box-sizing: border-box;width: 75%" type="text" name="" id="" value="" class="file-lis c-grayblue" placeholder="模型文件上传"/>
+											<a href="#" class="upload-file f-r" style="width: 25%">
+												<input type="file" name="upload_model_file_c" id="" value="" class="codefile" /> 浏览
+											</a>
+										</div>
+									</div>
+									<div class="f-l model-text w-100 m-t15 load_2 load_i">
+										<h3 class="f-l c-grayblue w-12">网络文件</h3>
+										<div class="f-l input-info-product bdr w-70" style="border: none">
+											<input style="box-sizing: border-box;width: 75%" type="text" name="" id="" value="" class="file-lis c-grayblue" placeholder="网络文件上传"/>
+											<a href="#" class="upload-file f-r" style="width: 25%">
+												<input type="file" name="upload_model_network_c" id="" value="" class="codefile" /> 浏览
+											</a>
+										</div>
+									</div>
+									<div class="f-l model-text w-100 m-t15 load_3 load_i">
+										<h3 class="f-l c-grayblue w-12">标签文件</h3>
+										<div class="f-l input-info-product bdr w-70" style="border: none">
+											<input style="box-sizing: border-box;width: 75%" type="text" name="" id="" value="" class="file-lis c-grayblue" placeholder="标签文件上传"/>
+											<a href="#" class="upload-file f-r" style="width: 25%">
+												<input type="file" name="upload_model_labels_c" id="" value="" class="codefile" /> 浏览
+											</a>
+										</div>
+									</div>
+								</div>
+								<div class="c-box f-l m-t15 w-50 txt_load_select_url">
+									<style>
+										.t-indent-10{text-indent: 10px}
+										.upload-ser{
+											width: 28rem;
+											height: 38px;
+											border: 1px solid #d9dce1;
+											padding: 0 10px;
+										}
+										.text-indent10{text-indent: 10px;}
+									</style>
+									<div class="f-l model-text w-100 m-t15 url_1 url_i">
+										<h3 class="f-l c-grayblue w-12">输入路径</h3>
+										<input style="width: 70%;height: 40px;padding: 0;" type="text" name="model_path_c" value="" class="autocomplete_path upload-ser f-l input-info-product bdr w-70 text-indent10 c-grayblue"  placeholder='模型文件路径'/>
+									</div>
+									<div class="f-l model-text w-100 m-t15 url_2 url_i">
+										<h3 class="f-l c-grayblue w-12">输入路径</h3>
+										<input style="width: 70%;height: 40px;padding: 0;" type="text" name="network_path_c" value="" class="autocomplete_path upload-ser f-l input-info-product bdr w-70 text-indent10 c-grayblue"  placeholder='网络文件路径'/>
+									</div>
+									<div class="f-l model-text w-100 m-t15 url_3 url_i">
+										<h3 class="f-l c-grayblue w-12">输入路径</h3>
+										<input style="width: 70%;height: 40px;padding: 0;" type="text" name="labels_path_c" value="" class="autocomplete_path upload-ser f-l input-info-product bdr w-70 text-indent10 c-grayblue"  placeholder='标签文件路径'/>
+									</div>
+								</div>
+							</div>
+
+						</div>
+					</div>
+					<div class="w-100 f-l model_select" >
+						<div class="f-l lis-ad bgc-white">
+							<div class="w-50 f-l m-t15">
+								<h3 class="f-l c-grayblue w-12">选择场景</h3>
+								<!--<div class="f-l w-70 product-select">-->
+									<select id="select_model_cj" class="f-l select-box bdr product-select c-grayblue w-70" name="select_scence" >
+										<option value="classification">图像分类</option>
+										<!--<option value="image-object-detection">目标检测</option>-->
+										<!--<option value="image-segmentation">图像分割</option>-->
+										<!--<option value="image-processing">图像处理</option>-->
+									</select>
+							</div>
+							<div class="w-50 f-l m-t15">
+								<h3 class="f-l c-grayblue w-12">选择模型</h3>
+									<select id="select_model_model" class="f-l select-box bdr product-select c-grayblue w-70 model-name-content" name="select_model">
+
+									</select>
+									<script>
+										$('#select_model_model').on('change',function () {
+											$.post('/get_cmodel/detail',{'value':$(this).val()},function (e) {
+	//											console.log(e)
+												$('.user-name').text(e.auth)
+												$('.found-time').text(e.create_time)
+												$('.time-length').text(Math.floor(e.run_time)+'s')
+												$('.dataset-name').text(e.dataset)
+												$('.scenarios').text(e.apply_scence)
+												$('.training-framework').text(e.framework)
+												$('.training-network').text(e.network)
+												$('.date-model').text(e.database)
+												$('.training-num1').text(e.train_count)
+												$('.training-num').text(e.val_count)
+											})
+										})
+									</script>
+								<!--</div>-->
+
+							</div>
+							<div class="c-box m-t15">
+								<div class="f-l c-box m-t15 w-100 model-select-content bdr" style="font-size: 15px">
+									<dl class="f-l  w-100">
+										<dd class="f-l w-100  c-grayblue">模型信息</dd>
+									</dl>
+									<dl class="f-l bdr-t w-100">
+										<dd class="f-l w-10  c-grayblue bgc-gray-c"> 用户名</dd>
+										<dd class="f-l w-10 bdr-l c-gray user-name"></dd>
+										<dd class="f-l w-10 bdr-l c-grayblue bgc-gray-c"> 创建时间</dd>
+										<dd class="f-l w-20 bdr-l c-gray found-time"></dd>
+										<dd class="f-l w-10 bdr-l c-grayblue bgc-gray-c"> 训练时长</dd>
+										<dd class="f-l w-10 bdr-l c-gray time-length"></dd>
+										<dd class="f-l w-10 bdr-l c-grayblue bgc-gray-c"> 所用数据集名称</dd>
+										<dd class="f-l w-20 bdr-l c-gray dataset-name"></dd>
+									</dl>
+									<dl class="f-l bdr-t w-100">
+										<dd class="f-l w-10  c-grayblue bgc-gray-c"> 应用场景</dd>
+										<dd class="f-l w-10 bdr-l c-gray scenarios" style="overflow: hidden"> </dd>
+										<dd class="f-l w-10 bdr-l c-grayblue bgc-gray-c"> 训练框架</dd>
+										<dd class="f-l w-20 bdr-l c-gray training-framework"></dd>
+										<dd class="f-l w-10 bdr-l c-grayblue bgc-gray-c"> 训练网络</dd>
+										<dd class="f-l w-10 bdr-l c-gray training-network"> </dd>
+										<dd class="f-l w-10 bdr-l c-grayblue bgc-gray-c"> 数据库类型</dd>
+										<dd class="f-l w-20 bdr-l c-gray date-model"> </dd>
+									</dl>
+									<dl class="f-l bdr-t w-100">
+										<dd class="f-l w-10  c-grayblue bgc-gray-c" style="border-bottom: 1px solid #d9dce1"> 训练集数量</dd>
+										<dd class="f-l w-10 bdr-l c-gray training-num1"> </dd>
+										<dd class="f-l w-10 bdr-l c-grayblue bgc-gray-c" style="border-bottom: 1px solid #d9dce1"> 验证集数量</dd>
+										<dd class="f-l w-20 bdr-l c-gray training-num"></dd>
+										<dd class="f-l w-50 bdr-l c-gray"></dd>
+									</dl>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!--tf_serveing-->
+				<!--<div class="tf_serveing f-l" style="display: none">-->
+					<!--<div class="f-l title">-->
+						<!--<h1 class="f-l c-grayblue"> 模型上传 </h1>-->
+					<!--</div>-->
+					<!--<div class="lis-ad bgc-white">-->
+						<!--<div class="c-box m-t15 w-100">-->
+							<!--<div class="c-box">-->
+								<!--<div class="f-l model-text w-50">-->
+									<!--<h3 class="f-l c-grayblue">本地上传：</h3>-->
+								<!--</div>-->
+								<!--<div class="f-r model-text w-50">-->
+									<!--<h3 class="f-l c-grayblue">服务器选择：</h3>-->
+								<!--</div>-->
+							<!--</div>-->
+						<!--</div>-->
+						<!--<div class="f-l w-100">-->
+							<!--<div class="c-box f-l m-t15 w-50 txt_load_select_update">-->
+								<!--<style>-->
+									<!--.model-text .file-lis{-->
+										<!--display: inline-block;-->
+										<!--width: 20rem;-->
+										<!--height: 38px;-->
+										<!--padding: 0 10px;-->
+										<!--border: none;-->
+										<!--border: 1px solid #D9DCE1;-->
+									<!--}-->
+								<!--</style>-->
+								<!--<div class="f-l model-text w-100 m-t15 load_1 load_i">-->
+									<!--<h3 class="f-l c-grayblue w-12">模型文件</h3>-->
+									<!--<div class="f-l input-info-product bdr w-70" style="border: none">-->
+										<!--<input style="box-sizing: border-box;width: 75%" type="text" name="" id="" value="" class="file-lis c-grayblue" placeholder="模型文件上传"/>-->
+										<!--<a href="#" class="upload-file f-r" style="width: 25%">-->
+											<!--<input type="file" name="upload_model_file_c" id="" value="" class="codefile" /> 浏览-->
+										<!--</a>-->
+									<!--</div>-->
+								<!--</div>-->
+								<!--<div class="f-l model-text w-100 m-t15 load_2 load_i">-->
+									<!--<h3 class="f-l c-grayblue w-12">网络文件</h3>-->
+									<!--<div class="f-l input-info-product bdr w-70" style="border: none">-->
+										<!--<input style="box-sizing: border-box;width: 75%" type="text" name="" id="" value="" class="file-lis c-grayblue" placeholder="网络文件上传"/>-->
+										<!--<a href="#" class="upload-file f-r" style="width: 25%">-->
+											<!--<input type="file" name="upload_model_network_c" id="" value="" class="codefile" /> 浏览-->
+										<!--</a>-->
+									<!--</div>-->
+								<!--</div>-->
+								<!--<div class="f-l model-text w-100 m-t15 load_3 load_i">-->
+									<!--<h3 class="f-l c-grayblue w-12">标签文件</h3>-->
+									<!--<div class="f-l input-info-product bdr w-70" style="border: none">-->
+										<!--<input style="box-sizing: border-box;width: 75%" type="text" name="" id="" value="" class="file-lis c-grayblue" placeholder="标签文件上传"/>-->
+										<!--<a href="#" class="upload-file f-r" style="width: 25%">-->
+											<!--<input type="file" name="upload_model_labels_c" id="" value="" class="codefile" /> 浏览-->
+										<!--</a>-->
+									<!--</div>-->
+								<!--</div>-->
+							<!--</div>-->
+							<!--<div class="c-box f-l m-t15 w-50 txt_load_select_url">-->
+								<!--<style>-->
+									<!--.t-indent-10{text-indent: 10px}-->
+									<!--.upload-ser{-->
+										<!--width: 28rem;-->
+										<!--height: 38px;-->
+										<!--border: 1px solid #d9dce1;-->
+										<!--padding: 0 10px;-->
+									<!--}-->
+									<!--.text-indent10{text-indent: 10px;}-->
+								<!--</style>-->
+								<!--<div class="f-l model-text w-100 m-t15 url_1 url_i">-->
+									<!--<h3 class="f-l c-grayblue w-12">输入路径</h3>-->
+									<!--<input style="width: 70%;height: 40px;padding: 0;" type="text" name="model_path_c" value="" class="autocomplete_path upload-ser f-l input-info-product bdr w-70 text-indent10 c-grayblue"  placeholder='模型文件路径'/>-->
+								<!--</div>-->
+								<!--<div class="f-l model-text w-100 m-t15 url_2 url_i">-->
+									<!--<h3 class="f-l c-grayblue w-12">输入路径</h3>-->
+									<!--<input style="width: 70%;height: 40px;padding: 0;" type="text" name="network_path_c" value="" class="autocomplete_path upload-ser f-l input-info-product bdr w-70 text-indent10 c-grayblue"  placeholder='网络文件路径'/>-->
+								<!--</div>-->
+								<!--<div class="f-l model-text w-100 m-t15 url_3 url_i">-->
+									<!--<h3 class="f-l c-grayblue w-12">输入路径</h3>-->
+									<!--<input style="width: 70%;height: 40px;padding: 0;" type="text" name="labels_path_c" value="" class="autocomplete_path upload-ser f-l input-info-product bdr w-70 text-indent10 c-grayblue"  placeholder='标签文件路径'/>-->
+								<!--</div>-->
+							<!--</div>-->
+						<!--</div>-->
+					<!--</div>-->
+				<!--</div>-->
+				<div class="f-l title">
+	            	<h1 class="f-l c-grayblue"> 资源属性 </h1>
+	            </div>
+	            <div class="f-l lis-ad bgc-white">
+					<div class="f-l c-box m-t15">
+						<div class="f-l w-50" >
+							<h3 class="f-l c-grayblue w-8" style="text-align: left">选择资源池 </h3>
+							<div class="f-l infer-box" style="height: 40px;line-height: 40px;font-size: 14px;">
+								<input type="radio" id="inference" name="inference" class="f-l" style="height: 40px;line-height: 40px;" value="inference" checked>
+								<label for="inference" class="f-l" style="margin-left: 5px;">inference</label>
+								<span class="f-l" style="margin-left: 15px;">目前可用GPU：{{remaining_gpu_count}}/{{total_gpu_count}}</span>
+							</div>
+
+						</div>
+
+
+					</div>
+					<script>
+                        $("input[type='radio']").each(function () {
+                            $(this).val($(this).next('label').html())
+                        })
+					</script>
+
+	            	<div class="c-box m-t15">
+	            		<div class="w-50 f-l">
+	            			<h3 class="f-l c-grayblue w-12" style="text-align: left">部署模式 </h3>
+	            			<select class="f-l select-box bdr product-select c-grayblue w-70 model-way-z" name="resources_deployment">
+					 					<option value="弹性伸缩模式">弹性伸缩模式</option>
+					 					<option value="固定资源模式">固定资源模式</option>
+
+					 		</select>
+	            		</div>
+						<div class="f-l w-50">
+							<div class="w-100 h-40">
+								<h4 class="f-l c-grayblue ta-l w-12">实例数量</h4>
+								<input type="text" class="f-l bdr product-select c-grayblue w-20 compute-element-max input-fixation bx-sz" style="display: none;" name="instance">
+								<input type="text" class="f-l bdr product-select c-grayblue w-20 compute-element-max mr-r-10 input-spring bx-sz t-indent-10 instance_min" placeholder="实例最小值" name="instance_min">
+								<span class="f-l h-40 line-h40 input-spring" style="padding: 0 10px">~</span>
+								<input type="text" class="f-l bdr product-select c-grayblue w-20 compute-element-max input-spring bx-sz t-indent-10 instance_max" placeholder="实例最大值" name="instance_max">
+							</div>
+						</div>
+	            	</div>
+	            	<div class="c-box m-t15">
+	            		<div class="f-l w-50">
+	            			<h3 class="f-l c-grayblue w-12" style="text-align: left">资源配置 </h3>
+	            			<div class="f-l w-70 bdr">
+	            				<div class="h-40 gcpu_name_mg">
+	            					<h4 class="f-l c-grayblue ta-l w-30">CPU(Core)</h4>
+	            					<select class="cpu_count f-l select-box bdr product-select c-grayblue w-50" name="cpu_count">
+												<option value="2">2</option>
+							 					<option value="4" selected>4</option>
+							 					<option value="8">8</option>
+
+							 				</select>
+	            				</div>
+	            				<div  class="h-40 gcpu_name_mg">
+	            					<h4 class="f-l c-grayblue ta-l w-30">内存（GB）</h4>
+	            					<select class="memory_count f-l select-box bdr product-select c-grayblue w-50" name="memory_count">
+												<option value="8Gi">8GB</option>
+							 					<option value="16Gi" selected>16GB</option>
+							 					<option value="32Gi">32GB</option>
+							 					<!--<option value="64Gi">64GB</option>-->
+							 					<!--<option value="128Gi">128GB</option>-->
+							 				</select>
+	            				</div>
+								
+	            				<div  class="h-40 gcpu_name_mg">
+	            					<h4 class="f-l c-grayblue ta-l w-30">GPU（Card)</h4>
+	            					<select class="gpu_count f-l select-box bdr product-select c-grayblue w-50" name="gpu_count">
+										{%for i in range(1,gpu_node+1)%}
+							 					<option value="{{i}}">{{i}}</option>
+										{%endfor%}
+							 					<!--<option value="3">3</option>-->
+							 					<!--<option value="4">4</option>-->
+							 					<!--<option value="5">5</option>-->
+							 					<!--<option value="4">6</option>-->
+							 					<!--<option value="5">7</option>-->
+												<!--<option value="5">8</option>-->
+							 				</select>
+	            				</div>
+	            			</div>
+	            		</div>
+						<div class="f-l w-50 max_min">
+							<h3 class="f-l c-grayblue w-12" style="text-align: left">GPU阈值</h3>
+							<input type="text" class="f-l bdr product-select c-grayblue w-20 compute-element-max mr-r-10  bx-sz t-indent-10 gpu_count_min" placeholder="GPU最小值" name="gpu_count_min">
+							<span class="f-l h-40 line-h40 input-spring" style="padding: 0 10px">~</span>
+							<input type="text" class="f-l bdr product-select c-grayblue w-20 compute-element-max bx-sz t-indent-10 gpu_count_max" placeholder="GPU最大值" name="gpu_count_max">
+						</div>
+	            	</div>
+	            </div>
+
+	            <input type="reset" value="取消" class="f-l btn-8 m-t35 m-r15 c-grayblue bgc-red-h c-white-h bgc-gray-b btn_m"/>
+	            <input type="button" value="部署" class="f-l btn-8 m-t35 m-r15 c-white bgc-Aqua bgc-red-h btn_m form-product-alert"/>
+            </form>
+{% endblock rightcontent %}
+
+{% block bottomfile %}
+<div class="product-end  h-100vh w-100vw product-form-select" style="display: none;">
+	<div class="w-100 h-100" style="position: relative;">
+		<div class="product-end-content">
+			<h2 class="f-l m-t30 c-grayblue product-end-text font-w w-100 ta-c">模型推理部署</h2>
+			<div class="product-end-btn-box f-l">
+				<div class="w-50 f-l">
+					<input type="button" value="取消部署" class="f-r btn-8-product  m-r15 c-grayblue bgc-red-h c-white-h bgc-gray-b btn_m product-end-btn-no"/>
+				</div>
+				<div class="w-50 f-l">
+					<input type="button" value="确认部署" class="f-l btn-8-product m-r15 c-white bgc-Aqua bgc-red-h btn_m product-end-btn-yes"/>
+
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+  	<script type="text/javascript">
+  		function formsubmit(){
+  			$('#form-product').submit()
+  		}
+//		部署方式
+	    $('.model-way').on('change',function(){
+	     	if($(this).val()=='全新部署'){
+	            $('.edition-num').css('display','block')
+	            $('.edition-select').css('display','none')
+	        }else if($(this).val()=='更新升级'){
+	            $('.edition-num').css('display','none')
+	            $('.edition-select').css('display','block')
+	        }
+	    })
+		$('.edition-num').on('blur',function () {
+
+		})
+//	    部署资源形式
+	    $('.model-way-z').on('change',function(){
+	    	console.log($(this).val())
+	    	if($(this).val()== '固定资源模式'){
+				$('.input-fixation').css('display','block')
+				$('.input-spring').css('display','none')
+				$('.max_min').css('display','none')
+	        }else if($(this).val()== '弹性伸缩模式'){
+				$('.input-fixation').css('display','none')
+				$('.input-spring').css('display','block')
+				$('.max_min').css('display','block')
+	        }
+	    })
+
+//		部署确认
+		$('.form-product-alert').on('click',function () {
+			$.ajax({
+				type:'get',
+				url:"{{url_for('hyperai.ration.views.check_resources')}}",
+				data:{
+					resources_deployment:$('.model-way-z').val(),
+					input_fixation:$('.input-fixation').val(),
+					instance_max:$('.instance_max').val(),
+					instance_min:$('.instance_min').val(),
+					gpu_count_max:$('.gpu_count_max').val(),
+					gpu_count_min:$('.gpu_count_min').val(),
+					cpu_count:$('.cpu_count').val(),
+					memory_count:$('.memory_count').val(),
+					gpu_count:$('.gpu_count').val()
+				},
+				success:function (e) {
+					console.log(e)
+					if(e.a==0){
+						$('.alert_text').html(e.res)
+						$(".alert_box").css('display','block')
+					} else if(e.a==1){
+						$('.product-form-select').css('display','block')
+					}
+				}
+			})
+
+		})
+		$('.product-end-btn-no').on('click',function () {
+			$('.product-form-select').css('display','none')
+		})
+		$('.product-end-btn-yes').on('click',function () {
+			$('.product-form-select').css('display','none')
+			$(".load_box").css('display','block')
+			setTimeout(function (){
+				formsubmit()
+			},3000)
+
+		})
+
+		// 获取文件
+		function getFileName(path) {
+			var pos1 = path.lastIndexOf('/');
+			var pos2 = path.lastIndexOf('\\');
+			var pos = Math.max(pos1, pos2);
+			if(pos < 0) {
+				return path
+			} else {
+				return path.substring(pos + 1)
+			}
+		}
+		$(document).ready(function() {
+			$(".codefile").change(function() {
+				var str = $(this).val();
+				var filename = getFileName(str);
+				var filetxt = filename.substring(filename.lastIndexOf(".") + 1);
+				$(this).parents("a").prev("input").val(filename)
+			})
+
+		})
+//		select 选择模型?
+		$('#select_model_cj')[0].selectedIndex = -1;
+		$('#select_model_cj').on('change',function () {
+			$('#select_model_model').children().remove()
+			$.post('{{url_for("hyperai.ration.views.get_cmodel")}}',{'value':$(this).val()},function (e) {
+				var text_all=e.model
+//				console.log(e);
+				$('#select_model_model')[0].selectedIndex = -1;
+				for(var i=0;i<e.model.length;i++){
+//					console.log(e.model[i][0])
+					$('#select_model_model').append('<option value="'+e.model[i][1]+'">'+e.model[i][0]+'</option>')
+					$('#select_model_model')[0].selectedIndex = -1;
+				}
+
+			})
+		})
+  	</script>
+{% endblock bottomfile %}

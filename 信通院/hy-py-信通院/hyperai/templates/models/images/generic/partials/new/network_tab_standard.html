@@ -1,0 +1,45 @@
+{# Copyright (c) 2016-2017, NVIDIA CORPORATION.  All rights reserved. #}
+<ul class="nav nav-tabs" id="stdnetRole">
+    {% for fw in frameworks %}
+    <li id="{{ fw.get_id() }}"><a href="#{{ fw.get_id() }}_standard" data-toggle="tab">{{ fw.get_name() }}</a></li>
+    {% endfor %}
+</ul>
+<div id="network-tab-standard-contents" class="tab-pane active">
+    <script>
+        $('#stdnetRole li').first().addClass("active");
+        $('#stdnetRole li').on('click', function(e) {
+            $(this).addClass('active');
+            $(this).siblings().removeClass('active');
+//             setFramework($(this).attr('id'));
+        });
+    </script>
+    <table class="table">
+        <!--<tr>-->
+        <!--<th>Network</th>-->
+        <!--<th>Details</th>-->
+        <!--<th>Intended image size</th>-->
+        <!--<th></th>-->
+        <!--</tr>-->
+        {% for network in form.standard_networks %}
+        <tr>
+            <td style="text-align: left;width: 40%;height: 40px;line-height: 40px;">{{ network }} {{ network.label }}</td>
+            {% if network.data == 'lenet' %}
+            <td style="width: 37%;height: 40px;line-height: 40px;">图片尺寸：28x28 (gray)</td>
+            {% elif network.data == 'alexnet' %}
+            <td style="width: 37%;height: 40px;line-height: 40px;">图片尺寸：256x256</td>
+            {% elif network.data == 'detectnet' %}
+            <td style="width: 37%;height: 40px;line-height: 40px;">图片尺寸：1248x384</td>
+             {% elif network.data == 'fcn-alexnet' %}
+            <td style="width: 37%;height: 40px;line-height: 40px;">图片尺寸：256x256</td>
+             {% elif network.data == 'char-cnn' %}
+            <td style="width: 37%;height: 40px;line-height: 40px;">图片尺寸：256x256</td>
+
+            {% else %}
+            <td></td><td>?</td>
+            {% endif %}
+            <!--<td><a class="btn btn-sm" onClick="customizeNetwork('{{network.data}}');">Customize</a></td>-->
+            <td style="width: 37%;height: 40px;line-height: 40px;"><a class="btn btn-sm" style="cursor: pointer" onClick="">Customize</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>

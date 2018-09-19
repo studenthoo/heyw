@@ -1,0 +1,41 @@
+<html>
+<title>Failed to connect to hyperai</title>
+<body>
+<h1>Error: Unable to connect to hyperai</h1>
+
+<h3>Restart the server</h3>
+<p>
+On Ubuntu 14.04, use this command to restart the server:
+</p>
+<pre>
+    sudo service hyperai restart
+</pre>
+<p>
+On Ubuntu 16.04, use this command to restart the server:
+</p>
+<pre>
+    sudo systemctl restart hyperai
+</pre>
+
+<h3>Check the logs for errors</h3>
+<p>
+If you are still encountering problems after restarting, check the logs for errors.
+</p>
+<pre>
+    cat /var/log/hyperai/hyperai.log
+</pre>
+</p>
+<p>
+For additional messsages on Ubuntu 14.04:
+</p>
+<pre>
+    cat /var/log/upstart/hyperai.log
+</pre>
+<p>
+For additional messages on Ubuntu 16.04:
+</p>
+<pre>
+    journalctl -u hyperai.service
+</pre>
+</body>
+</html>

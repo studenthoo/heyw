@@ -1,0 +1,897 @@
+{% extends 'job1.html' %}
+
+
+{% block topfile %}
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/bitbug_favicon.ico') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/ZK_last11/public.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/ZK_last11/sub.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/ZK_last11/iconfont.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='plugins/iCheck/skins/minimal/grey.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/ZK_last11/calendar.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='c3/c3.css') }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/modelmanagement-details.css') }}"/>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}"/>
+
+
+
+<script type="text/javascript" src="{{ url_for('static', filename='js/jquery-1.7.2.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/Feffects.js') }}"></script>
+    <!--<script type="text/javascript" src="plugins/iCheck/icheck.min.js"></script>--> 
+    <script type="text/javascript" src="{{ url_for('static', filename='js/CustomScrollbar.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jq-datepicker.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.nicescroll.js') }}"></script>
+    <!--<script type="text/javascript" src="js/echarts.min.js"></script>-->   
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jqmeter.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='plugins/jqueryraty/jquery.raty.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/public.js') }}"></script>
+    <!--<script type="text/javascript" src="js/subChart-d.js"></script>--> 
+    <!--[if lt IE 9]>
+      <script src="{{ url_for('static', filename='js/html5shiv.js') }}"></script>
+    <![endif]-->
+ <style>
+	 .c3-legend-item-sample{display: none;}
+		#mychart-a2 .c3-line,#mychart-a1 .c3-line,#mychart-准确率（验证） .c3-line ,#mychart-a2 .c3-line{
+				  stroke-width: 2px;
+				}
+    </style>
+  {% endblock %}
+
+{% block rightcontent %}
+
+            <div class="f-l title">
+            	<h1 class="f-l c-grayblue"> 模型管理 </h1>
+            	<span class="f-l c-gray"> Welcome back, {{ request.cookies.username }} </span>
+            </div>
+            
+			      <div class="f-l sub-title bgc-white">
+			      	<a href="{{url_for('hyperai.views.index')}}" class="f-l c-gray c-aqua-h"><span class="f-l"> Home      </span><em class="f-l c-gray"> / </em></a>
+			      	<a href="{{url_for('hyperai.views.modelmanage')}}" class="f-l c-gray c-aqua-h"><span class="f-l"> 模型管理  </span><em class="f-l c-gray"> / </em></a>
+			      	<a href="#" class="f-l c-gray c-aqua-h"><span class="f-l"> 详情 </span><em class="f-l c-gray"> / </em></a>
+			      </div>
+
+			      <div class="f-l lis-m-a bgc-white">
+              <div class="c-box">
+              	<div class="l-box w-35">
+              	  <div class="div-box">
+              	  	<a href="{{url_for('hyperai.views.modelmanage')}}" class="f-l btn-9 bdr bgc-white c-grayblue c-aqua-h" style="z-index: 8;"><i class="fz-14 iconfont "> &#xe6c5; </i> 返回 </a>
+              	   
+					  {%set num = ['1','2','3','4','5']|random%}
+              	    <img src="{{ url_for('static', filename='images/e-'+num+'.png') }}" class="f-l" />
+              	  </div>
+              	  <div class="c-box">
+              	  	<div class="c-box">
+              	  	  <a {%if job.status == 'D' %}href="{{url_for('hyperai.model.views.to_store', job_id=job.id())}}" {%else%} href='#'{%endif%} class="f-l m-t10 fz-12 lis-mab c-gray c-aqua-h"><i class="f-l fz-20 iconfont plr-5"> &#xe663; </i> 发布模型 </a>
+						<a href="{{url_for('hyperai.model.views.download', job_id=job.id())}}" class="f-r m-t10 fz-12 lis-mab c-gray c-aqua-h"><i class="f-l fz-20 iconfont plr-5"> &#xe600; </i> 下载模型 </a>
+					</div>
+              	  	<div class="c-box">
+
+
+              	  	</div>	  	 
+              	  </div>
+              	</div>
+
+              	<div class="r-box w-64">
+              		<div class="c-box lis-m-al m-t15">
+              			<div class="l-box">
+              				<h1 class="f-l mode-name">{{job.name()}} </h1>
+              			</div>
+              			<div class="r-box">
+              				<div class="f-l bdr-r div">
+              					<span class="c-grayblue"> 用户名   <span>
+              					<span class="c-aqua "> {{job.username}}  </span>
+              				</div>
+              				<div class="f-l div">
+              					<span class="c-grayblue"> 创建时间 <span> 
+              					<span class="c-aqua "> {{job.create_time}} </span>
+              				</div>            				
+              			</div>
+              		</div>
+			            <div class="f-l lis-g-a bgc-white">
+				            <div class="c-box bdr">
+									    <dl class="f-l">
+									      <dt class="f-l w-100 bdr-l c-grayblue"><span class="f-l w-100  ta-c"> 模型基本属性 </span> </dt>
+									    </dl>						  
+									    <dl class="f-l bdr-t">
+									      <dt class="f-l w-16 bdr-l c-grayblue bgc-gray-c"> 应用场景 </dt>
+									      <dd class="f-l w-16 bdr-l c-gray model-changjing">{{job.apply_scence}}</dd>
+									      <dt class="f-l w-16 bdr-l c-grayblue bgc-gray-c"> 训练框架 </dt>
+									      <dd class="f-l w-16 bdr-l c-gray"> {{job.train_task().get_framework_id()}} </dd>
+									      <dt class="f-l w-16 bdr-l c-grayblue bgc-gray-c"> 训练网络 </dt>
+									      <dd class="f-l w-16 bdr-l c-gray"> {{job.network}} </dd>
+									    </dl>
+									    <dl class="f-l bdr-t">
+									      <dt class="f-l w-16 bdr-l c-grayblue bgc-gray-c"> 数据库类型 </dt>
+									      <dd class="f-l w-16 bdr-l c-gray"> {{job.dataset.get_backend()}} </dd>
+									      <dt class="f-l w-16 bdr-l c-grayblue bgc-gray-c"> 图像类型 </dt>
+									      <dd class="f-l w-16 bdr-l c-gray"> {%if job.dataset.image_dims%}{{job.dataset.image_dims[2]|transfer}}{%else%}{%if job.dataset.create_db_tasks()%}{{job.dataset.create_db_tasks()[0][1]|transfer}}{%else%}None{%endif%}{%endif%}</dd>
+									      <dt class="f-l w-16 bdr-l c-grayblue bgc-gray-c"> 训练集数量 </dt>
+									      <dd class="f-l w-16 bdr-l c-gray"> {%if job.dataset.parse_folder_tasks()%}{{job.dataset.parse_folder_tasks()[0].train_count}}{%else%}{%if job.dataset.create_db_tasks()%}{{job.dataset.create_db_tasks()[0].entries_count}}{%else%}None{%endif%}{%endif%}</dd>
+									    </dl>	    
+									    <dl class="f-l bdr-t">
+									      <dt class="f-l w-16 bdr-l c-grayblue bgc-gray-c"> 数据集名称 </dt>
+									      <dd class="f-l w-16 bdr-l c-gray"> <a href="{%if job.dataset%}/datasets/{{job.dataset.id()}}{%else%}{%endif%}" style="color: #00b5b8;">{{job.dataset.name()}}</a> </dd>
+									      <dt class="f-l w-16 bdr-l c-grayblue bgc-gray-c"> 图像尺寸 </dt>
+									      <dd class="f-l w-16 bdr-l c-gray"> {{job.size}} </dd>
+									      <dt class="f-l w-16 bdr-l c-grayblue bgc-gray-c"> 训练时长 </dt>
+									      <dd class="f-l w-16 bdr-l c-gray"> {{job.runtime_of_tasks()|int}}秒 </dd>
+									    </dl>
+									    <dl class="f-l bdr-t">
+									      <dt class="f-l w-16 bdr-l c-grayblue bgc-gray-c"> 验证集数量 </dt>
+									      <dd class="f-l w-16 bdr-l c-gray"> {%if job.dataset.parse_folder_tasks()%}{{job.dataset.parse_folder_tasks()[0].val_count}}{%else%}{%if job.dataset.create_db_tasks()%}{{job.dataset.create_db_tasks()[1].entries_count}}{%else%}None{%endif%}{%endif%}</dd>
+									      <dt class="f-l w-16 bdr-l c-grayblue bgc-gray-c">  </dt>
+									      <dd class="f-l w-16 bdr-l c-gray">   </dd>
+									      <dt class="f-l w-16 bdr-l c-grayblue bgc-gray-c">   </dt>
+									      <dd class="f-l w-16 bdr-l c-gray">  </dd>
+									    </dl>
+								    </div>          
+			            </div>
+              	</div>
+              </div>
+            </div>
+<script>
+//	if($('.model-changjing').html() == 'image-object-detection'){
+//		$('.model-changjing').html('目标检测')
+//	}
+</script>
+<!--图表	1		双折线-->
+<div class="f-l lis-h bgc-white">
+              <div class="title">
+            		<div class="l-box">
+            			<h2 class="f-l c-grayblue"><i class="f-l iconfont fz-38 pr-5 m-t5 c-aqua"> &#xe639; </i> 训练监控：</h2>
+            	  </div>
+            	</div>
+            	<!--表格-->
+            	<div class="chart-box" id="mychart-a2">
+
+            	</div>
+            	 <h4 class="f-l"> 损失率 </h4>
+            	 <h4 class="f-r"> 准确率 </h4>
+
+            </div>
+<!--图表	2		-->
+ <div class="f-l lis-j bgc-white">
+              <div class="title">
+            		<div class="l-box">
+            			<h2 class="f-l c-grayblue"><i class="f-l iconfont fz-38 pr-5 m-t5 c-aqua"> &#xe60a; </i> 学习率监控：</h2>
+            	  </div>
+            	</div>
+            	<div class="chart-box" id="mychart-a1"></div>
+            	 <h4 class="f-l"> 学习率 </h4>
+            	 <!--<h4 class="f-r"> 学习率 </h4>-->
+            </div>
+
+<script>
+    function modelForecast(){
+        // if(($('#image_path').val() !== '') || ($('#image_file').val()!=='') || ($('#image_folder').val() !== '') || ($('#image_list').val() !== '')){
+        //     // alert('服务器端路径或浏览本地文件不能为空！')
+        //     return true
+        // }else{
+        //     alert('服务器端路径或浏览本地文件不能为空！')
+        //     return false
+        // }
+        // return true
+    }
+</script>
+
+{%if job.apply_scence=='classification'%}
+
+            <div style="display: none" class="c-box model_scene_1 model_scene_I">
+            	<div class="l-box w-50  bgc-white">
+                <div class="f-l lis-zl">
+                	<form action="#" method="post" class="f-l" onsubmit="return modelForecast()">
+
+	                <div class="title">
+	            		  <div class="l-box">
+	            			  <h2 class="f-l c-grayblue"><i class="f-l iconfont fz-30 pr-5 m-t5 c-aqua"> &#xe63f; </i> 测试单样本 </h2>
+	            	    </div>
+	            	  </div>
+	            	  <div class="c-box m-t10">
+	            	  	<h2 class="f-l c-grayblue"> 服务器端数据路径 </h2>
+	            	  	<div class="c-box">
+							 <input type="text" id="image_path" name="image_path" placeholder="路径" class="form-control autocomplete_path f-l bdr w-95 input-info">
+	            	    </div>
+	            	  </div>	            	  
+	            	  <div class="c-box m-t10">
+	            	  	<h2 class="f-l c-grayblue"> 从本地上传数据 </h2>
+	            	  	<div class="c-box">
+
+							 <div class="input-group">
+                                    <span class="input-group-btn f-l bgc-red bgc-Aqua-h upload-file c-white w-20 ta-c">
+                                           浏览
+                                            <input class="form-control" type="file" id="image_file" name="image_file" >
+										<script>
+											$('#image_file').on('change',function (e) {
+												$('.image_file_i_1').val(e.currentTarget.files[0].name)
+												if(e.currentTarget.files[0].name=='undefined'){
+												    $('.image_file_i_1').val('')
+												}
+                                            })
+										</script>
+                                    </span>
+                                    <input class="form-control image_file_i_1 f-l bdr w-75 input-info" placeholder="文件" type="text" readonly>
+                                </div>
+	            	    </div>
+	            	  </div>
+	            	  <div class="c-box m-t10">
+	            	    <button name="classify-one-btn"
+                            formaction="{{url_for('hyperai.model.images.classification.views.classify_one', job_id=job.id())}}"
+                            formmethod="post"
+                            formenctype="multipart/form-data"
+                            formtarget="_blank"
+                            class="btn btn-primary f-r btn-2 bgc-Aqua bgc-red-h c-white sbmit" style="border-radius: 0">
+                            单张测试
+                        </button>
+	            	  </div>	 	  
+            	  </form>
+                </div>
+            	</div>
+
+            	<div class="r-box w-48 bgc-white">
+                <div class="f-l lis-zr">
+                	<form action="#" method="post" class="f-l" onsubmit="return modelForecast()">
+                	
+	                <div class="title">
+	            		  <div class="l-box">
+	            			  <h2 class="f-l c-grayblue"><i class="f-l iconfont fz-36 pr-5 m-t5 c-aqua"> &#xe62e; </i> 测试多样本 </h2>
+	            	    </div>
+	            	  </div>
+	            	  <div class="c-box m-t10">
+	            	  	<h2 class="f-l c-grayblue"> 从本地上传数据目录 </h2>
+	            	  	<div class="c-box">
+	                  	<div class="input-group">
+                                    <span class="input-group-btn f-l bgc-red bgc-Aqua-h upload-file c-white w-20 ta-c">
+
+                                            浏览
+                                            <input class="form-control" type="file" multiple="multiple" id="image_list" name="image_list">
+										<script>
+											$('#image_list').on('change',function (e) {
+                                                var file_num = $(this)[0].files.length;
+                                                if(file_num == 1){
+                                                    $('.image_list_i_1').val(e.currentTarget.files[0].name)
+                                                }else{
+                                                    $('.image_list_i_1').val(file_num + '个文件')
+                                                }
+
+                                            })
+										</script>
+
+                                    </span>
+                                    <input  placeholder="文件" class="form-control image_list_i_1 f-l bdr w-75 input-info" type="text" readonly>
+                                </div>
+								    	<p class="f-l p-text c-gray"> 接受txt格式文件 </p>
+	            	    </div>
+	            	  </div>
+	            	  <div class="c-box m-t10">
+	            	  	<h2 class="f-l c-grayblue"> 服务器端数据路径(可选) </h2>
+	            	  	<div class="c-box">
+								    	<!--<input type="text" placeholder="路径" class="f-l bdr w-95 input-info" />-->
+							<input  placeholder="路径" type="text" id="image_folder" name="image_folder" class="form-control autocomplete_path f-l bdr w-95 input-info">
+								    	<p class="f-l p-text c-gray"> 上方填写的文本文件内的相对路径，会添加到此项填写数据路径后 </p>
+	            	    </div>
+	            	  </div>	
+	            	  <div class="c-box m-t10">
+	            	  	<h2 class="f-l c-grayblue"> 从文本文件中选择做测试的图像数量 </h2>
+	            	  	<div class="c-box">
+								    	<!--<input type="text" placeholder="默认值为所有" class="f-l bdr w-95 input-info" />-->
+							<input type="text" id="num_test_images" name="num_test_images" class="form-control f-l bdr w-95 input-info" placeholder="默认值为所有">
+							<p class="f-l p-text c-gray"> 留空代表所有 </p>
+	            	    </div>
+	            	  </div>	            	  
+	            	  <div class="c-box">
+	            	    <button name="classify-many-btn"
+                            formaction="{{url_for('hyperai.model.images.classification.views.classify_many', job_id=job.id())}}"
+                            formmethod="post"
+                            formenctype="multipart/form-data"
+                            formtarget="_blank"
+                            class="btn btn-primary f-l btn-2 bgc-Aqua bgc-red-h c-white"  style="border-radius: 0;border: 0;">
+                            多张测试
+                        </button>
+	            	  </div>	
+	            	  <!--<div class="c-box m-t10">-->
+	            	  	<!--<h2 class="f-l c-grayblue"> 每一类数据展示的图像数量 </h2>-->
+	            	  	<!--<div class="c-box">-->
+							<!--<input type="text" id="top_n" name="top_n" class="form-control f-l bdr w-95 input-info" placeholder="9">-->
+	            	    <!--</div>-->
+	            	  <!--</div>		            	 -->
+	            	  <!--<div class="c-box m-t10">-->
+	            	    <!--<button name="top-n-btn"-->
+                            <!--formaction="{{url_for('hyperai.model.images.classification.views.top_n', job_id=job.id())}}"-->
+                            <!--formmethod="post"-->
+                            <!--formenctype="multipart/form-data"-->
+                            <!--formtarget="_blank"-->
+                            <!--class="btn btn-primary f-l btn-2 bgc-Aqua-h bgc-red c-white" style="border-radius: 0;border:0 ">-->
+                            <!--多张每一类罗列前 N 项的预测率测试-->
+                        <!--</button>-->
+	            	  <!--</div>-->
+	            	  </form>
+            	  </div>
+            	</div>            	
+            </div>
+{%else%}
+<!--另外四个场景-->
+			<div class="c-box model_scene_4 model_scene_I" style="margin-top:20px;display: none">
+				<form action="#" method="post" class="f-l form_dan" enctype="multipart/form-data"  id="form_url_all" style="width: 100%;" onsubmit="return modelForecast()">
+					<div class="bgc-white model_scene_4_select last4_snc_ipt f-l">
+						<style>
+							.model_scene_4_select{padding: 20px;}
+						</style>
+						<div class="last4_snc_ipt_l1 f-l">
+							<div class="col-sm-6">
+									<h3 style="margin-bottom: 10px">选择可视化方法</h3>
+									<div class="form-group">
+										<select id="view_extension_id" name="view_extension_id" class="form-control">
+											{% for key in view_extensions.keys()|sort %}
+											{%if key != 'text-classification'%}
+												<option value="{{ key }}">{{ view_extensions[key] | transfer}}</option>
+											{%endif%}
+											{% endfor %}
+										</select>
+									</div>
+							</div>
+								<div class="col-sm-6">
+									<h3 style="margin-top: 10px">可视化选项</h3>
+									<div id="view_extension-details">
+									</div>
+								</div>
+							 <script>
+									$("#view_extension_id").change(function() {
+										if ($(this).val()) {
+											$.ajax("{{config['URL_PREFIX']}}/models/view-config/" + $(this).val(),
+												{
+													type: "GET",
+													}
+												)
+											.done(function(data) {
+												$("#view_extension-details").html(data);
+												})
+											.fail(function(data) {
+												$("#view_extension-details").html("");
+												errorAlert(data);
+												});
+											}
+										});
+									$("#view_extension_id").change();
+								</script>
+						</div>
+						<div class="row last4_snc_ipt_l2 f-l">
+							<div class="col-sm-12">
+								<h3 style="margin-bottom: 10px">预测选项</h3>
+							</div>
+							<div class="col-sm-12">
+								<div class="form-group">
+									<label for="dont_resize">
+										<input id="dont_resize" name="dont_resize" type="checkbox" value="y">
+										不调整输入图像的大小
+									</label>
+									<span name="dont_resize_explanation"
+										class="explanation-tooltip glyphicon glyphicon-question-sign"
+										data-container="body"
+										title="By default input images are resized to the dimensions of the images in the dataset. Check this box
+										to skip this stage. This may be useful for models that can take inputs of various dimensions."
+										style="padding: 10px 0"></span>
+								</div>
+							</div>
+						</div>
+						<div class="row last4_snc_ipt_l3 f-l">
+							<div class="form-group">
+								<div class="col-sm-6">
+									<h3 style="margin-bottom: 10px">选择预测场景</h3>
+									<div class="form-group">
+										<select id="data_extension_id" name="data_extension_id" class="form-control">
+											{% for key in data_extensions.keys()|sort %}
+											{%if key != 'text-classification'%}
+												<option value="{{ key }}">{{ data_extensions[key] | transfer }}</option>
+											{%endif%}
+											{% endfor %}
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+            	<div class="l-box w-50  bgc-white last-forecast-one">
+                <div class="f-l lis-zl">
+	                <div class="title">
+	            		  <div class="l-box">
+	            			  <h2 class="f-l c-grayblue"><i class="f-l iconfont fz-30 pr-5 m-t5 c-aqua"> &#xe63f; </i> 测试单样本 </h2>
+	            	    </div>
+	            	  </div>
+	            	  <div class="c-box m-t10">
+	            	  	<h2 class="f-l c-grayblue"> 服务器端数据路径 </h2>
+	            	  	<div class="c-box">
+							 <input type="text" id="image_path" name="image_path" placeholder="路径" class="form-control autocomplete_path f-l bdr w-95 input-info">
+
+	            	    </div>
+	            	  </div>
+	            	  <div class="c-box m-t10">
+	            	  	<h2 class="f-l c-grayblue"> 从本地上传数据 </h2>
+	            	  	<div class="c-box">
+
+							 <div class="input-group">
+                                    <span class="input-group-btn f-l bgc-red bgc-Aqua-h upload-file c-white w-20 ta-c">
+                                           浏览
+                                            <input class="form-control" type="file" id="image_file" name="image_file" >
+										<script>
+											$('#image_file').on('change',function (e) {
+												$('.image_file_i_1').val(e.currentTarget.files[0].name)
+												if(e.currentTarget.files[0].name=='undefined'){
+												    $('.image_file_i_1').val('')
+												}
+                                            })
+										</script>
+                                        <!--</span>-->
+                                    </span>
+                                    <input class="form-control image_file_i_1 f-l bdr w-75 input-info" placeholder="文件" type="text" readonly>
+                                </div>
+	            	    </div>
+	            	  </div>
+	            	  <div class="c-box m-t10">
+	            	    <!--<a href="#" class="f-l btn-2 bgc-Aqua bgc-red-h c-white"> 单张测试 </a>-->
+	            	    <!--<input type="submit" name="" id="" class="f-r btn-2 bgc-Aqua bgc-red-h c-white sbmit" value="单张测试" />-->
+	            	  	<button name="classify-one-btn"
+                            formaction="{{url_for('hyperai.model.images.generic.views.infer_one', job_id=job.id())}}"
+                            formmethod="post"
+                            formenctype="multipart/form-data"
+                            formtarget="_blank"
+                            class="btn btn-primary f-r btn-2 bgc-Aqua bgc-red-h c-white sbmit" style="border-radius: 0">
+                            单张测试
+                        </button>
+	            	  </div>
+            	  <!--</form>-->
+				</div>
+            	</div>
+
+					<!--测试多样本-->
+            	<div class="r-box w-48 bgc-white last-forecast-many">
+                <div class="f-l lis-zr last_model_foolt">
+                	<!--<form action="#" method="post" class="f-l">-->
+	                <div class="title">
+	            		  <div class="l-box">
+	            			  <h2 class="f-l c-grayblue"><i class="f-l iconfont fz-36 pr-5 m-t5 c-aqua"> &#xe62e; </i> 测试多样本 </h2>
+	            	    </div>
+	            	  </div>
+	            	  <div class="c-box m-t10">
+	            	  	<h2 class="f-l c-grayblue"> 从本地上传数据目录 </h2>
+	            	  	<div class="c-box">
+							<div class="input-group">
+                                    <span class="input-group-btn f-l bgc-red bgc-Aqua-h upload-file c-white w-20 ta-c">
+                                            浏览
+                                            <input class="form-control" type="file" multiple="multiple" id="image_list" name="image_list">
+										<script>
+											$('#image_list').on('change',function (e) {
+                                                var files_num = $(this)[0].files.length;
+                                                if(files_num == 1){
+                                                    $('.image_list_i_1').val(e.currentTarget.files[0].name)
+                                                }else{
+                                                    $('.image_list_i_1').val(files_num + '个文件')
+                                                }
+
+                                            })
+										</script>
+                                    </span>
+                                    <input  placeholder="文件" class="form-control image_list_i_1 f-l bdr w-75 input-info" type="text" readonly>
+                                </div>
+								    	<p class="f-l p-text c-gray"> 接受txt格式文件 </p>
+	            	    </div>
+	            	  </div>
+	            	  <div class="c-box m-t10">
+	            	  	<h2 class="f-l c-grayblue"> 服务器端数据路径(可选) </h2>
+	            	  	<div class="c-box">
+							<input  placeholder="路径" type="text" id="image_folder" name="image_folder" class="form-control autocomplete_path f-l bdr w-95 input-info">
+								    	<p class="f-l p-text c-gray"> 上方填写的文本文件内的相对路径，会添加到此项填写数据路径后 </p>
+	            	    </div>
+	            	  </div>
+	            	  <div class="c-box m-t10">
+	            	  	<h2 class="f-l c-grayblue"> 从文本文件中选择做测试的图像数量 </h2>
+	            	  	<div class="c-box">
+								    	<!--<input type="text" placeholder="默认值为所有" class="f-l bdr w-95 input-info" />-->
+							<input type="text" id="num_test_images" name="num_test_images" class="form-control f-l bdr w-95 input-info" placeholder="默认值为所有">
+							<p class="f-l p-text c-gray"> 留空代表所有 </p>
+	            	    </div>
+	            	  </div>
+	            	  <div class="c-box">
+	            	    <!--<a href="#" class="f-l btn-2 bgc-Aqua bgc-red-h c-white"> 多张测试 </a>-->
+	            	    <!--<input type="submit" id="" name="" value="多张测试" class="f-l btn-2 bgc-Aqua bgc-red-h c-white sbmit"/>-->
+						  <button name="classify-many-btn"
+                            formaction="{{url_for('hyperai.model.images.generic.views.infer_many', job_id=job.id())}}"
+                            formmethod="post"
+                            formenctype="multipart/form-data"
+                            formtarget="_blank"
+                            class="btn btn-primary f-l btn-2 bgc-Aqua bgc-red-h c-white"  style="border-radius: 0;border: 0;">
+                            多张测试
+                        </button>
+	            	  </div>
+
+
+
+
+				</div>
+            	</div>
+					<!--文本分类-->
+					<style>
+						#custom-inference-form{
+							float: left;
+							width: 100%;
+							background: white;
+							padding:0 20px;
+						}
+						.col-sm-6 textarea{width: 85%;
+							height: 220px;
+						}
+						.col-sm-6 label{
+							float: left;}
+						#form_url_all .btn-primary{
+							border-radius: 0!important;
+							background: #00b5b8;
+							color: white;
+							outline: none;
+							border: none;
+						}
+						#form_url_all .btn-primary:hover{background: #ff6376}
+
+						/*医疗影像*/
+						#custom-inference-form{    float: left;
+							width: 100%;
+							background: white;
+							padding: 20px;
+						}
+					</style>
+					<script>
+
+						$('#data_extension_id').on('change',function () {
+							console.log('2-1')
+							if($(this).val()=='text-classification' && $('#view_extension_id').val()=='text-classification'){
+								console.log('text')
+								$('#custom-inference-form-html').css('display','block')
+								$('.text-classifiaction-btn').css('display','block')
+
+							}
+							else if($(this).val()=='image-sunnybrook' && $('#view_extension_id').val()=='image-segmentation'){
+								$('#custom-inference-form-html').css('display','block')
+								$('.text-classifiaction-btn').css('display','block')
+							}
+							else{
+								$('#custom-inference-form-html').css('display','none')
+								$('.text-classifiaction-btn').css('display','none')
+
+							}
+						})
+
+					</script>
+					<style>
+						#custom-inference-form{
+							float: left;
+							width: 100%;
+							background: white;
+							padding:30px 20px;
+						}
+						.col-sm-6 textarea{width: 85%;
+							height: 220px;
+						}
+						.col-sm-6 label{
+							float: left;}
+						.model_scene_4 .btn-primary{
+							border-radius: 0!important;
+							background: #00b5b8;
+							color: white;
+							outline: none;
+							border: none;
+						}
+						.model_scene_4 .btn-primary:hover{background: #ff6376}
+
+					</style>
+					<!--<div class="row" id="custom-inference-form" >-->
+						<!--&lt;!&ndash;医疗影像&ndash;&gt;-->
+						<!--<div id="" class="custom-inference-form-html-i" style="display: none;">-->
+
+							<!--<div class="row">-->
+								<!--<div class="col-sm-6">-->
+									<!--<h3></h3>-->
+									<!--<div class="form-group">-->
+										<!--<div class="form-group">-->
+											<!--<label for="test_image_file">Image file</label>-->
+											<!--<span name="test_image_file_explanation" class="explanation-tooltip glyphicon glyphicon-question-sign" data-container="body" title="Provide the (server) path to an image."></span>-->
+											<!--<input class="form-control autocomplete_path" id="test_image_file" name="test_image_file" placeholder="image file" type="text" value="">-->
+										<!--</div>-->
+									<!--</div>-->
+								<!--</div>-->
+
+								<!--<div class="col-sm-6">-->
+									<!--<h3>Test a record from validation set</h3>-->
+									<!--<div class="form-group">-->
+										<!--<div class="form-group">-->
+											<!--<label for="validation_record">Record from validation set</label>-->
+											<!--<span name="validation_record_explanation" class="explanation-tooltip glyphicon glyphicon-question-sign" data-container="body" title="Test a record from the validation set."></span>-->
+											<!--<select class="form-control" id="validation_record" name="validation_record"><option selected="" value="none">- select record -</option><option value="0">SC-HYP-38</option><option value="1">SC-HYP-40</option><option value="2">SC-HF-I-4</option><option value="3">SC-HYP-38</option><option value="4">SC-N-40</option><option value="5">SC-HF-NI-34</option><option value="6">SC-HF-I-2</option><option value="7">SC-HF-I-40</option><option value="8">SC-HF-NI-4</option><option value="9">SC-HYP-3</option><option value="10">SC-HF-NI-4</option><option value="11">SC-N-40</option><option value="12">SC-HYP-40</option><option value="13">SC-HF-I-40</option><option value="14">SC-N-40</option><option value="15">SC-HF-I-40</option><option value="16">SC-N-40</option><option value="17">SC-N-3</option><option value="18">SC-N-3</option><option value="19">SC-HYP-1</option><option value="20">SC-HF-NI-3</option><option value="21">SC-HF-NI-3</option><option value="22">SC-HF-NI-34</option><option value="23">SC-HF-I-1</option><option value="24">SC-HF-I-40</option><option value="25">SC-N-3</option><option value="0">SC-HYP-38</option><option value="1">SC-HYP-40</option><option value="2">SC-HF-I-4</option><option value="3">SC-HYP-38</option><option value="4">SC-N-40</option><option value="5">SC-HF-NI-34</option><option value="6">SC-HF-I-2</option><option value="7">SC-HF-I-40</option><option value="8">SC-HF-NI-4</option><option value="9">SC-HYP-3</option><option value="10">SC-HF-NI-4</option><option value="11">SC-N-40</option><option value="12">SC-HYP-40</option><option value="13">SC-HF-I-40</option><option value="14">SC-N-40</option><option value="15">SC-HF-I-40</option><option value="16">SC-N-40</option><option value="17">SC-N-3</option><option value="18">SC-N-3</option><option value="19">SC-HYP-1</option><option value="20">SC-HF-NI-3</option><option value="21">SC-HF-NI-3</option><option value="22">SC-HF-NI-34</option><option value="23">SC-HF-I-1</option><option value="24">SC-HF-I-40</option><option value="25">SC-N-3</option><option value="0">SC-HYP-38</option><option value="1">SC-HYP-40</option><option value="2">SC-HF-I-4</option><option value="3">SC-HYP-38</option><option value="4">SC-N-40</option><option value="5">SC-HF-NI-34</option><option value="6">SC-HF-I-2</option><option value="7">SC-HF-I-40</option><option value="8">SC-HF-NI-4</option><option value="9">SC-HYP-3</option><option value="10">SC-HF-NI-4</option><option value="11">SC-N-40</option><option value="12">SC-HYP-40</option><option value="13">SC-HF-I-40</option><option value="14">SC-N-40</option><option value="15">SC-HF-I-40</option><option value="16">SC-N-40</option><option value="17">SC-N-3</option><option value="18">SC-N-3</option><option value="19">SC-HYP-1</option><option value="20">SC-HF-NI-3</option><option value="21">SC-HF-NI-3</option><option value="22">SC-HF-NI-34</option><option value="23">SC-HF-I-1</option><option value="24">SC-HF-I-40</option><option value="25">SC-N-3</option><option value="0">SC-HYP-38</option><option value="1">SC-HYP-40</option><option value="2">SC-HF-I-4</option><option value="3">SC-HYP-38</option><option value="4">SC-N-40</option><option value="5">SC-HF-NI-34</option><option value="6">SC-HF-I-2</option><option value="7">SC-HF-I-40</option><option value="8">SC-HF-NI-4</option><option value="9">SC-HYP-3</option><option value="10">SC-HF-NI-4</option><option value="11">SC-N-40</option><option value="12">SC-HYP-40</option><option value="13">SC-HF-I-40</option><option value="14">SC-N-40</option><option value="15">SC-HF-I-40</option><option value="16">SC-N-40</option><option value="17">SC-N-3</option><option value="18">SC-N-3</option><option value="19">SC-HYP-1</option><option value="20">SC-HF-NI-3</option><option value="21">SC-HF-NI-3</option><option value="22">SC-HF-NI-34</option><option value="23">SC-HF-I-1</option><option value="24">SC-HF-I-40</option><option value="25">SC-N-3</option><option value="0">SC-HYP-38</option><option value="1">SC-HYP-40</option><option value="2">SC-HF-I-4</option><option value="3">SC-HYP-38</option><option value="4">SC-N-40</option><option value="5">SC-HF-NI-34</option><option value="6">SC-HF-I-2</option><option value="7">SC-HF-I-40</option><option value="8">SC-HF-NI-4</option><option value="9">SC-HYP-3</option><option value="10">SC-HF-NI-4</option><option value="11">SC-N-40</option><option value="12">SC-HYP-40</option><option value="13">SC-HF-I-40</option><option value="14">SC-N-40</option><option value="15">SC-HF-I-40</option><option value="16">SC-N-40</option><option value="17">SC-N-3</option><option value="18">SC-N-3</option><option value="19">SC-HYP-1</option><option value="20">SC-HF-NI-3</option><option value="21">SC-HF-NI-3</option><option value="22">SC-HF-NI-34</option><option value="23">SC-HF-I-1</option><option value="24">SC-HF-I-40</option><option value="25">SC-N-3</option></select>-->
+										<!--</div>-->
+									<!--</div>-->
+								<!--</div>-->
+							<!--</div>-->
+						<!--</div>-->
+						<!--&lt;!&ndash;文本分类&ndash;&gt;-->
+						<!--<div id="" class="custom-inference-form-html-i" style="display: none;">-->
+
+							<!--<div class="row">-->
+
+								<!--<div class="col-sm-6 f-l" style="width: 52%">-->
+									<!--<h3 style="padding: 10px 0;">Test a snippet</h3>-->
+									<!--<div class="form-group">-->
+										<!--<div class="form-group">-->
+											<!--<label for="snippet">片段</label>-->
+											<!--<span name="snippet_explanation" class="explanation-tooltip glyphicon glyphicon-question-sign" data-container="body" title="Test a single snippet"></span>-->
+											<!--<textarea class="form-control" id="snippet" name="snippet" placeholder="text snippet"></textarea>-->
+										<!--</div>-->
+									<!--</div>-->
+								<!--</div>-->
+								<!--<div class="col-sm-6 f-l" style="width: 40%">-->
+									<!--<h3 style="padding: 10px 0;">Test a data file</h3>-->
+									<!--<div class="form-group">-->
+										<!--<div class="form-group">-->
+											<!--<label for="test_data_file">测试数据(.csv)</label>-->
+											<!--<span name="test_data_file_explanation" class="explanation-tooltip glyphicon glyphicon-question-sign" data-container="body" title="Data file in .csv format. There should be one sample per line. On each line, the first field should be the numerical class label. All subsequent fields will be concatenated to produce a single string of characters, up to the specified limit"></span>-->
+											<!--<input class="form-control autocomplete_path" id="test_data_file" name="test_data_file" placeholder=".csv file" type="text" value="">-->
+										<!--</div>-->
+									<!--</div>-->
+								<!--</div>-->
+							<!--</div>-->
+						<!--</div>-->
+					<!--</div>-->
+					<div class="row" id="custom-inference-form" >
+						<!--医疗影像-->
+						<div id="" class="custom-inference-form-html-i" style="display: none;">
+
+							<div class="row">
+								<div class="col-sm-6" style="margin-bottom: 30px;">
+									<!--<h3>Test an image</h3>-->
+									<h3 style="font-size: 18px;margin-bottom: 15px;">测试一张图片</h3>
+									<div class="form-group">
+										<div class="form-group">
+											<!--<label for="test_image_file">Image file</label>-->
+											<label for="test_image_file" style="margin-right: 15px">图片文件</label>
+											<span name="test_image_file_explanation" class="explanation-tooltip glyphicon glyphicon-question-sign" data-container="body" title="Provide the (server) path to an image."></span>
+											<input class="form-control autocomplete_path" id="test_image_file" name="test_image_file" placeholder="image file" type="text" value="">
+										</div>
+									</div>
+								</div>
+
+								<div class="col-sm-6">
+									<!--<h3>Test a record from validation set</h3>-->
+									<h3 style="font-size: 18px;margin-bottom: 15px;">从验证集中测试记录</h3>
+									<div class="form-group">
+										<div class="form-group">
+											<!--<label for="validation_record">Record from validation set</label>-->
+											<label for="validation_record" style="margin-right: 15px">记录验证设置</label>
+											<span name="validation_record_explanation" class="explanation-tooltip glyphicon glyphicon-question-sign" data-container="body" title="Test a record from the validation set."></span>
+											<!--select record-->
+											<select class="form-control" id="validation_record" name="validation_record"><option selected="" value="none">- 选择记录 -</option><option value="0">SC-HYP-38</option><option value="1">SC-HYP-40</option><option value="2">SC-HF-I-4</option><option value="3">SC-HYP-38</option><option value="4">SC-N-40</option><option value="5">SC-HF-NI-34</option><option value="6">SC-HF-I-2</option><option value="7">SC-HF-I-40</option><option value="8">SC-HF-NI-4</option><option value="9">SC-HYP-3</option><option value="10">SC-HF-NI-4</option><option value="11">SC-N-40</option><option value="12">SC-HYP-40</option><option value="13">SC-HF-I-40</option><option value="14">SC-N-40</option><option value="15">SC-HF-I-40</option><option value="16">SC-N-40</option><option value="17">SC-N-3</option><option value="18">SC-N-3</option><option value="19">SC-HYP-1</option><option value="20">SC-HF-NI-3</option><option value="21">SC-HF-NI-3</option><option value="22">SC-HF-NI-34</option><option value="23">SC-HF-I-1</option><option value="24">SC-HF-I-40</option><option value="25">SC-N-3</option><option value="0">SC-HYP-38</option><option value="1">SC-HYP-40</option><option value="2">SC-HF-I-4</option><option value="3">SC-HYP-38</option><option value="4">SC-N-40</option><option value="5">SC-HF-NI-34</option><option value="6">SC-HF-I-2</option><option value="7">SC-HF-I-40</option><option value="8">SC-HF-NI-4</option><option value="9">SC-HYP-3</option><option value="10">SC-HF-NI-4</option><option value="11">SC-N-40</option><option value="12">SC-HYP-40</option><option value="13">SC-HF-I-40</option><option value="14">SC-N-40</option><option value="15">SC-HF-I-40</option><option value="16">SC-N-40</option><option value="17">SC-N-3</option><option value="18">SC-N-3</option><option value="19">SC-HYP-1</option><option value="20">SC-HF-NI-3</option><option value="21">SC-HF-NI-3</option><option value="22">SC-HF-NI-34</option><option value="23">SC-HF-I-1</option><option value="24">SC-HF-I-40</option><option value="25">SC-N-3</option><option value="0">SC-HYP-38</option><option value="1">SC-HYP-40</option><option value="2">SC-HF-I-4</option><option value="3">SC-HYP-38</option><option value="4">SC-N-40</option><option value="5">SC-HF-NI-34</option><option value="6">SC-HF-I-2</option><option value="7">SC-HF-I-40</option><option value="8">SC-HF-NI-4</option><option value="9">SC-HYP-3</option><option value="10">SC-HF-NI-4</option><option value="11">SC-N-40</option><option value="12">SC-HYP-40</option><option value="13">SC-HF-I-40</option><option value="14">SC-N-40</option><option value="15">SC-HF-I-40</option><option value="16">SC-N-40</option><option value="17">SC-N-3</option><option value="18">SC-N-3</option><option value="19">SC-HYP-1</option><option value="20">SC-HF-NI-3</option><option value="21">SC-HF-NI-3</option><option value="22">SC-HF-NI-34</option><option value="23">SC-HF-I-1</option><option value="24">SC-HF-I-40</option><option value="25">SC-N-3</option><option value="0">SC-HYP-38</option><option value="1">SC-HYP-40</option><option value="2">SC-HF-I-4</option><option value="3">SC-HYP-38</option><option value="4">SC-N-40</option><option value="5">SC-HF-NI-34</option><option value="6">SC-HF-I-2</option><option value="7">SC-HF-I-40</option><option value="8">SC-HF-NI-4</option><option value="9">SC-HYP-3</option><option value="10">SC-HF-NI-4</option><option value="11">SC-N-40</option><option value="12">SC-HYP-40</option><option value="13">SC-HF-I-40</option><option value="14">SC-N-40</option><option value="15">SC-HF-I-40</option><option value="16">SC-N-40</option><option value="17">SC-N-3</option><option value="18">SC-N-3</option><option value="19">SC-HYP-1</option><option value="20">SC-HF-NI-3</option><option value="21">SC-HF-NI-3</option><option value="22">SC-HF-NI-34</option><option value="23">SC-HF-I-1</option><option value="24">SC-HF-I-40</option><option value="25">SC-N-3</option><option value="0">SC-HYP-38</option><option value="1">SC-HYP-40</option><option value="2">SC-HF-I-4</option><option value="3">SC-HYP-38</option><option value="4">SC-N-40</option><option value="5">SC-HF-NI-34</option><option value="6">SC-HF-I-2</option><option value="7">SC-HF-I-40</option><option value="8">SC-HF-NI-4</option><option value="9">SC-HYP-3</option><option value="10">SC-HF-NI-4</option><option value="11">SC-N-40</option><option value="12">SC-HYP-40</option><option value="13">SC-HF-I-40</option><option value="14">SC-N-40</option><option value="15">SC-HF-I-40</option><option value="16">SC-N-40</option><option value="17">SC-N-3</option><option value="18">SC-N-3</option><option value="19">SC-HYP-1</option><option value="20">SC-HF-NI-3</option><option value="21">SC-HF-NI-3</option><option value="22">SC-HF-NI-34</option><option value="23">SC-HF-I-1</option><option value="24">SC-HF-I-40</option><option value="25">SC-N-3</option></select>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!--文本分类-->
+						<div id="" class="custom-inference-form-html-i" style="display: none;">
+
+							<div class="row">
+
+
+
+								<div class="col-sm-6 f-l" style="width: 52%">
+									<!--<h3 style="padding: 10px 0;">Test a snippet</h3>-->
+									<h3 style="padding: 10px 0;">测试一个片段</h3>
+									<div class="form-group">
+										<div class="form-group">
+											<label for="snippet">片段</label>
+											<span name="snippet_explanation" class="explanation-tooltip glyphicon glyphicon-question-sign" data-container="body" title="Test a single snippet"></span>
+											<textarea class="form-control" id="snippet" name="snippet" placeholder="text snippet"></textarea>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-6 f-l" style="width: 40%">
+									<!--<h3 style="padding: 10px 0;">Test a data file</h3>-->
+									<h3 style="padding: 10px 0;">测试数据文件</h3>
+									<div class="form-group">
+										<div class="form-group">
+											<label for="test_data_file">测试数据(.csv)</label>
+											<span name="test_data_file_explanation" class="explanation-tooltip glyphicon glyphicon-question-sign" data-container="body" title="Data file in .csv format. There should be one sample per line. On each line, the first field should be the numerical class label. All subsequent fields will be concatenated to produce a single string of characters, up to the specified limit"></span>
+											<input class="form-control autocomplete_path" id="test_data_file" name="test_data_file" placeholder=".csv file" type="text" value="">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<input type="hidden" name="Language" value="English">
+						<button style="display: none;margin-top: 50px;" name="infer-db-btn" formaction="" formmethod="post" formenctype="multipart/form-data" formtarget="_blank" class="btn btn-primary text-classifiaction-btn">
+							测试
+						</button>
+					</div>
+					<!--<input type="hidden" name="Language" value="English">-->
+					<!--<button style="display: none;" name="infer-db-btn" formaction="" formmethod="post" formenctype="multipart/form-data" formtarget="_blank" class="btn btn-primary text-classifiaction-btn">-->
+						<!--Test-->
+					<!--</button>-->
+					<div class="text-classifiaction-btn-content" style="display: none;">{{url_for('hyperai.model.images.generic.views.infer_extension',job_id=job.id())}}</div>
+					<script>
+						$(window).bind('load',function () {
+							console.log($('.model-changjing').text())
+							if($('.model-changjing').html()=='image-sunnybrook'){
+								$('.custom-inference-form-i').eq(0).attr('id','custom-inference-form')
+								$('.custom-inference-form-html-i').eq(0).attr('id','custom-inference-form-html')
+							}
+							else  if($('.model-changjing').html()=='text-classification'){
+								$('.custom-inference-form-html-i').eq(1).attr('id','custom-inference-form-html')
+							}
+							if($('.model-changjing').html()=='image-sunnybrook' || $('.model-changjing').html()=='text-classification'){
+								console.log('no')
+								$('.last-forecast-one').css('display','none')
+								$('.last-forecast-many').css('display','none')
+							}
+							else {
+								$('.last-forecast-one').css('display','block')
+								$('.last-forecast-many').css('display','block')
+								$('#custom-inference-form-html').css('display','none')
+								$('.text-classifiaction-btn').css('display','none')
+							}
+
+//							form url
+							//						mode-name
+							console.log($('.mode-name').text())
+							$('.text-classifiaction-btn').attr('formaction',$('.text-classifiaction-btn-content').text())
+						})
+
+					</script>
+				{%endif%}
+					</form>
+            </div>
+
+
+{% endblock %}
+{% block bottomfile %}
+  	<script src="{{ url_for('static', filename='c3/c3.min.js') }}" type="text/javascript" charset="utf-8"></script>
+  	<script src="{{ url_for('static', filename='c3/d3.v3.min.js') }}" type="text/javascript" charset="utf-8"></script>
+  	<!--<script src="js/modelManagementDetails.js" type="text/javascript" charset="utf-8"></script>-->
+ {% set combined_graph_data = job.train_task().combined_graph_data() %}
+            {% if combined_graph_data %}
+<script>
+	var drawComb= {% autoescape false %}{{combined_graph_data}}{% endautoescape %};
+	if(drawComb=='undefined'){
+					console.log('zhexian1')
+	}
+	else{
+	    $('.model_scene_I').css('display','block')
+		var c3_aa=function(a){
+			c3.generate($.extend({
+				bindto: '#mychart-a2',
+	//          title:{text:'zuoye',},//标题
+				axis: {
+					x: {
+						tick: {
+							// 3 sig-digs
+							format: function(x) { return Math.round(x * 1000) / 1000; },
+	//                      fit: false,   //坐标位点偏移量
+	//						count:7
+	//						culling: {
+	//						                    max: 7 //刻度显示数量
+	//						                }
+						},
+						min: 0,
+						padding: {left: 0},
+						 label: {
+							text: '[轮数]',
+							position: 'outer-right',
+						},
+					},
+					y: {
+						min: 0,
+	//                  max:90,
+						padding: {bottom: 0},
+					},
+					y2: {
+						show: true,
+	//                 		 最值
+						min: 0,
+						max: 100,
+						padding: {top: 0, bottom: 0},
+					},
+				},
+				color: {
+					 pattern: ['#0e9aef', 'red', '#11c888', '#ababab','#e5e6e8']
+
+				},
+				point: {
+	//     			参数点半径
+					  r: 2,
+				},
+				grid: {x: {show: true},
+	//            	y: {show: true}
+				},
+				legend: {position: 'bottom'},
+				},
+			{
+				 data: a,
+	//            data: {
+	//		    	axes: {
+	////		    		给data3额外添加Y轴
+	//			        "accuracy-val": 'y2' // ADD
+	//			     },
+	//		        columns: a
+	//		    },
+				transition: {
+					duration: 0,
+				},
+				subchart: {
+					show: true,
+				},
+				zoom: {
+					rescale: true,
+				},
+			}
+        ));
+	}
+
+        var obkect_all={% autoescape false %}{{combined_graph_data}}{% endautoescape %};
+        obkect_all['axes']={'mAP-val': 'y2', 'precision-val': 'y2', 'recall-val': 'y2','accuracy-val':'y2','accuracy-train':'y2'}
+        console.log(obkect_all)
+        c3_aa(obkect_all)
+		$(window).bind('load',function () {
+			$('.l-sidemenu').on('click',function () {
+                c3_aa(obkect_all)
+            })
+        })
+	}
+
+
+	</script>
+ {% endif %}
+<!--第二个图表-->
+{% set lr_graph_data = job.train_task().lr_graph_data() %}
+            {% if lr_graph_data %}
+            <script>
+  		var drawLRG11={% autoescape false %}{{lr_graph_data}}{% endautoescape %};
+		if(drawLRG11=='undefined'){
+		    console.log('zhexian2--1')
+		}
+		else{
+		                   //单线折线图
+			var c3_data_b=function(a){
+					c3.generate($.extend({
+						bindto: '#mychart-a1',
+			//          title:{text:'zuoye',},//标题
+						 axis: {
+						x: {
+							label: {
+								text: 'Epoch',
+								position: 'outer-center',
+							},
+							tick: {
+								// 3 sig-digs
+								format: function(x) { return Math.round(x * 1000) / 1000; },
+								fit: false,
+							},
+							min: 0,
+							padding: {left: 0},
+						},
+						y: {
+			//              label: {
+			//                  text: 'Learning Rate',
+			//                  position: 'outer-middle',
+			//              },
+							min: 0,
+							padding: {bottom: 0},
+						},
+						 },
+							grid: {x: {show: true} },
+							legend: {show: false}
+						},
+						{data: a}
+					));
+			}
+			c3_data_b({% autoescape false %}{{lr_graph_data}}{% endautoescape %})
+            $(window).bind('load',function () {
+                $('.l-sidemenu').on('click',function () {
+                    c3_data_b({% autoescape false %}{{lr_graph_data}}{% endautoescape %})
+                })
+            })
+		}
+            </script>
+            {% endif %}
+{% endblock bottomfile %}

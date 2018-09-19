@@ -1,0 +1,712 @@
+{% extends 'job2.html' %}
+   {% block topfile %}
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/bitbug_favicon.ico') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/iconfont.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/public.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/v-homeworkMonitor.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/sub.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/homework.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='c3/c3.css') }}" />
+    <script src="{{ url_for('static', filename='js/jquery-1.7.2.js') }}" type="text/javascript" charset="utf-8"></script>
+    <script src="{{ url_for('static', filename='js/jquery.nicescroll.js') }}" type="text/javascript" charset="utf-8"></script>
+    <script src="{{ url_for('static', filename='js/v-homeworkMonitor.js') }}" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='c3/d3.v3.min.js') }}" ></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='c3/c3.min.js') }}" ></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/t-pub.js') }}" ></script>
+{% with namespace = "/jobs" %}
+    {% set room = job.id() %}
+    {% include 'socketio.html' %}
+{% endwith %}
+{% endblock topfile%}
+
+{% block rightcontent %}
+<style>
+    .title .home_work_state{
+        /*background: #ff6376;*/
+        color: #fff;
+        border-radius: 5px;
+        font-size: 15px;
+        height: 30px;
+        line-height: 30px;
+        padding: 0 5px;
+        width: 70px;
+    }
+</style>
+                <div class="f-l title">
+                    <h1 class="f-l c-grayblue"> 作业监控 </h1>
+                    <span class="f-l c-gray"> Welcome back, {{request.cookies.username}} </span>
+                </div>
+
+                <div class="f-l sub-title bgc-white">
+                    <a href="#" class="f-l c-gray c-aqua-h"><span class="f-l"> Home   </span><em class="f-l c-gray"> / </em></a>
+                    <a href="#" class="f-l c-gray c-aqua-h"><span class="f-l"> 作业监控 </span><em class="f-l c-gray"> / </em></a>
+                </div>
+
+                <div class="f-l lis-g bgc-white">
+                    <div class="title">
+                        <div class="l-box">
+                            <h2 class="f-l c-grayblue"><i class="f-l iconfont fz-38 pr-5 m-t5 c-aqua"> &#xe625; </i> 作业名称： <strong> {{job.name()}} </strong></h2>
+                            <h2 class="f-l c-grayblue" style="margin-left: 100px;">作业状态： <strong class="home_work_state">{%if 'Dataset' in job.job_type()%}{{job.status.name}}{%elif 'Model' in job.job_type()%}{{job.train_task().status.name}}{% else%}{{job.train_task().status.name}}{%endif%}</strong></h2>
+                        </div>
+                    </div>
+                 <script>
+                     $(".xitong-h1").toggle(function() {
+                         $(this).addClass('current-la').siblings().removeClass('current-la')
+                         $(this).next(".side-div").slideDown(500)
+
+                     }, function() {
+                         $(this).removeClass('current-la')
+                         $(this).next(".side-div").slideUp(500)
+                     });
+                    $('document').ready(function() {
+                        socket.on('job update', function (msg) {
+//                            console.log('socket')
+                            console.log('+++++++++++++++++++++',msg)
+                            if (msg['update'] == 'progress') {
+//                                console.log(msg['percentage']+'::::'+'{{job.id()}}'+'{%if 'Dataset' in job.job_type()%}{{job.status.name}}{%elif 'Model' in job.job_type()%}{{job.train_task().status.name}}{%endif%}')
+                                $('.home_work_state').text(msg['percentage']+'%')
+                            }
+                            else  if(msg['update']=="status"){
+//                                console.log(msg['status']+'::::'+'{{job.id()}}'+'{%if 'Dataset' in job.job_type()%}{{job.status.name}}{%elif 'Model' in job.job_type()%}{{job.train_task().status.name}}{%endif%}')
+//                                $('.home_work_state').text(msg['data']['status'])
+                                $('.home_work_state').text(msg['status'])
+                                $('.home_work_state').css('background','#ff6376')
+                                if(($('.home_work_state').text() == "Error") || ($('.home_work_state').text() == "Done")){
+//                                    console.log('+++++++++++')
+                                    $.ajax({
+                                        type:'GET',
+                                        url:'/get_gpu_number',
+                                        success:function (e) {
+                                            console.log(e)
+                                            $('.resources-box strong').eq(0).html( e.gpu_max)
+                                            $('.resources-box strong').eq(1).html(e.gpu_used )
+                                            $('.resources-box strong').eq(2).html(e.total_gpu_count)
+                                            $('.resources-box strong').eq(3).html(e.remaining_gpu_count)
+                                        }
+
+                                    })
+                                }
+                            }
+                            if($('.home_work_state').text()=='Aborted'){
+                                $('.home_work_state').text('终止')
+                            }
+                            else if($('.home_work_state').text()==='Done'){
+                                console.log("hello")
+                                $('.home_work_state').text('完成')
+                                $('.resource-content').css('display','none')
+                            }
+                            else if($('.home_work_state').text()=='Error'){
+                                $('.home_work_state').text('错误')
+                            }
+                            else if($('.home_work_state').text()=='Running' ){
+                                $('.home_work_state').text('运行中')
+                            }
+                            else if($('.home_work_state').text()=='Waiting' ){
+                                $('.home_work_state').text('等待')
+                            }
+                            if($('.home_work_state').text() == "运行中"){
+
+                                $('.home_work_state').css('backgroundColor','#17d49c')
+                            }
+                            else if($('.home_work_state').text() == "完成"){
+                                $('.home_work_state').css('background-color','#ff6376')
+                            }
+                            else if($('.home_work_state').text() == "终止"){
+                                $('.home_work_state').css('background-color','#9eb7c6')
+                            }
+                            else if($('.home_work_state').text() == "错误"){
+                                $('.home_work_state').css('background-color','#ff976a')
+                            }
+                            else if($('.home_work_state').text() == "等待"){
+                                $('.home_work_state').css('background-color','#ff976a')
+                            }
+                            else{
+                                $('.home_work_state').css('backgroundColor','#17d49c')
+                            }
+
+                        })
+                    })
+
+                    </script>
+                    <div class="f-l c-box bdr m-t15">
+                        <dl class="f-l">
+                            <dt class="f-l w-10 bdr-l c-grayblue bgc-gray-c"></dt>
+                            <dt class="f-l w-90 bdr-l c-grayblue"> 基本信息 </dt>
+                        </dl>
+                        <dl class="f-l bdr-t">
+                            <dd class="f-l w-10 bdr-l c-grayblue bgc-gray-c"> 用户名 </dd>
+                            <dd class="f-l w-10 bdr-l c-gray"> {{ job.username }} </dd>
+                            <dd class="f-l w-10 bdr-l c-grayblue bgc-gray-c"> 创建时间 </dd>
+                            <dd class="f-l w-20 bdr-l c-gray"> {{job.create_time}} </dd>
+                            <dd class="f-l w-10 bdr-l c-grayblue bgc-gray-c"> 训练时长 </dd>
+                            <dd class="f-l w-10 bdr-l c-gray"> {{job.runtime_of_tasks()| print_time_diff}} </dd>
+                            <dd class="f-l w-30 bdr-l "> </dd>
+
+                        </dl>
+                    </div>
+                </div>
+<style>
+    .tab-lbox1,.tab-lbox2{
+        width: 100px;
+        height: 40px;
+        line-height: 40px;
+        text-align: center;
+    }
+    .tab-color {
+        color: #FFFFFF!important;
+        background-color: #00B5B8!important;
+    }
+    .train-box,.logs-box{
+        width: 100%;
+        margin-top: 30px;
+    }
+    .logs-box{
+        width: 100%;
+        height: 500px;
+        padding: 0 20px;
+        display: none;
+
+    }
+    .log-content{
+
+        width: 100%;
+        height: 500px;
+        /*border: 1px solid #0a6cd6;*/
+        border: 1px solid #9999;
+        padding: 0 20px;
+        overflow: auto;
+    }
+</style>
+    <div class="f-l lis-h bgc-white">
+        <div class="title">
+            <div class="l-box tab-lbox1 tab-color tab-box">
+                <h2 class="f-l " style="width: 100%;">训练监控</h2>
+
+            </div>
+            <div class="l-box tab-lbox2 tab-box">
+                <h2 class="f-l " style="width: 100%;">
+                    日志</h2>
+            </div>
+        </div>
+
+        <div class="train-box f-l">
+            <div class="chart-box" id="mychart-a2">
+            </div>
+            {% if job.framework =='mxnet' %}
+            <h4 class="f-l" style="height: 250px;margin-top: -450px;margin-left: -10px">每秒处理样本数量</h4>
+            {% else %}
+            <h4 class="f-l loss-title" style="margin-left: -10px"> 损失率</h4>
+            {% endif %}
+            <h4 class="f-r"> 准确率</h4>
+        </div>
+        <div class="logs-box f-l">
+            <div class="log-content f-l">
+            </div>
+        </div>
+    </div>
+
+<script>
+    $('.tab-box').on('click',function () {
+        $(this).addClass('tab-color').siblings().removeClass('tab-color')
+        if($(this).find('h2').html() == '训练监控'){
+            console.log('====')
+            $('.logs-box').hide()
+            $('.train-box').show()
+
+        }else{
+            $('.train-box').hide()
+            $('.logs-box').show()
+            $('.log-content')[0].scrollTop = $('.log-content')[0].scrollHeight
+        }
+    })
+</script>
+                <!--<div class="f-l lis-h bgc-white">-->
+                    <!--<div class="title">-->
+                        <!--<div class="l-box">-->
+                            <!--<h2 class="f-l c-grayblue"><i class="f-l iconfont fz-38 pr-5 m-t5 c-aqua"> &#xe639; </i> 训练监控：</h2>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <!--<div class="chart-box" id="mychart-a2">-->
+
+                    <!--</div>-->
+
+                    <!--{% if job.framework =='mxnet' %}-->
+                    <!--<h4 class="f-l" style="height: 250px;margin-top: -450px;margin-left: -10px">每秒处理样本数量</h4>-->
+                    <!--{% else %}-->
+                    <!--<h4 class="f-l loss-title" style="margin-left: -10px"> 损失率</h4>-->
+                    <!--{% endif %}-->
+
+                    <!--<h4 class="f-r"> 准确率</h4>-->
+
+                    <!--&lt;!&ndash;<a href="v-c3.html" class="f-r btn-7 c-white bgc-Aqua bgc-red-h"> 详情 </a>&ndash;&gt;-->
+                <!--</div>-->
+    <!--<div class="f-l log-box">-->
+        <!--<div class="f-l log">-->
+            <!--<div class="title">-->
+                <!--<div class="l-box">-->
+                    <!--<h2 class="f-l c-grayblue"><i class="f-l iconfont fz-38 pr-5 m-t5 c-aqua"> &#xe79b; </i> 日志：</h2>-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<div class="f-l log-table">-->
+                <!--<div class="f-l bgc-gray-c log-tr">-->
+                    <!--<div class="f-l  w-20 c-grayblue log-th"> 模型名称 </div>-->
+                    <!--<div class="f-l bdr-l w-20 c-grayblue log-th"> 日志文件   </div>-->
+                    <!--<div class="f-l bdr-l w-20 c-grayblue log-th"> 产生时间   </div>-->
+                    <!--<div class="f-l bdr-l w-20 c-grayblue log-th"> 大小       </div>-->
+                    <!--<div class="f-l bdr-l w-20 c-grayblue log-th"> 下载       </div>-->
+                <!--</div>-->
+                <!--<div class="f-l log-tr">-->
+                    <!--<div class="f-l  bdr-t log-td w-20"><p class="f-l p-text-1 fz-12 ta-c c-gray"> {{job.name()}}  </p></div>-->
+                    <!--<div class="f-l bdr-l bdr-t log-td w-20">-->
+                        <!--<a href="{{url_for('hyperai.vip.views.show_log', framework=job.framework, job_id=job.id())}}" class="f-l p-text-1 c-green-h ta-c c-gray" target="_blank">日志文件</a>-->
+                    <!--</div>-->
+                    <!--<div class="f-l bdr-l bdr-t log-td w-20"><p class="f-l p-text-1 fz-12 ta-c c-gray"> {{job.create_time}}   </p></div>-->
+                    <!--<div class="f-l bdr-l bdr-t log-td w-20"><p class="f-l p-text-1 fz-12 ta-c c-gray"> {{ job.getDocSize() }}         </p></div>-->
+                    <!--<div class="f-l bdr-l bdr-t log-td w-20">-->
+                    <!--<a href="{{url_for('hyperai.vip.views.download_log', job_id=job.id(), framework=job.framework)}}" class="f-l p-text-1 c-green-h ta-c c-gray"><i class="iconfont fz-24"> &#xe600; </i></a>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--<style>-->
+             <!--#log-lists:hover{-->
+                 <!--color: #00B5B8 !important;-->
+             <!--}-->
+        <!--</style>-->
+    <!--</div>-->
+<div class="f-l lis-k bgc-white">
+    <div class="title">
+        <div class="l-box">
+            <h2 class="f-l c-grayblue"><i class="f-l iconfont fz-38 pr-5 m-t5 c-aqua"> &#xe632; </i> 资源使用监控：</h2>
+        </div>
+    </div>
+    <style>
+        .w-5{width: 5%}
+        .w-95{width: 95%}
+        .w-25{width: 25%}
+        .w-15{width: 15%}
+        .sub-table-tr-i1{
+            float: left;
+            display: table-row;
+            width: 100%;
+            padding: 0;
+            height: 70px;
+            vertical-align: middle;
+        }
+    </style>
+    <!--r容器1-->
+    <!--clone-框架+容器-->
+    <style>
+        @font-face {font-family: "iconfont";
+            src: url('iconfont.eot?t=1529980529900'); /* IE9*/
+            src: url('iconfont.eot?t=1529980529900#iefix') format('embedded-opentype'), /* IE6-IE8 */
+            url('data:application/x-font-woff;charset=utf-8;base64,d09GRgABAAAAAAeEAAsAAAAACpAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAABHU1VCAAABCAAAADMAAABCsP6z7U9TLzIAAAE8AAAAQwAAAFZW7kl3Y21hcAAAAYAAAABwAAABsgVK1B5nbHlmAAAB8AAAA4EAAAQ0aqGJ7GhlYWQAAAV0AAAAMQAAADYTCdLfaGhlYQAABagAAAAgAAAAJAkaBL5obXR4AAAFyAAAABQAAAAUFSP//2xvY2EAAAXcAAAADAAAAAwBwgMEbWF4cAAABegAAAAfAAAAIAEcAJNuYW1lAAAGCAAAAUUAAAJtPlT+fXBvc3QAAAdQAAAAMwAAAET/F8RoeJxjYGRgYOBikGPQYWB0cfMJYeBgYGGAAJAMY05meiJQDMoDyrGAaQ4gZoOIAgCKIwNPAHicY2BksWKcwMDKwMHUyXSGgYGhH0IzvmYwYuRgYGBiYGVmwAoC0lxTGBwYKp57Mzf8b2CIYW5gaAAKM4LkAOusC/sAeJzFkLENgDAMBM8EEEKMwhD0rAINFQ3rJmOET0wBE/DWRfbLliMDHRDELFqwA6Nok2vVD4zVb1lUjww0ijPu8UprzvLeucvU51HyRrPaYT2/yf5b/dVU3+WpdHHOB30x7o4uRryc0pNWh3ADph0YNHicNVJLb9xUFL7n3vqRcTJje3zjGc/Lj3hMMokz9rxaHpNJH4mIEjUSmkakm4xUhFAVKhqkblhEakpRhVQQiwY2IIRg018AFSA2/AI2WSAhqq7oApZBcTjO0Cv7Xp/j75zvfve7RCDk9A/2hBVInrxEInKZbBICYgPcLK2AE7RD2gDuCNw0sizwAkfy3JC9BqYrGtNxt103RUnMQRaq0HLibhDSADrtPn0F4ukKQLFkvaH7ZZ19AplCUL2XrNGvgde8cq6/kLw+v2TEdl6+M6nrRV3/WBYFQab0XC4Lu+b0hDCREZNvhJzFn9RmaQ0mi4G1/uaUXdJHH7XfrfjmBMD+PuRLdva7Jc3S8PnAms7rRUmdkgvWlDdjwJ2nSiE/Wan/SXCcOz093RdeZfuo1ScXyCohedw47fa6tlmFPq0HxIYQXJSE4tJsKlGq29IY1kdRZykWQpAFqQpm3Ke6Ikm8UlaO6f1jpVzhsqwkT08clhse/X00VJ157RHce6TNO7/dSP59S5FkA8G1q1tXq9q8ewCX4vgS4FxouBq9jQ0MWVKeP1dk2aiWFcgmV4bb20MsVx8+xGaf7+z8j6nZdg0TyV/jepx1p5HqBPT0J/YrG5ABBg5ulDt96FXBECXcuKM5vPUiduuB13E4KkkhHafjITyEdrcXmy3uaCGwjZOdhSWgu5m5ottsutU54eQzOH6szBW8xUWvMic+SwawHNGvomVIyONMvZLmLxjP4GdYZumv7aIN0LzSBLCLyRfvj6NFcAp7e1iDgKO9F4iXd+F+tEzIFGr4kf3CLhJGJKKQHHpmkhLZIm+Tm+QW2SMfojaPt1ir46Vr3uwFLJBwlkyGi9/xOJqKzqU3lnba3SXQzgxsjc3jIXh4yY0qbcXdXnoC6aG06342LfIQhCHCfWzO8ZWQiLki186Mx5J2PcDjoeUoOh9FyT+Hh9Hs+uz6Qenup7iMDsoH9GCDq5pALzel4sKMriocGoMGbNCtweAa5bEVX1/1/dXrsVLKsPeG2c13aCn5PjMlqL66NqJ0tGbFHKKN8VhX1GkLzjqUOKjs4uGJcQhLUfJl6W4ZvkXOB8iZPMCP3sqIqyFvrkh5LyzyUOXwg91o2MhKrw1WlAyS3kBuKkjD21S6uTmzWsvwjCgjJRLn1VvN881RE7iqJK7oW2mt5Yvwu6Li9foPAtC/9AAAAHicY2BkYGAA4u4cmT/x/DZfGbhZGEDgevjxQhj9////BlYb5gYgl4OBCSQKAFhpDNcAAAB4nGNgZGBgbvjfwBDDavX///9/rDYMQBEUwAoAqugG4QQAAAAD6QAABTr//wQAAAAEAAAAAAAAAAB2AOoBTAIaeJxjYGRgYGBlaGfgZQABJiDmAkIGhv9gPgMAFysBsAB4nGWPTU7DMBCFX/oHpBKqqGCH5AViASj9EatuWFRq911036ZOmyqJI8et1ANwHo7ACTgC3IA78EgnmzaWx9+8eWNPANzgBx6O3y33kT1cMjtyDRe4F65TfxBukF+Em2jjVbhF/U3YxzOmwm10YXmD17hi9oR3YQ8dfAjXcI1P4Tr1L+EG+Vu4iTv8CrfQ8erCPuZeV7iNRy/2x1YvnF6p5UHFockikzm/gple75KFrdLqnGtbxCZTg6BfSVOdaVvdU+zXQ+ciFVmTqgmrOkmMyq3Z6tAFG+fyUa8XiR6EJuVYY/62xgKOcQWFJQ6MMUIYZIjK6Og7VWb0r7FDwl57Vj3N53RbFNT/c4UBAvTPXFO6stJ5Ok+BPV8bUnV0K27LnpQ0kV7NSRKyQl7WtlRC6gE2ZVeOEXpc0Yk/KGdI/wAJWm7IAAAAeJxjYGKAAC4G7ICVkYmRmZGFkZWRjYGxgr08MS89pzSfydOfvTw1L6U0K5OBAQBdVAc/AA==') format('woff'),
+            url('iconfont.ttf?t=1529980529900') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
+            url('iconfont.svg?t=1529980529900#iconfont') format('svg'); /* iOS 4.1- */
+        }
+        .iconfont {
+            font-family:"iconfont" !important;
+            font-style:normal;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        .icon-wangluo:before { content: "\e66d"; }
+        .icon-IO:before { content: "\e74b"; }
+        .icon-wenduji:before { content: "\e67d"; }
+    </style>
+    <div class="resource-all">
+        <div class="table-tr bdr-t gpu_cpu_all resource-parent" style="display: none;height: 100%;">
+            <div class="bdr-l table-td w-5">
+                <div class="sub-table">
+                    <div class="sub-table-tr-i1">
+                        <div class="sub-table-td bdr-b ta-c h-70"> 容器  </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!--clone&#45;&#45;卡-->
+        <div class="bdr-l table-td w-95  resource-children" style="display: none;float: right;">
+            <!--name-->
+            <div class="bdr-l table-td w-25">
+                <div class="sub-table sub-table-ka1">
+                    <div class="sub-table-tr-i1">
+                        <div class="sub-table-td bdr-b ta-c h-70 sub-table-ka1-name"> 卡  </div>
+                    </div>
+                </div>
+            </div>
+            <!--GPU**************************************-->
+            <div class="bdr-l table-td w-10">
+                <div class="sub-table sub-table-ka1">
+                    <div class="sub-table-tr-i1">
+                        <div class="sub-table-td bdr-b ta-l h-70"><i class="f-l iconfont fz-36 pr-5 c-orange"> &#xe62a; </i> GPU </div>
+                    </div>
+                </div>
+            </div>
+            <div class="bdr-l table-td w-15">
+                <div class="sub-table sub-table-ka1">
+                    <div class="sub-table-tr-i1">
+                        <div class="sub-table-td bdr-b h-70">
+                            <div class="f-l m-t5 cpu-meter">
+                                <div class="threm cpu-threm">
+                                    <div class="length_i length_i_g">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--CPU*9***************************************-->
+            <div class="bdr-l table-td w-10">
+                <div class="sub-table sub-table-ka1">
+                    <div class="sub-table-tr-i1">
+                        <div class="sub-table-td bdr-b ta-l h-70"><i class="f-l iconfont fz-30 pr-5 c-green"> &#xe670; </i> 显存 </div>
+                    </div>
+                </div>
+            </div>
+            <div class="bdr-l table-td w-15">
+                <div class="sub-table sub-table-ka1">
+                    <div class="sub-table-tr-i1">
+                        <div class="sub-table-td bdr-b h-70">
+                            <div class="f-l m-t5 gpu-meter">
+                                <div class="threm gpu-threm">
+                                    <div class="length_i length_i_gm">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--温度 temperature************************************-->
+            <div class="bdr-l table-td w-10">
+                <div class="sub-table sub-table-ka1">
+                    <div class="sub-table-tr-i1">
+                        <div class="sub-table-td bdr-b ta-l h-70"><i class="f-l iconfont fz-30 pr-5 c-green icon-wenduji"> </i> 温度 </div>
+                    </div>
+                </div>
+            </div>
+            <div class="bdr-l table-td w-15">
+                <div class="sub-table sub-table-ka1">
+                    <div class="sub-table-tr-i1">
+                        <div class="sub-table-td bdr-b h-70">
+                            <div class="f-l m-t5 gpu-meter">
+                                <div class="threm gpu-threm">
+                                    <div class="length_i_t length_i">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--资源监控主体-->
+    <div class="f-l c-box m-t15">
+        <div class="table bdr">
+            <div class="table-tr bgc-gray" style="height:100%;">
+                <div class="table-th w-5">容器</div>
+                <div class="table-th w-95">
+                    <div class="table-th w-25">显卡</div>
+                    <div class="table-th w-10" style="height: 50px"> </div>
+                    <div class="table-th w-15">使用率</div>
+                    <div class="table-th w-10" style="height: 50px"> </div>
+                    <div class="table-th w-15">使用率</div>
+                    <div class="table-th w-10" style="height: 50px"> </div>
+                    <div class="table-th w-15">温度</div>
+                </div>
+            </div>
+            <div class="table-tr bgc-gray  resource-content">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+            </div>
+<script>
+    if($('.home_work_state').text()=='Aborted'){
+        $('.home_work_state').text('终止')
+    }
+    else if($('.home_work_state').text()==='Done'){
+        console.log("hello")
+        $('.home_work_state').text('完成')
+    }
+    else if($('.home_work_state').text()=='Error'){
+        $('.home_work_state').text('错误')
+    }
+    else if($('.home_work_state').text()=='Running' ){
+        $('.home_work_state').text('运行中')
+    }
+    else if($('.home_work_state').text()=='Waiting' ){
+        $('.home_work_state').text('等待')
+    }
+
+    if($('.home_work_state').text() == "运行中"){
+//		console.log(1)
+        $('.home_work_state').css('backgroundColor','#17d49c')
+    }
+    else if($('.home_work_state').text() == "完成"){
+        $('.home_work_state').css('background-color','#ff6376')
+    }
+    else if($('.home_work_state').text() == "终止"){
+        $('.home_work_state').css('background-color','#9eb7c6')
+    }
+    else if($('.home_work_state').text() == "错误"){
+        $('.home_work_state').css('background-color','#ff976a')
+    }
+    else if($('.home_work_state').text() == "等待"){
+        $('.home_work_state').css('background-color','#ff976a')
+    }
+    else{
+        $('.home_work_state').css('backgroundColor','#17d49c')
+    }
+</script>
+
+        {% set combined_graph_data = job.get_data() %}
+            {% if combined_graph_data %}
+        <script>
+            console.log('zhexian1')
+            var drawComb= {% autoescape false %}{{combined_graph_data}}{% endautoescape %};
+            console.log('===888888',drawComb)
+               if(drawComb=='undefined'){
+					console.log('zhexian1')
+			   }
+			   else{
+
+                   function arryF(s){
+                       return Array.from(new Set(s));
+                   }
+
+
+                   var c3_aa=function(a,b,c){
+                     c3.generate($.extend({
+                        bindto: '#mychart-a2',
+                        axis: {
+                            x: {
+                                tick: {
+                                    format: function(x) { return Math.round(x * 1000) / 1000; },
+//                                    fit: false,
+
+                                },
+                                min: 0,
+                                padding: {left: 0},
+                                 label: {
+                                    text: '[迭代次数]',
+                                    position: 'outer-right',
+                                },
+                            },
+                            y: {
+                                min: 0,
+                                padding: {bottom: 0},
+
+                            },
+                            y2: {
+                                show: true,
+            //                 		 最值
+                                min: 0,
+//                                max: 10,
+                                padding: {top: 0, bottom: 0},
+                            },
+
+                        },
+                        color: {
+                             pattern: ['#0e9aef', 'red', '#11c888', '#ababab','#e5e6e8']
+
+                        },
+                        point: {
+                              r: 2,
+                        },
+                        grid: {x: {show: true},
+                            y: {show: true}
+                        },
+                        legend: {position: 'bottom'},
+                    },
+                    {
+                         data: {
+                             xs:b,
+                             columns:a,
+                             axes:c
+//                             {
+//                                 accuracy: 'y2',
+//                                 cost:'y',
+//                                 'mAP(val)':'y2',
+//                                 'precision(val)':'y2',
+//                                 'recall(val)':'y2',
+//                                 'accuracy(test)':'y2',
+//                                 'loss(train)':'y',
+//                                 'loss(test)':'y',
+//                                 loss: 'y'
+//                             }
+                         },
+
+                        transition: {
+                            duration: 0,
+                        },
+                        subchart: {
+                            show: true,
+                        },
+                        zoom: {
+                            rescale: true,
+                        },
+                    }
+                    ));
+            }
+                    var arry1 = ["accuracy"]
+                    var arry2 = ['loss']
+                    var arry3 = ['cost']
+                    var arry4 = ['accuracy(test)']
+                    var arry5 = ['loss(train)']
+                    var arry6 = ['loss(test)']
+                    var arry7 = ['loss_bbox(train)']
+                    var arry8 = ['loss_coverage(train)']
+                    var arry9 = ['loss_bbox(val)']
+                    var arry10 = ['loss_coverage(val)']
+                    var arry11 = ['mAP(val)']
+                    var arry12 = ['precision(val)']
+                    var arry13 = ['recall(val)']
+                    var arry14 = ['test_x']
+                    var arry15 = ['train_x']
+                    var arry16 = ['x']
+                    var arry17 = ['accuracy(val)']
+                    var arry18 = ['accuracy(train)']
+                    var arry19 = ['speed']
+
+
+
+                   for (var i = 0; i < drawComb.length; i++){
+                       if('accuracy' in drawComb[i]){
+                           arry1.push(drawComb[i]['accuracy'])
+                       }
+                       if('loss' in drawComb[i]){
+                           arry2.push(drawComb[i]['loss'])
+                       }
+
+                       if('cost' in drawComb[i]){
+                           arry3.push(drawComb[i]['cost'])
+                       }
+                       if('accuracy_test' in drawComb[i]){
+                           arry4.push(drawComb[i]['accuracy_test'])
+
+                       }
+                       if('loss_train' in drawComb[i]){
+                           arry5.push(drawComb[i]['loss_train'])
+                       }
+                       if('loss_test' in drawComb[i]) {
+                           arry6.push(drawComb[i]['loss_test'])
+
+                       }
+                       if('train_loss_bbox' in drawComb[i]){
+                           arry7.push(drawComb[i]['train_loss_bbox'])
+                       }
+                       if('train_loss_coverage' in drawComb[i]){
+                           arry8.push(drawComb[i]['train_loss_coverage'])
+                       }
+                       if('test_loss_bbox' in drawComb[i]){
+                           arry9.push(drawComb[i]['test_loss_bbox'])
+                       }
+                       if('test_loss_coverage' in drawComb[i]){
+                           arry10.push(drawComb[i]['test_loss_coverage'])
+                       }
+                       if('mAP' in drawComb[i]){
+                           arry11.push(drawComb[i]['mAP'])
+                       }
+                       if('precision' in drawComb[i]){
+                           arry12.push(drawComb[i]['precision'])
+                       }
+                       if('recall' in drawComb[i]){
+                           arry13.push(drawComb[i]['recall'])
+                       }
+                       if('test_step' in drawComb[i]){
+                           arry14.push(drawComb[i]['test_step'])
+                       }
+                       if('train_step' in drawComb[i]){
+                           arry15.push(drawComb[i]['train_step'])
+                       }
+                       if('step' in drawComb[i]){
+                           arry16.push(drawComb[i]['step'])
+                       }
+                       if('epoch' in drawComb[i]){
+                           arry15.push(drawComb[i]['epoch'])
+                       }
+                       if('val_epoch' in drawComb[i]){
+                           arry14.push(drawComb[i]['val_epoch'])
+                       }
+                       if('val_accuracy' in drawComb[i]){
+                           arry17.push(drawComb[i]['val_accuracy'])
+                       }
+                       if('train_accuracy' in drawComb[i]){
+                           arry18.push(drawComb[i]['train_accuracy'])
+                       }
+                       if('speed' in drawComb[i]){
+
+                           arry19.push(drawComb[i]['speed'])
+                       }
+
+
+
+
+
+
+                   }
+//                   var arry_step = arryF(arry14)
+//                   c3_a([arry1,arry2,arry3,arry4,arry5,arry6,arry7,arry8,arry9,arry10,arry11,arry12,arry13,arry_step])
+                    console.log('***********',arry15)
+                   var test_step = arryF(arry14)
+                   var train_step = arryF(arry15)
+                   var step = arryF(arry16)
+
+                   var data_obj = {
+                       columns:[arry1,arry2,arry3,arry4,arry5,arry6,arry7,arry8,arry9,arry10,arry11,arry12,arry13,arry17,arry18,arry19,test_step,train_step,step],
+                       xs:{accuracy:'x',loss:'x',cost:'x','accuracy(test)':'test_x','loss(test)':'test_x',
+                           'loss(train)':'train_x','loss_bbox(train)':'train_x','loss_coverage(train)':'train_x','loss_bbox(val)':'test_x','loss_coverage(val)':'test_x',
+                           'mAP(val)':'test_x','precision(val)':'test_x','recall(val)':'test_x','accuracy(val)':'test_x','accuracy(train)':'train_x','speed':'train_x'},
+                       axes:{
+                           accuracy: 'y2',
+                           loss:'y',
+                           'mAP(val)':'y2',
+                           'precision(val)':'y2',
+                           'recall(val)':'y2',
+                           'accuracy(test)':'y2',
+                           'loss(train)':'y',
+                           'loss(test)':'y',
+                           cost: 'y',
+                           'accuracy(val)':'y2',
+                           'accuracy(train)':'y2'
+                       }
+                   }
+
+                   c3_a(data_obj.columns,data_obj.xs,data_obj.axes)
+
+
+
+
+                   $(window).bind("load", function () {
+                       $(".l-sidemenu").on("click", function() {
+                           c3_aa([arry1,arry2])
+                           // c3_b(numm2);
+                       });
+                   });
+
+			   }
+			   console.log('===========data')
+            </script>
+            {% endif %}
+        {% set log_content = job.log_data()%}
+            {% if log_content %}
+            <script>
+                var data= {% autoescape false %}{{log_content}}{% endautoescape %};
+                console.log('+++++++++++++++>>>>', data)
+                for(j = 0; j < data.length; j++) {
+                     $("<p>" + data[j] +"</p>").appendTo($(".log-content"))
+                }
+            </script>
+            {% endif%}
+{% endblock rightcontent %}
+{% block bottomfile %}
+
+{% endblock bottomfile %}

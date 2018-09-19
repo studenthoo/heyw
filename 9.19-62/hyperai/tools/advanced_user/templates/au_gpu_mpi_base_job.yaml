@@ -1,0 +1,49 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: $name$
+  labels:
+    app: $label$
+spec:
+  replicas: $node_count$
+  template:
+    metadata:
+      labels:
+        app: $label$
+    spec:
+#      nodeSelector:
+#          kubernetes.io/hostname: $select_node$
+      containers:
+      - image: $image$
+        name : $name$
+        resources:
+          limits:
+            cpu: $cpu$ 
+            memory: $memory$ 
+            nvidia.com/gpu: $gpu$
+          requests:
+            cpu: $cpu$ 
+            memory: $memory$ 
+            nvidia.com/gpu: $gpu$
+#        command: ['/usr/sbin/sshd']
+#        args: ['-D']
+        command: $cmd$
+        args: $args$
+        volumeMounts:
+          - name: nfs-storage
+            readOnly: false
+            mountPath: /home/nfsdir
+        ports:
+          - name: digits-port
+            containerPort: 5000
+          - name: ssh-port
+            containerPort: 22
+        env:
+          - name: LD_LIBRARY_PATH
+            value: "/usr/local/cuda/extras/CUPTI/lib64:/usr/local/nvidia/lib:/usr/local/nvidia/lib64"
+      volumes:
+        - name: nfs-storage
+          nfs:
+            server: $nfsip$
+            path: "/home/nfsdir"
+

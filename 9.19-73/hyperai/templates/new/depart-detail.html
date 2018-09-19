@@ -1,0 +1,671 @@
+{% extends 'new/public.html' %}
+
+{% block topfile %}
+<link rel="shortcut icon" href="{{ url_for('static', filename='images/bitbug_favicon.ico') }}"/>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/public.css') }}"/>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/sub.css') }}"/>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/iconfont.css') }}"/>
+<link rel="stylesheet" type="{{ url_for('static', filename='text/css" href="css/calendar.css') }}"/>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/user_admin.css') }}"/>
+<!--<link rel="stylesheet" href="{{ url_for('static', filename='c3/c3.css') }}"/>-->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}"/>
+<!--<link rel="stylesheet" href="{{ url_for('static', filename='css/user_admin.css') }}"/>-->
+<!--<link rel="stylesheet" href="{{ url_for('static', filename='data1/css/lq.datetimepick.css') }}"/>-->
+<script type="text/javascript" src="{{ url_for('static', filename='js/jquery-1.7.2.js') }}"></script>
+<script type="text/javascript" src="{{url_for('static', filename='js/paging.js')}}" ></script>
+
+
+{% endblock topfile %}
+
+
+
+{% block rightcontent %}
+
+<style>
+    .right-bottom{
+        margin-top: 130px;
+    }
+    .permiss,.users{
+        display: block;
+        width: 100%;
+        background-color: #FFFFFF;
+        margin-top: 15px;
+        padding: 0 20px;
+    }
+    .users{
+        margin-top: 35px;
+    }
+    .permiss-t,.users-t{
+        display: block;
+        width: 100%;
+        border-bottom: 1px solid #DEDCE1;
+        padding-bottom: 10px;
+        margin: 30px 0;
+    }
+    .permiss-t h3,.users-t h3{
+        display: inline-block;
+        width: 100px;
+        font-family: "微软雅黑";
+        font-weight: 400;
+    }
+    .permiss-t span{
+        display: inline-block;
+        width: 100px;
+        height: 25px;
+        line-height: 25px;
+        text-align: center;
+        background-color: #00B5B8;
+        border-radius: 5px;
+        cursor: pointer;
+        font-family: "微软雅黑";
+    }
+    .permiss-u,.users-u{
+        display: block;
+        width: 100%;
+        margin:0 0 0px 0;
+        min-height: 100px;
+        font-family: "宋体";
+    }
+    .permiss-u ul,.users-list ul{
+        display: block;
+        width: 100%;
+        /*padding: 0 20px;*/
+    }
+    .users-list ul{
+        height: 50px;
+        line-height: 50px;
+    }
+    .permiss ul li{
+        display:inline-block;
+        width: 20%;
+        text-align: center;
+        margin-bottom: 25px;
+        /*margin-right: 150px;*/
+    }
+    /*.select-u{*/
+    /*display: block;*/
+    /*margin-left: 80px;*/
+    /*margin-bottom: 30px;*/
+    /*}*/
+    /*.select-u select{*/
+    /*display: inline-block;*/
+    /*outline: none;*/
+    /*width: 200px;*/
+    /*height: 40px;*/
+    /*line-height: 40px;*/
+    /*text-align: center;*/
+    /*border: 1px solid #DEDCE1;*/
+    /*margin-left: 40px;*/
+    /*}*/
+    /*.select-u select option:hover{*/
+    /*background-color: #00B5B8;*/
+    /*color: #fff;*/
+    /*}*/
+    /*.select-u .add-user{*/
+    /*display: inline-block;*/
+    /*width: 80px;*/
+    /*height: 38px;*/
+    /*background-color: #00B5B8;*/
+    /*line-height: 38px;*/
+    /*text-align: center;*/
+    /*margin-left: 20px;*/
+    /*border-radius: 5px;*/
+    /*cursor: pointer;*/
+    /*}*/
+    .users-list{
+        display: block;
+        width: 100%;
+        min-height: 100px;
+    }
+    .users-list ul li{
+        display:inline-block;
+        width: 20%;
+        text-align: center;
+        /*margin-bottom: 25px;*/
+    }
+    .users-list ul:not(first-child){
+        text-align: right;
+    }
+    .users-list ul li:first-child{
+        /*position: relative;
+        right: 58px;*/
+        width: 20%;
+        /*text-align: left;*/
+        /*margin-left: 80px;*/
+    }
+    /*.users-list ul li:nth-child(1){*/
+    /*margin-right: 37px;*/
+    /*}*/
+    /*.users-list ul li:nth-child(3){*/
+    /*position: relative;*/
+    /*left: 80px;*/
+    /*}*/
+    .users-list ul li input{
+        display: inline-block;
+        width: 80px;
+        height: 25px;
+        line-height: 25px;
+        text-align: center;
+        border-radius: 5px;
+        cursor: pointer;
+        background: #ffffff;
+        font-size: 14px;
+    }
+    .users-list ul li .d-cluster{
+        margin-right: 10px;
+        border: 1px solid #00B5B8;
+        color: #00b5b8;
+
+    }
+    .users-list ul li .delete-user{
+        border: 1px solid #999;
+        color: #999;
+    }
+    .host-box label{
+        display: block;
+        width: 100%;
+        height: 30px;
+        line-height: 30px;
+        margin: 0 0 10px 20px;
+    }
+    .host-box label input{
+        display: inline-block;
+        width: 15px;
+        height: 15px;
+        margin-right: 20px;
+    }
+    .add-hosts .cancel-1{
+        background-color: #fffafa;
+        border-bottom:1px solid #DEDCE1 ;
+        padding-bottom: 5px;
+        border-radius: 5px;
+    }
+    .cancel-1 h3{
+        display: inline-block;
+        width: 200px;
+        height: 40px;
+        line-height: 40px;
+        margin: 5px 0 0 20px;
+        font-size: 18px;
+        font-weight: 400;
+    }
+    @media screen and (max-width:1346px){
+        .permiss ul li{
+            width:20%;
+        }
+    }
+    @media screen and (max-width:1290px){
+        .permiss-u ul li{
+            /*font-size: 0.75rem;*/
+            margin-right: 100px;
+            /*width: 25%;*/
+        }
+        /*.select-u{*/
+        /*font-size: 0.75rem;*/
+        /*}*/
+        .users-list ul li{
+            /*font-size: 0.75rem;*/
+        }
+        .users-list ul li span{
+            width: 60px;
+        }
+        .users-list ul li:first-child,.users-list ul li:nth-child(3) {
+            position: relative;
+            right: 0px;
+            left: 0;
+        }
+        .users-list ul li:nth-child(2) {
+            position: relative;
+            right: 30px;
+        }
+        .users-list ul:not('first-child') li:last-child{
+            width: 25%;
+        }
+        /*.select-u select{*/
+        /*height: 30px;*/
+        /*}*/
+        /*.select-u .add-user{*/
+        /*height: 30px;*/
+        /*line-height: 30px;*/
+        /*width: 60px;*/
+        /*}*/
+    }
+
+    .page_box{margin: 35px;}
+    .w-100{
+        width: 100%;
+    }
+
+    #page a {
+        min-width: 30px;
+        height: 28px;
+        border: 1px solid #dce0e0!important;
+        text-align: center;
+        margin: 0 4px;
+        cursor: pointer;
+        line-height: 28px;
+        color: #666666;
+        font-size: 13px;
+        display: inline-block;
+        padding: 0 5px;
+        margin: 0 1px;
+    }
+    #page a:hover {
+        color: white;
+        background: #00b5b8;
+    }
+    .totalPages,.totalSize{
+        display: none;
+    }
+
+    #page .current{background: #00b5b8;
+        color:white;
+    }
+
+    .success-box,.success-box1{    z-index: 99998;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, .6);
+        display: none;
+    }
+    .alert-div{
+        width: 400px;
+        height: 240px;
+        background: white;
+        margin: 0 auto;
+        margin-top: 10%;
+        position: relative;
+    }
+    .alert-div-nav{
+        height:40px;
+    }
+    .alert-div-nav i{
+        background: #00b5b8;
+        color: white;
+    }
+    .alert-div-content h3{height: 40px;
+        line-height: 40px;
+        text-align: center;
+        margin-top: 35px;
+    }
+    .alert-btn{height: 40px;
+        text-align: center;
+        position: absolute;
+        bottom: 35px;
+        width: 100%;
+    }
+    .alert-btn div{display: inline-block; }
+    .alert-btn  h3{
+        height:40px;
+        width: 100%;
+        /*padding: 0 30px;*/
+        line-height: 40px;
+    }
+    .alert-btn-no{
+        color: #2c3850;
+        background: #d2e0e9;
+        margin-right: 20px;
+        width:100px;
+    }
+    .alert-btn-yes,.user-btn-yes{background: #00b5b8;
+        color: white;
+        width:100px;
+    }
+    .hover-red:hover{color: white;
+        background: #ff6376;
+    }
+
+
+
+</style>
+
+
+
+<div class="success-box">
+    <div class="alert-div">
+        <div class="alert-div-nav">
+            <!--<i class="fz-24 iconfont f-r hover-red"> &#xe676; </i>-->
+        </div>
+        <div class="alert-div-content">
+            <h3></h3>
+        </div>
+        <div class="alert-btn">
+            <div class="alert-btn-no hover-red">
+                <h3>取消</h3>
+            </div>
+            <div class="alert-btn-yes hover-red">
+                <h3>确认</h3>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="success-box1">
+    <div class="alert-div">
+        <div class="alert-div-nav">
+            <!--<i class="fz-24 iconfont f-r hover-red"> &#xe676; </i>-->
+        </div>
+        <div class="alert-div-content">
+            <h3></h3>
+        </div>
+        <div class="alert-btn">
+            <!--<div class="alert-btn-no hover-red">-->
+            <!--<h3>取消</h3>-->
+            <!--</div>-->
+            <div class="alert-btn-yes hover-red">
+                <h3>确认</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+<div class="f-l title">
+    <h1 class="f-l c-grayblue"> 用户管理 </h1>
+    <span class="f-l c-gray"> Welcome back, {{request.cookies.username}} </span>
+</div>
+
+<div class="f-l sub-title bgc-white">
+    <a href="#" class="f-l c-gray c-aqua-h"><span class="f-l"> Home   </span><em
+            class="f-l c-gray"> / </em></a>
+    <a href="{{url_for('hyperai.views.user_manage')}}" class="f-l c-gray c-aqua-h"><span class="f-l"> 用户管理 </span><em class="f-l c-gray">/ </em></a>
+    <a href="#" class="f-l c-gray c-aqua-h"><span class="f-l"> 部门详情</span><em class="f-l c-gray">/ </em></a>
+</div>
+
+
+<div class="permiss f-l">
+
+    <div class="permiss-t f-l">
+        <h3>权限</h3>
+        <!--<span class="f-r c-white"><a href="permissionManage.html" class="c-white">修改权限</a></span>-->
+    </div>
+    <div class="permiss-u f-l">
+        <ul class="f-l c-gray">
+            <!--<li class="f-l">部门名称</li>-->
+            <li class="f-l">资源配额</li>
+            <!--<li class="f-l">使用配额</li>-->
+            <li class="f-l">优先级</li>
+        </ul>
+        <ul class="f-l depart-gpu">
+            <!--<li class="f-l">depart1</li>-->
+            <li class="f-l">GPU使用上限为<i style="color: #ff6376;margin: 0 10px;font-weight: 600;"></i>个</li>
+            <li class="f-l"></li>
+        </ul>
+    </div>
+
+</div>
+<div class="users f-l">
+    <div class="users-t f-l">
+        <h3>成员</h3>
+    </div>
+    <div class="users-u f-l">
+        <!--<div class="select-u f-l">-->
+        <!--<span class="user-name c-gray">-->
+        <!--用户名-->
+        <!--</span>-->
+        <!--<select name="">-->
+        <!--<option value="">请选择</option>-->
+        <!--<option value="张三">张三</option>-->
+        <!--<option value="李四">李四</option>-->
+        <!--<option value="王五">王五</option>-->
+        <!--</select>-->
+        <!--<span class="add-user c-white">-->
+        <!--添加-->
+        <!--</span>-->
+        <!--</div>-->
+        <div class="clone-box" style="display: none;">
+            <ul class="f-l user-detail">
+                <li class="f-l"></li>
+                <li class="f-l gpu_max"></li>
+                <li class="f-l"></li>
+                <li class="f-l" >
+                    <!--<span class="d-cluster c-green2">暂停使用</span>-->
+                    <input type="button" class="d-cluster c-green2" value="暂停使用"/>
+                    <input type="button" class="delete-user c-green2" value="恢复使用" disabled=true/>
+                    <!--<span class="delete-user c-green2" style="color: #ff6376">恢复使用</span>-->
+                    <!--<span class="delete-user c-red">移除用户</span>-->
+                </li>
+                <p style="display:none "></p>
+            </ul>
+        </div>
+        <div class="users-list f-l">
+            <ul class="f-l c-gray">
+                <li class="f-l">用户名</li>
+                <li class="f-l">GPU配额</li>
+                <li class="f-l">剩余GPU</li>
+                <li class="f-l" style="text-align: center;">操作</li>
+            </ul>
+            <div class="user-detail-list f-l" style="width: 100%;">
+                <!--<ul class="f-l user-detail">-->
+                <!--<li class="f-l">李立</li>-->
+                <!--<li class="f-l">3</li>-->
+                <!--<li class="f-l">1</li>-->
+                <!--<li class="f-r" >-->
+                <!--<span class="d-cluster c-green2">暂停使用</span>-->
+                <!--<span class="delete-user c-green2" style="color: #ff6376">恢复使用</span>-->
+                <!--&lt;!&ndash;<span class="delete-user c-red">移除用户</span>&ndash;&gt;-->
+                <!--</li>-->
+                <!--<p style="display:none "></p>-->
+                <!--</ul>-->
+            </div>
+
+
+        </div>
+    </div>
+
+    <div class="w-100 page_box f-l" style="margin-top: 80px;text-align: center;">
+        <div  id="page">
+
+        </div>
+    </div>
+
+
+</div>
+
+
+
+<script>
+
+    var department_id = localStorage.getItem('depart_id')
+    //    页码
+    var page=function (a) {
+        $("#page").paging({
+            pageNo:1,    //显示页面
+            totalPage: a,   //总页数
+            totalSize: 300,
+            callback: function(num) {
+
+                console.log('---------',num)
+
+                $.ajax({
+                    type:'POST',
+                    url:'/department_load_user',
+                    data:{'num':num,'depart_id':department_id},
+                    success:function (e) {
+                        console.log('-----------分页',e)
+
+                        $('.user-detail-list ul').remove()
+
+                        for(var i = 0; i < e.user_list.length;i++){
+                            $('.clone-box .user-detail').clone().appendTo($('.user-detail-list'))
+                            $('.user-detail-list ul').eq(i).children().eq(0).html(e.user_list[i]['name'])
+                            $('.user-detail-list ul').eq(i).children().eq(1).html(e.user_list[i]['user_gpu_max'])
+                            $('.user-detail-list ul').eq(i).children().eq(2).html(e.user_list[i]['gpu_used'])
+                            $('.user-detail-list ul').eq(i).children().eq(4).html(e.user_list[i]['id'])
+                        }
+                        $('.user-detail-list .gpu_max').each(function () {
+
+                            if($(this).html() == 0){
+                                console.log('00000')
+                                $(this).parents('.user-detail').find('.d-cluster').attr('disabled',true)
+                                $(this).parents('.user-detail').find('.d-cluster').css({'color':'#999','border':'1px solid #999'})
+                                $(this).parents('.user-detail').find('.delete-user').attr('disabled',false)
+                                $(this).parents('.user-detail').find('.delete-user').css({'color':'#00b5b8','border':'1px solid #00b5b8'})
+                            }
+                        })
+                    }
+                })
+
+            }
+        })
+    }
+
+
+
+
+
+
+
+
+
+
+    <!--加载部门详情信息-->
+    console.log(localStorage.getItem('depart_id'))
+
+    console.log(department_id)
+    $.ajax({
+        type:'POST',
+        url:'/department_load_user',
+        data:{'depart_id':department_id},
+        success:function (e) {
+            console.log('加载用户',e)
+            $('.depart-gpu').find('li').eq(0).find('i').html(e.gpu_max)
+            $('.depart-gpu').find('li').eq(1).html(e.power)
+            for(var i = 0; i < e.user_list.length;i++){
+                $('.clone-box .user-detail').clone().appendTo($('.user-detail-list'))
+                $('.user-detail-list ul').eq(i).children().eq(0).html(e.user_list[i]['name'])
+                $('.user-detail-list ul').eq(i).children().eq(1).html(e.user_list[i]['user_gpu_max'])
+                $('.user-detail-list ul').eq(i).children().eq(2).html(e.user_list[i]['gpu_used'])
+                $('.user-detail-list ul').eq(i).children().eq(4).html(e.user_list[i]['id'])
+            }
+
+            $('.user-detail-list .gpu_max').each(function () {
+
+                if($(this).html() == 0){
+                    console.log('00000')
+                    $(this).parents('.user-detail').find('.d-cluster').attr('disabled',true)
+                    $(this).parents('.user-detail').find('.d-cluster').css({'color':'#999','border':'1px solid #999'})
+                    $(this).parents('.user-detail').find('.delete-user').attr('disabled',false)
+                    $(this).parents('.user-detail').find('.delete-user').css({'color':'#00b5b8','border':'1px solid #00b5b8'})
+                }
+            })
+
+            page(e.user_page)
+        }
+    })
+
+    //  $('.user-detail-list .gpu_max').each(function () {
+    //      console.log('000001')
+    //      if($(this).html() == 0){
+    //          console.log('00000')
+    //          $(this).parents('.user-detail').find('.d-cluster').attr('disabled',true)
+    //          $(this).parents('.user-detail').find('.d-cluster').css({'color':'#999','border':'1px solid #999'})
+    //          $(this).parents('.user-detail').find('.delete-user').attr('disabled',false)
+    //          $(this).parents('.user-detail').find('.delete-user').css({'color':'#ff6376','border':'1px solid #ff6376'})
+    //      }
+    //  })
+
+
+
+    var usersid = null
+    $('.user-detail-list').on('click','.d-cluster',function () {
+        usersid = $(this).parents('.user-detail').find('p').html()
+        console.log('usersid',usersid)
+        $('.success-box').css('display','block')
+        $('.success-box .alert-div-content').find('h3').html('确定暂停使用？')
+    })
+    //
+    //    $('.user-detail-list .delete-user').each(function () {
+    //        $(this).attr('disabled',true)
+    //        $(this).css({'color':'#999','border':'1px solid #999'})
+    //    })
+
+    $('.user-detail-list').on('click','.delete-user',function () {
+        usersid = $(this).parents('.user-detail').find('p').html()
+        $('.success-box').css('display','block')
+        $('.success-box .alert-div-content').find('h3').html('确定恢复使用？')
+    })
+
+    //    释放和恢复资源
+    $('.success-box .alert-btn-yes').on('click',function () {
+        if($('.success-box .alert-div-content').find('h3').html() == '确定暂停使用？'){
+
+            $.ajax({
+                type:'POST',
+                url:'/user_release',
+                data:{'user_id':usersid},
+                success:function (e) {
+                    console.log('暂停使用',e)
+                    $('.user-detail-list p').each(function () {
+
+
+                        if($(this).html() == e.user_id){
+
+                            $(this).parents('.user-detail').find('li').eq(1).html(e.gpu_max)
+                            $(this).parents('.user-detail').find('li').eq(2).html(e.gpu_use)
+                            $(this).parents('.user-detail').find('.d-cluster').attr('disabled',true)
+                            $(this).parents('.user-detail').find('.d-cluster').css({'color':'#999','border':'1px solid #999'})
+                            $(this).parents('.user-detail').find('.delete-user').attr('disabled',false)
+                            $(this).parents('.user-detail').find('.delete-user').css({'color':'#00b5b8','border':'1px solid #00b5b8'})
+                        }
+                    })
+
+                    $('.success-box').css('display','none')
+                }
+            })
+        }
+        if($('.success-box .alert-div-content').find('h3').html() == '确定恢复使用？'){
+            $.ajax({
+                type:'POST',
+                url:'/user_restore',
+                data:{'user_id':usersid},
+                success:function (e) {
+                    console.log('恢复使用',e)
+                    $('.user-detail-list p').each(function () {
+
+
+                        if($(this).html() == e.user_id){
+
+                            $(this).parents('.user-detail').find('li').eq(1).html(e.gpu_max)
+                            $(this).parents('.user-detail').find('li').eq(2).html(e.gpu_use)
+                            $(this).parents('.user-detail').find('.delete-user').attr('disabled',true)
+                            $(this).parents('.user-detail').find('.delete-user').css({'color':'#999','border':'1px solid #999'})
+                            $(this).parents('.user-detail').find('.d-cluster').attr('disabled',false)
+                            $(this).parents('.user-detail').find('.d-cluster').css({'color':'#00b5b8','border':'1px solid #00b5b8'})
+
+                        }
+                    })
+                    $('.success-box').css('display','none')
+                }
+            })
+        }
+
+    })
+    $('.success-box1 .alert-btn-yes').on('click',function () {
+        $('.success-box').css('display','none')
+    })
+
+    $('.alert-btn-no').on('click',function () {
+        $('.success-box').css('display','none')
+        $('.success-box1').css('display','none')
+    })
+</script>
+
+{% endblock rightcontent %}
+{% block bottomfile %}
+<script type="text/javascript" src="{{ url_for('static', filename='laydate/laydate.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/Feffects.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.nicescroll.js') }}"></script>
+<!--<script type="text/javascript" src="{{ url_for('static', filename='c3/d3.v3.min.js') }}"></script>-->
+<!--<script type="text/javascript" src="{{ url_for('static', filename='c3/c3.min.js') }}"></script>-->
+<script type="text/javascript" src="{{ url_for('static', filename='js/public.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/paging.js') }}"></script>
+{% endblock bottomfile %}

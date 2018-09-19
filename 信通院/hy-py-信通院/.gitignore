@@ -1,0 +1,8 @@
+/hyperai.cfg
+/jobs/
+/hyperai.log*
+hyperai/hyperai.log
+*.log*
+*.pyc
+.idea
+*.swp

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+	<head>
+    <meta charset="utf-8" />
+    <meta content="IE=edge,chrome=1" />
+    <meta name="keywords" content="DistantSound" />
+	<meta name="author" content="DistantSound" />
+    <meta name="format-detection" content="telephone=no" />
+
+    <title>中科弘云</title>
+    <link rel="shortcut icon" href="{{url_for('static', filename='images/bitbug_favicon.ico')}}" />
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/public.css')}}" />
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/login.css')}}" />
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/iconfont.css')}}" />
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='plugins/iCheck/skins/minimal/grey.css')}}" />
+    <link rel="stylesheet" href="{{url_for('static', filename='css/reg.css')}}" />
+    <!--[if lt IE 9]>
+      <script src="{{url_for('static', filename='js/html5shiv.js')}}"></script>
+    <![endif]-->
+		<script type="text/javascript" src="{{url_for('static', filename='js/jquery-1.7.2.js')}}"></script>
+	</head>
+	<style>
+		.form-error{
+			font-size: 12px;
+			color: red;
+			font-weight:400;
+			margin-top: 10px;
+			margin-left: 10px;
+		}
+		.user-pwd,.user-prepwd,.user-tel,.email-span,.user-namenew,.user-nameold{
+			display:none;
+		}
+	</style>
+	<body class="bg-body">
+		<div class="f-l u-reg-box">
+			<div class="f-l u-reg-l">
+        <img src="{{url_for('static', filename='images/logo_new.png')}}" class="f-l" />
+	    </div>
+
+	    <div class="f-r u-reg-r">
+	    	<h1 class="f-l c-aqua"><i class="f-l iconfont fz-30"> &#xe615; </i>
+				<span class="form-error f-l user-pwd">密码格式不正确！</span>
+				<span class="form-error f-l user-prepwd">密码不一致！</span>
+				<span class="form-error f-l user-forms"></span>
+				<span class="form-error f-l user-tel">手机号格式不正确！</span>
+				<span class="form-error f-l email-span">邮箱格式不正确！</span>
+				<span class="form-error f-l user-namenew">字母开头6-16位字母、数字、下划线！</span>
+				<span class="form-error f-l user-nameold"> 账号已被注册！</span>
+			</h1>
+
+	    	<h2 class="f-l c-aqua bdr-b"> 欢迎使用--- <strong class=" c-grayblue"> HyperAI Cloud  </strong></h2>
+
+
+	    	<form action="/user/register" method="post" class="f-l form-reg" >
+					<div class="f-l u-reg">
+						<input type="text" name="username" placeholder="用户名，6-16位字母、数字、下划线" id="user-name" class="f-l bdr-n u-info bdr-b c-gray username" />
+						<em class="f-r c-red"> &lowast; </em>
+					</div>
+					<div class="f-l u-reg">
+
+						<input type="password" name="pwd" placeholder="密码，6-18位字母、数字、下划线" maxlength="16" id="user-pas" class="f-l bdr-n u-info bdr-b c-gray pwd" />
+						<em class="f-r c-red"> &lowast; </em>
+
+					</div>	
+					<div class="f-l u-reg">
+						<input type="password" name="" placeholder="密码确认" maxlength="16" id="user-Confirmpas" class="f-l bdr-n u-info bdr-b c-gray pre-pwd" />
+						<em class="f-r c-red"> &lowast; </em>
+					</div>
+					<script>
+                        $('#user-pas').on('focus',function () {
+                            $(this).css('border-bottom','1px solid #00b5b8')
+                            $('.user-forms').html('')
+                            $('.user-pwd').hide()
+
+                        })
+                        $('#user-Confirmpas').on('focus',function () {
+                            $(this).css('border-bottom','1px solid #00b5b8')
+                            $('.user-forms').html('')
+                            $('.user-prepwd').hide()
+
+                        })
+					</script>
+					<div class="f-l u-reg bdr-b">
+					 	<div class="f-l reg-select-box reg-select" >
+					 		<select name="department">
+								{%for depart in all_depart%}
+									<option value="{{depart.depart_power}}/{{depart.depart_name}}">{{depart.depart_name}}</option>
+								{%endfor%}
+							</select>
+						</div>
+						<em class="f-r c-red"> &lowast; </em>
+					</div>	
+					<div class="f-l u-reg">
+						<input type="text" name="real_name" placeholder="真实姓名" id="user-fullname" class="f-l bdr-n u-info bdr-b c-gray" />
+					</div>						
+					<div class="f-l u-reg">
+						<input type="tel" name="phone" placeholder="电话" id="user-mobile" class="f-l bdr-n u-info bdr-b c-gray tel" />
+						<em class="f-r c-red"> &lowast; </em>
+						<script>
+							// $('#user-mobile').on('blur',function () {
+							// 	if(/^1[3|4|5|8][0-9]\d{4,8}$/.test($(this).val())){
+							// 		$(this).css('color','#999')
+							// 	}
+							// 	else {
+							// 		$('.user-tel').show()
+                            //
+							// 	}
+							// })
+                            $('#user-mobile').on('focus',function () {
+                                $('#user-mobile').css('border-bottom','1px solid #00b5b8')
+                                $('.user-forms').html('')
+                                $('.user-tel').hide()
+                            })
+						</script>
+					</div>	
+					<div class="f-l u-reg">
+						<input type="email" name="email" placeholder="邮箱" id="user-email" class="f-l bdr-n u-info bdr-b c-gray email" />
+						<em class="f-r c-red"> &lowast; </em>
+						<script>
+							// $('#user-email').on('blur',function () {
+							// 	console.log(1)
+							// 	if(/^([0-9A-Za-z\-_\.]+)@([0-9a-z]+\.[a-z]{2,3}(\.[a-z]{2})?)$/g.test($(this).val())){
+							// 		$(this).css('color','#999')
+							// 	}
+							// 	else {
+							// 		$(this).val('* 请输入正确输入邮箱')
+							// 		$(this).css('color','red')
+							// 	}
+							// })
+                            $('#user-email').on('focus',function () {
+                                $('#user-email').css('border-bottom','1px solid #00b5b8')
+                                $('.user-forms').html('')
+                                $('.email-span').hide()
+                            })
+						</script>
+					</div>										
+			  <div class="f-l u-reg"> 
+
+				  <input type="reset" name="" id="" value="重置" class="btn-reg m-t10 m-l15 bgc-Aqua bgc-red-h c-white"/>
+				  <!--<a></a>-->
+				  <input type="submit" name="" id="" value="注册" class="btn-reg m-t10 m-l15 bgc-Aqua bgc-red-h c-white"/>
+			  </div>
+	    	</form>
+			<!--<div class="f-l u-reg">-->
+				<div class="f-l u-login" style="height: 40px;margin-top: 15px">
+					<hr/>
+					<h3 class="f-l bgc-white"> 已有账号，<a href="{{url_for('hyperai.passport.views.login')}}"
+													   class="c-aqua-h c-red"> 返回登陆 </a></h3>
+				<!--</div>-->
+			</div>
+	    </div>
+	    <p class="f-l c-white"> Copyright © 2017 <a href="#" class="c-aqua c-red-h"> 中科弘云科技（北京）有限公司,</a> All rights reserved. </p>
+		</div>
+		<script>
+            $('.form-reg').submit(function(){
+                var pwd = $('.pwd').val();
+                var pre_pwd = $('.pre-pwd').val();
+                var username = $('.username').val();
+                var tel = $('.tel').val();
+                var email = $('.email').val();
+                var pattern = /^[a-z0-9_-]{6,18}$/;
+                var pattern1 = /^([0-9A-Za-z\-_\.]+)@([0-9a-z]+\.[a-z]{2,3}(\.[a-z]{2})?)$/g;
+                var pattern2 = /^[1][3,4,5,7,8][0-9]{9}$/;
+                if((username === '')){
+                    $('.user-forms').html('用户名不能为空！')
+
+                    return false
+                }else if(pwd === ''){
+                    $('.user-forms').html('密码不能为空！')
+                    $('#user-pas').css('border-bottom','1px solid red')
+                    return false
+                }else if(!pattern.test(pwd)){
+                    $('#user-pas').css('border-bottom','1px solid red')
+                    $('.user-pwd').show()
+                    return false
+                } else if(pwd !== pre_pwd){
+                    $('#user-Confirmpas').css('border-bottom','1px solid red')
+                    $('.user-prepwd').show()
+                    console.log('123')
+                    return false
+                }
+                else if(tel === ''){
+                    $('.user-forms').html('手机号不能为空！')
+                    $('#user-mobile').css('border-bottom','1px solid red')
+                    return false
+                } else if(!pattern2.test(tel)){
+
+                    $('.user-tel').show()
+                    $('#user-mobile').css('border-bottom','1px solid red')
+                    return false
+                }
+                else if(email === ''){
+                    $('.user-forms').html('邮箱不能为空！')
+                    $('#user-email').css('border-bottom','1px solid red')
+                    return false
+                }else if(!pattern1.test(email)){
+                    $('.email-span').show()
+                    $('#user-email').css('border-bottom','1px solid red')
+                    return false
+                }
+                else if($('.user-nameold').is(':visible')){
+                    console.log('1245')
+                    return false
+                }
+
+                return true
+            })
+            for (var i = 0;i<$('form').find('input').length;i++){
+                $('form').find('input').eq(i).blur(function () {
+                    $(this).css('border-bottom','1px solid #d9dce1')
+                })
+            }
+
+
+		</script>
+	</body>
+	<!--<script type="text/javascript" src="{{url_for('static', filename='js/jquery-1.7.2.js')}}"></script>-->
+    <script type="text/javascript" src="{{url_for('static', filename='js/Feffects.js')}}"></script>
+    <script type="text/javascript" src="{{url_for('static', filename='plugins/iCheck/icheck.min.js')}}"></script>
+    <script type="text/javascript" src="{{url_for('static', filename='js/jquery.nicescroll.js')}}"></script>
+    <script type="text/javascript" src="{{url_for('static', filename='js/formValidator.js')}}"></script>
+    <script type="text/javascript" src="{{url_for('static', filename='js/public.js')}}"></script>
+    <script type="text/javascript" src="{{url_for('static', filename='js/reg.js')}}" ></script>
+</html>

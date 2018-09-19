@@ -1,0 +1,11 @@
+/*进度条*/
+.preview-dataset-meter{height: 40px;
+	background: #dfe6ea;
+}
+.preview-dataset-meter div{height: 40px;
+	float: left;
+	background: #00b5b8;
+	text-align: center;
+	width: 0;
+	line-height: 40px;
+}

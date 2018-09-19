@@ -1,0 +1,73 @@
+<div class="col-sm-3 col-md-2 sidebar" id="l-slider">
+    <ul class=" nav-sidebar left-menu">
+
+        <li class="">
+            <a href="{{ url_for('hyperai.views.index') }}" class="{% if index =='index'%}lc-menu {% else %} {% endif%}">
+                <span>
+                    <i class="iconfont icon-shouye ml-15"></i>
+                </span>
+
+                <span id="">首页</span>
+
+            </a>
+        </li>
+        <li>
+            <a href="#" class="" id="">
+                <span>
+                    <i class="iconfont icon-gaojigongneng"></i>
+                </span>
+
+                <span id="advance">模型训练</span>
+
+            </a>
+        </li>
+        <li>
+            <a href="#" class="{% if index =='tuning'%}lc-menu{% else %} {% endif%}">
+                <span>
+                    <i class="iconfont icon-zidongtishengyouxianshengji"></i>
+                </span>
+
+                <span id="tuning">超参调优</span>
+
+            </a>
+        </li>
+        <li>
+            <a href="http://{{jupyter_ip}}:{{jupyter_port}}/tree/{{request.cookies.username}}" target="_blank">
+                <span>
+                     <i class="iconfont icon-wenjianguanli "></i>
+                </span>
+
+                <span id="">Note Book</span>
+
+            </a>
+        </li>
+        <li class="xtgl">
+            <a href="#">
+                <span>
+                    <i class="iconfont icon-xitongguanli"></i>
+                </span>
+
+                <span id="">系统管理</span>
+                <!--<i class="iconfont icon-xiala xiala" style="transform: rotate(-90deg);"></i>-->
+            </a>
+        </li>
+        <div class="xit-menu">
+            <a href="{{url_for('hyperai.sysmanager.views.show')}}" style="text-decoration: none">
+                <div class="menu-info">镜像仓库</div>
+            </a>
+            <a href="http://{{grafana_ip}}:{{grafana_port}}" style="text-decoration: none" target="_blank">
+                <div class="menu-info">资源监控</div>
+            </a>
+            <a href="{{url_for('hyperai.views.user_manage')}}" class="{% if index =='manage'%}lc-menu {% else %} {% endif%}"  style="text-decoration: none">
+                <div class="menu-info">用户管理</div>
+            </a>
+
+        </div>
+    </ul>
+</div>
+<script>
+    // $('#advace').click(function () {
+    //     console.log('000000')
+    //     window.location.href = '/show/advance'
+    // })
+</script>

@@ -1,0 +1,157 @@
+{% extends 'job1.html' %}
+{% from "helper.html" import print_flashes, print_exception,serve_file%}
+{% block topfile %}
+    <link rel="shortcut icon" href="{{url_for('static', filename='images/bitbug_favicon.ico') }}" />
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/ZK_last4/public.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/ZK_last4/sub.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/ZK_last4/iconfont.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/ZK_last4/calendar.css') }}" />
+    <link rel="stylesheet" href="{{url_for('static', filename='c3/c3.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/preview.css') }}"/>
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/data-dataPreview.css') }}"/>
+    
+    
+    
+    <script type="text/javascript" src="{{url_for('static', filename='js/jquery-1.7.2.js') }}"></script>
+    <script type="text/javascript" src="{{url_for('static', filename='js/Feffects.js') }}"></script>
+    <script type="text/javascript" src="{{url_for('static', filename='js/jq-datepicker.js') }}"></script>
+    <script type="text/javascript" src="{{url_for('static', filename='js/jquery.nicescroll.js') }}"></script>
+    <script type="text/javascript" src="{{url_for('static', filename='js/CustomScrollbar.js') }}"></script>
+    <script type="text/javascript" src="{{url_for('static', filename='js/jqmeter.min.js') }}"></script>
+    <script type="text/javascript" src="{{url_for('static', filename='js/public.js') }}"></script>
+{% endblock topfile %}
+
+  	
+{% block rightcontent%}
+
+			<!--<div>{{url_for('hyperai.dataset.generic.views.explore', job_id=job.id(), db=path)}}</div>-->
+            <div class="f-l title">
+            	<h1 class="f-l c-grayblue"> 数据管理 </h1>
+            	<span class="f-l c-gray"> Welcome back, {{request.cookies.username}} </span>
+            </div>
+            
+			      <div class="f-l sub-title bgc-white">
+			      	<a href="{{ url_for('hyperai.views.index') }}" class="f-l c-gray c-aqua-h"><span class="f-l"> Home   </span><em class="f-l c-gray"> / </em></a>
+			      	<a href="{{ url_for('hyperai.views.datasets') }}" class="f-l c-gray c-aqua-h"><span class="f-l"> 数据管理 </span><em class="f-l c-gray"> / </em></a>
+			      	<a href="#" class="f-l c-gray c-aqua-h"><span class="f-l"> 文本分类数据集预览 </span><em class="f-l c-gray"> / </em></a>
+			      </div>
+ 
+            <div class="f-l lis-m bgc-white">
+              <div class="c-box">
+              	<div class="l-box w-48">
+              	  <div class="div-box">
+              	  	<a href="{{ url_for('hyperai.views.datasets') }}" class="f-l btn-9 bdr bgc-white c-grayblue c-aqua-h"><i class="fz-14 iconfont "> &#xe6c5; </i> 返回 </a>
+              	    <!--<em class="f-l bgc-gray-c"></em>-->
+					   {%set num = ['1','2','3','4','5']|random%}
+              	    <img src="{{url_for('static', filename='images/e-'+num+'.png') }}" class="f-l" />
+              	  </div>
+              	</div>
+				  <style>
+					  .w-40{width: 40%}
+					  @media screen and (max-width: 1440px) {
+						  .w-40{
+							  width: 55%;
+						  }
+					  }
+
+				  </style>
+              	<div class="r-box w-50">
+              		<div class="div-box">
+              			<div class="c-box m-t30">
+              				<h2 class="f-l"> {{job.name()}}  </h2>
+              			</div>
+              			<div class="c-box">
+                      <div class="l-box w-35"><h2 class="f-l c-gray"><i class="f-l fz-18 iconfont "> &#xe669; </i> 用户名:   </h2><span class="f-l c-gray">{{job.username}}    </span></div>
+                      <div class="r-box w-40"><h2 class="f-l c-gray"><i class="f-l fz-18 iconfont "> &#xe60d; </i> 创建时间: </h2><span class="f-l c-gray"> {{job.create_time}}  </span></div>
+              			</div>
+              			<div class="c-box">
+                      <div class="l-box w-35"><h2 class="f-l c-gray"><i class="f-l fz-18 iconfont "> &#xe72a; </i> 应用场景:   </h2><span class="f-l c-gray"> 文本分类</span></div>
+                      <div class="r-box w-40"><h2 class="f-l c-gray"><i class="f-l fz-18 iconfont "> &#xe623; </i> 数据库类型:  </h2><span class="f-l c-gray">{{job.get_backend()}}   </span></div>
+              			</div>          			
+             		  	<div class="c-box">
+                      <div class="l-box w-40"><h2 class="f-l c-gray"><i class="f-l fz-20 iconfont "> &#xe66b; </i> 数据个数： </h2><span class="f-l c-gray data_num_num"> </span></div>
+              			</div>             			
+              		  <div class="c-box">
+	              		  <p class="f-l p-text c-gray Scrollbars">
+	              		   {{job.desc}}
+	              		  </p>
+              		  </div>   
+              		</div>
+              	</div>    	
+              </div>
+	            <div class="c-box m-t15">
+	              <div class="f-l preview-dataset-meter">
+	              	<div class="length_i"></div>
+					   <div class="length_YN" style="display: none">{{job.status}}</div>
+	              </div>
+	            </div>
+            </div>
+            
+            
+			          <div class="btn-toggle hd" style="float: right;">
+				          <ul class="f-l">
+				          	<!--<li class="f-l putcolor"><a href="#" class="li-a">标签训练集</a></li>-->
+				          	<li class="f-l"><a href="#" class="">点击展示训练集</a></li>
+				          	<!--<li class="f-l "><a href="#">标签验证集</a></li>-->
+				          	<li class="f-l "><a href="#">点击展示验证集</a></li>
+				          </ul>
+				        </div>       	
+			       			         
+				       
+				                   	
+
+
+
+<!-- 点击展示训练集数据集  ------------------------------------->           
+            <div class="f-l lis-tview-lt bgc-white m-t15 lis-tview-train lis-tview-xl">
+           						
+					    <div style="width: 100%;height: 1100px;">
+					    	<!--特征训练集-->
+
+					    	<div class="lis_train_url" style="display: none;">/datasets/generic/explore?db=train_db%2Ffeatures&job_id={{job.id()}}</div>
+              	<iframe src="" width="100%" height="100%" class="iframe_train"></iframe>
+					    </div>
+            </div>
+
+<!-- 点击展示验证集数据集  ------------------------------------>       
+            <div class="f-l lis-tview-lv bgc-white m-t15 lis-tview-val lis-tview-xl">
+
+					    	 <div style="width: 100%;height: 1100px;">
+					    		<!--特征验证集-->
+					    		<div class="lis_val_url" style="display: none;">/datasets/generic/explore?db=val_db%2Ffeatures&job_id={{job.id()}}</div>
+              	  <iframe src="" width="100%" height="100%" class="iframe_val"></iframe>
+					    	</div>
+					    </div>
+
+
+<script>
+	var arr_num_num=[];
+</script>
+
+{%if job.create_db_tasks() %}
+    {%for task in job.create_db_tasks()%}
+     {% if task.entry_count %}
+<script>
+	arr_num_num.push({{task.entry_count}})
+
+</script>
+
+      {%endif%}
+{%endfor%}
+{%endif%}
+	        {% endblock rightcontent%}
+			{% block bottomfile%}
+<script>
+	var data_num_all=0;
+	for (var i=0;i<arr_num_num.length;i++){
+	    data_num_all+=arr_num_num[i]
+	}
+	$('.data_num_num').text(data_num_all)
+</script>
+ <script type="text/javascript" src="{{url_for('static', filename='c3/d3.v3.min.js') }}" ></script>
+  <script type="text/javascript" src="{{url_for('static', filename='c3/c3.min.js') }}" ></script>
+  <script type="text/javascript" src="{{url_for('static', filename='js/data-dataPreview_c3.js') }}" ></script>
+  <!--<script src="js/segcogPreview.js" type="text/javascript" charset="utf-8"></script>-->
+  <script src="{{url_for('static', filename='js/dataManage-datasetObject.js') }}" type="text/javascript" charset="utf-8"></script>
+{% endblock bottomfile %}
+

@@ -1,0 +1,28 @@
+﻿/*
+	* ----------------------------------------------------------------------------
+  * CSS Document calendar Start 
+	* Author: DistantSound
+	* IDE :  
+  * ----------------------------------------------------------------------------
+*/
+.ui-datepicker,.ui-datepicker table,.ui-datepicker tr,.ui-datepicker td,.ui-datepicker th{margin: 0;padding: 0;border: none;border-spacing: 0;}
+.ui-datepicker{display: none;width:auto;padding: 20px;cursor: default;text-transform: uppercase;font-family:Tahoma;font-size: 14px;background: #f3f4f7;border:1px solid #C0C0C0;margin-left:0px;margin-top:0;}
+.ui-datepicker-header{position:relative;padding-bottom: 12px;border-bottom: 1px solid #ff6275;}
+.ui-datepicker-title{text-align:center;}
+.ui-datepicker-month{position: relative;font-family:"微软雅黑";font-size:16px;padding-right: 15px;color: #e40323;font-weight :400;}
+.ui-datepicker-year{padding-left: 8px;font-family:"微软雅黑";font-size:16px;color: #e40323;font-weight :400;}
+.ui-datepicker-prev,.ui-datepicker-next{position: absolute;top:0;padding: 5px;cursor: pointer;background-image: url(../images/arrows.png);}
+.ui-datepicker-prev{left: 0;padding-left: 0;background-position:0 0;}
+.ui-datepicker-next{right:0;padding-right: 0;background-position:-15px 0;}
+.ui-datepicker-prev span,.ui-datepicker-next span{display: block;width: 10px;height: 15px;text-indent: -9999px;}
+.ui-datepicker-prev span{background-position: 0px 0px;}
+.ui-datepicker-next span{background-position: -5px 0px;}
+.ui-datepicker-prev-hover span{background-position: 0px -10px;}
+.ui-datepicker-next-hover span{background-position: -5px -10px;}
+.ui-datepicker-calendar th{padding-top: 15px;padding-bottom: 10px;text-align: center;font-weight: normal;color: #ff6275;}
+.ui-datepicker-calendar td{padding: 0 8px;text-align: center;line-height: 26px;}
+.ui-datepicker-calendar .ui-state-default{display: block;width: 26px;outline: none;text-decoration: none;color: #34435a;border: 1px solid transparent;}
+.ui-datepicker-calendar .ui-state-active{color: #FFFFFF;border-color:#20b5b4;background-color:#20b5b4;}
+.ui-datepicker-other-month .ui-state-default{color:#cccccc;}
+.ui-state-default:hover{color:#fff;background-color:#20b5b4;}
+.ui-datepicker-today .ui-state-highlight {background-color:#ff6275;color:#fff;}

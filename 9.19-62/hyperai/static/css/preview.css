@@ -1,0 +1,24 @@
+.btn-toggle li{
+	display: none;
+	width: 130px;
+	margin-right: 15px;
+	height: 40px;
+	line-height: 40px;
+	background-color:#dfe6ea ;
+	text-align: center;
+}
+.btn-toggle .putcolor{
+	background-color: #00B5B8;
+}
+.btn-toggle li a{
+	color: #2C3850;
+}
+.btn-toggle li .li-a{
+	color: #FFFFFF;
+}
+.lis-t{height: 800px;
+	position: relative;
+	display: none;
+}
+iframe{border: none;}
+.right-bottom{margin-top: 225px;}

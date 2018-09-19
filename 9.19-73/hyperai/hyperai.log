@@ -1,0 +1,184 @@
+2018-09-13 11:36:12 [INFO ] Loaded 96 jobs.
+2018-09-13 11:36:12 [WARNING] Failed to load 72 jobs.
+2018-09-13 11:36:19 [INFO ] Loaded 96 jobs.
+2018-09-13 11:36:19 [WARNING] Failed to load 72 jobs.
+2018-09-13 12:03:52 [INFO ] Loaded 98 jobs.
+2018-09-13 12:03:52 [WARNING] Failed to load 76 jobs.
+2018-09-13 12:06:19 [20180913-120619-375b] [INFO ] Allocate GPU: <Administrator> - 1
+2018-09-13 12:06:19 [20180913-120619-375b] [INFO ] 该用户 Administrator 已使用GPU: 1
+
+2018-09-13 12:06:19 [20180913-120619-375b] [INFO ] Deployment created. status='{'available_replicas': None,
+ 'collision_count': None,
+ 'conditions': None,
+ 'observed_generation': None,
+ 'ready_replicas': None,
+ 'replicas': None,
+ 'unavailable_replicas': None,
+ 'updated_replicas': None}'
+2018-09-13 12:06:23 [20180913-120619-375b] [INFO ] Pod Status: ['Running']
+2018-09-13 12:06:23 [20180913-120619-375b] [INFO ] < System > < Resources Pool: GTX-1060 > Allocate the resources Successed . GPU=[1]
+2018-09-13 12:06:23 [20180913-120619-375b] [INFO ] Deployment created successfully!
+2018-09-13 12:06:23 [20180913-120619-375b] [INFO ] Train Tensorflow Model task started.
+2018-09-13 12:06:23 [20180913-120619-375b] [INFO ] Task subprocess args: "/usr/bin/python2 /root/hyperai/hyperai/tools/tensorflow/main.py --network=network.py --epoch=30 --networkDirectory=/home/newnfs/Administrator/jobs/20180913-120619-375b --save=/home/newnfs/Administrator/jobs/20180913-120619-375b --snapshotPrefix=snapshot --snapshotInterval=1.0 --lr_base_rate=0.01 --lr_policy=step --mean=/home/newnfs/alljobs/20180903-145809-6a9a/mean.binaryproto --labels_list=/home/newnfs/alljobs/20180903-145809-6a9a/labels.txt --train_db=/home/newnfs/alljobs/20180903-145809-6a9a/train_db --validation_db=/home/newnfs/alljobs/20180903-145809-6a9a/val_db --lr_gamma=0.1 --lr_stepvalues=33.0 --subtractMean=image --optimization=sgd --validation_interval=1 --log_runtime_stats_per_step=0 --augFlip=none --augHSVh=0 --augHSVs=0 --augHSVv=0"
+2018-09-13 12:06:27 [20180913-120619-375b] [WARNING] Train Tensorflow Model unrecognized output: 2018-09-13 04:06:27.788249: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1356] Found device 0 with properties:
+2018-09-13 12:06:27 [20180913-120619-375b] [WARNING] Train Tensorflow Model unrecognized output: name: GeForce GTX 1060 6GB major: 6 minor: 1 memoryClockRate(GHz): 1.7845
+2018-09-13 12:06:27 [20180913-120619-375b] [WARNING] Train Tensorflow Model unrecognized output: pciBusID: 0000:81:00.0
+2018-09-13 12:06:27 [20180913-120619-375b] [WARNING] Train Tensorflow Model unrecognized output: totalMemory: 5.93GiB freeMemory: 5.86GiB
+2018-09-13 12:06:27 [20180913-120619-375b] [WARNING] Train Tensorflow Model unrecognized output: 2018-09-13 04:06:27.788308: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1435] Adding visible gpu devices: 0
+2018-09-13 12:06:28 [20180913-120619-375b] [WARNING] Train Tensorflow Model unrecognized output: 2018-09-13 04:06:28.131420: I tensorflow/core/common_runtime/gpu/gpu_device.cc:923] Device interconnect StreamExecutor with strength 1 edge matrix:
+2018-09-13 12:06:28 [20180913-120619-375b] [WARNING] Train Tensorflow Model unrecognized output: 2018-09-13 04:06:28.131501: I tensorflow/core/common_runtime/gpu/gpu_device.cc:929]      0
+2018-09-13 12:06:28 [20180913-120619-375b] [WARNING] Train Tensorflow Model unrecognized output: 2018-09-13 04:06:28.131514: I tensorflow/core/common_runtime/gpu/gpu_device.cc:942] 0:   N
+2018-09-13 12:06:28 [20180913-120619-375b] [WARNING] Train Tensorflow Model unrecognized output: 2018-09-13 04:06:28.131785: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1053] Created TensorFlow device (/device:GPU:0 with 5641 MB memory) -> physical GPU (device: 0, name: GeForce GTX 1060 6GB, pci bus id: 0000:81:00.0, compute capability: 6.1)
+2018-09-13 12:06:28 [20180913-120619-375b] [WARNING] Train Tensorflow Model unrecognized output: 2018-09-13 04:06:28.679326: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1435] Adding visible gpu devices: 0
+2018-09-13 12:06:28 [20180913-120619-375b] [WARNING] Train Tensorflow Model unrecognized output: 2018-09-13 04:06:28.679407: I tensorflow/core/common_runtime/gpu/gpu_device.cc:923] Device interconnect StreamExecutor with strength 1 edge matrix:
+2018-09-13 12:06:28 [20180913-120619-375b] [WARNING] Train Tensorflow Model unrecognized output: 2018-09-13 04:06:28.679417: I tensorflow/core/common_runtime/gpu/gpu_device.cc:929]      0
+2018-09-13 12:06:28 [20180913-120619-375b] [WARNING] Train Tensorflow Model unrecognized output: 2018-09-13 04:06:28.679424: I tensorflow/core/common_runtime/gpu/gpu_device.cc:942] 0:   N
+2018-09-13 12:06:28 [20180913-120619-375b] [WARNING] Train Tensorflow Model unrecognized output: 2018-09-13 04:06:28.689092: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1053] Created TensorFlow device (/device:GPU:0 with 5641 MB memory) -> physical GPU (device: 0, name: GeForce GTX 1060 6GB, pci bus id: 0000:81:00.0, compute capability: 6.1)
+2018-09-13 12:06:29 [20180913-120619-375b] [WARNING] Train Tensorflow Model unrecognized output: 2018-09-13 04:06:28.732283: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1435] Adding visible gpu devices: 0
+2018-09-13 12:06:29 [20180913-120619-375b] [WARNING] Train Tensorflow Model unrecognized output: 2018-09-13 04:06:28.732344: I tensorflow/core/common_runtime/gpu/gpu_device.cc:923] Device interconnect StreamExecutor with strength 1 edge matrix:
+2018-09-13 12:06:29 [20180913-120619-375b] [WARNING] Train Tensorflow Model unrecognized output: 2018-09-13 04:06:28.732355: I tensorflow/core/common_runtime/gpu/gpu_device.cc:929]      0
+2018-09-13 12:06:29 [20180913-120619-375b] [WARNING] Train Tensorflow Model unrecognized output: 2018-09-13 04:06:28.732363: I tensorflow/core/common_runtime/gpu/gpu_device.cc:942] 0:   N
+2018-09-13 12:06:29 [20180913-120619-375b] [WARNING] Train Tensorflow Model unrecognized output: 2018-09-13 04:06:28.732467: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1053] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 5641 MB memory) -> physical GPU (device: 0, name: GeForce GTX 1060 6GB, pci bus id: 0000:81:00.0, compute capability: 6.1)
+2018-09-13 12:06:54 [20180913-120619-375b] [WARNING] Train Tensorflow Model unrecognized output: INFO:tensorflow:/home/newnfs/Administrator/jobs/20180913-120619-375b/snapshot_1.ckpt is not in all_model_checkpoint_paths. Manually adding it.
+2018-09-13 12:07:12 [20180913-120619-375b] [WARNING] Train Tensorflow Model unrecognized output: INFO:tensorflow:/home/newnfs/Administrator/jobs/20180913-120619-375b/snapshot_2.ckpt is not in all_model_checkpoint_paths. Manually adding it.
+2018-09-13 12:07:28 [20180913-120619-375b] [WARNING] Train Tensorflow Model unrecognized output: INFO:tensorflow:/home/newnfs/Administrator/jobs/20180913-120619-375b/snapshot_3.ckpt is not in all_model_checkpoint_paths. Manually adding it.
+2018-09-13 12:07:45 [20180913-120619-375b] [WARNING] Train Tensorflow Model unrecognized output: INFO:tensorflow:/home/newnfs/Administrator/jobs/20180913-120619-375b/snapshot_4.ckpt is not in all_model_checkpoint_paths. Manually adding it.
+2018-09-13 12:08:03 [20180913-120619-375b] [WARNING] Train Tensorflow Model unrecognized output: INFO:tensorflow:/home/newnfs/Administrator/jobs/20180913-120619-375b/snapshot_5.ckpt is not in all_model_checkpoint_paths. Manually adding it.
+2018-09-13 12:08:22 [20180913-120619-375b] [WARNING] Train Tensorflow Model unrecognized output: INFO:tensorflow:/home/newnfs/Administrator/jobs/20180913-120619-375b/snapshot_6.ckpt is not in all_model_checkpoint_paths. Manually adding it.
+2018-09-13 12:08:42 [20180913-120619-375b] [WARNING] Train Tensorflow Model unrecognized output: INFO:tensorflow:/home/newnfs/Administrator/jobs/20180913-120619-375b/snapshot_7.ckpt is not in all_model_checkpoint_paths. Manually adding it.
+2018-09-13 12:08:59 [20180913-120619-375b] [WARNING] Train Tensorflow Model unrecognized output: INFO:tensorflow:/home/newnfs/Administrator/jobs/20180913-120619-375b/snapshot_8.ckpt is not in all_model_checkpoint_paths. Manually adding it.
+2018-09-13 12:09:18 [20180913-120619-375b] [WARNING] Train Tensorflow Model unrecognized output: INFO:tensorflow:/home/newnfs/Administrator/jobs/20180913-120619-375b/snapshot_9.ckpt is not in all_model_checkpoint_paths. Manually adding it.
+2018-09-13 12:09:37 [20180913-120619-375b] [WARNING] Train Tensorflow Model unrecognized output: INFO:tensorflow:/home/newnfs/Administrator/jobs/20180913-120619-375b/snapshot_10.ckpt is not in all_model_checkpoint_paths. Manually adding it.
+2018-09-13 12:09:56 [20180913-120619-375b] [WARNING] Train Tensorflow Model unrecognized output: INFO:tensorflow:/home/newnfs/Administrator/jobs/20180913-120619-375b/snapshot_11.ckpt is not in all_model_checkpoint_paths. Manually adding it.
+2018-09-13 12:10:15 [20180913-120619-375b] [WARNING] Train Tensorflow Model unrecognized output: INFO:tensorflow:/home/newnfs/Administrator/jobs/20180913-120619-375b/snapshot_12.ckpt is not in all_model_checkpoint_paths. Manually adding it.
+2018-09-13 12:10:34 [20180913-120619-375b] [WARNING] Train Tensorflow Model unrecognized output: INFO:tensorflow:/home/newnfs/Administrator/jobs/20180913-120619-375b/snapshot_13.ckpt is not in all_model_checkpoint_paths. Manually adding it.
+2018-09-13 12:10:53 [20180913-120619-375b] [WARNING] Train Tensorflow Model unrecognized output: INFO:tensorflow:/home/newnfs/Administrator/jobs/20180913-120619-375b/snapshot_14.ckpt is not in all_model_checkpoint_paths. Manually adding it.
+2018-09-13 12:11:11 [20180913-120619-375b] [WARNING] Train Tensorflow Model unrecognized output: INFO:tensorflow:/home/newnfs/Administrator/jobs/20180913-120619-375b/snapshot_15.ckpt is not in all_model_checkpoint_paths. Manually adding it.
+2018-09-13 12:11:29 [20180913-120619-375b] [WARNING] Train Tensorflow Model unrecognized output: INFO:tensorflow:/home/newnfs/Administrator/jobs/20180913-120619-375b/snapshot_16.ckpt is not in all_model_checkpoint_paths. Manually adding it.
+2018-09-13 12:11:45 [20180913-120619-375b] [WARNING] Train Tensorflow Model unrecognized output: INFO:tensorflow:/home/newnfs/Administrator/jobs/20180913-120619-375b/snapshot_17.ckpt is not in all_model_checkpoint_paths. Manually adding it.
+2018-09-13 12:12:04 [20180913-120619-375b] [WARNING] Train Tensorflow Model unrecognized output: INFO:tensorflow:/home/newnfs/Administrator/jobs/20180913-120619-375b/snapshot_18.ckpt is not in all_model_checkpoint_paths. Manually adding it.
+2018-09-13 12:12:22 [20180913-120619-375b] [WARNING] Train Tensorflow Model unrecognized output: INFO:tensorflow:/home/newnfs/Administrator/jobs/20180913-120619-375b/snapshot_19.ckpt is not in all_model_checkpoint_paths. Manually adding it.
+2018-09-13 12:12:41 [20180913-120619-375b] [WARNING] Train Tensorflow Model unrecognized output: INFO:tensorflow:/home/newnfs/Administrator/jobs/20180913-120619-375b/snapshot_20.ckpt is not in all_model_checkpoint_paths. Manually adding it.
+2018-09-13 12:12:56 [20180913-120619-375b] [WARNING] Train Tensorflow Model unrecognized output: INFO:tensorflow:/home/newnfs/Administrator/jobs/20180913-120619-375b/snapshot_21.ckpt is not in all_model_checkpoint_paths. Manually adding it.
+2018-09-13 12:13:14 [20180913-120619-375b] [WARNING] Train Tensorflow Model unrecognized output: INFO:tensorflow:/home/newnfs/Administrator/jobs/20180913-120619-375b/snapshot_22.ckpt is not in all_model_checkpoint_paths. Manually adding it.
+2018-09-13 12:13:33 [20180913-120619-375b] [WARNING] Train Tensorflow Model unrecognized output: INFO:tensorflow:/home/newnfs/Administrator/jobs/20180913-120619-375b/snapshot_23.ckpt is not in all_model_checkpoint_paths. Manually adding it.
+2018-09-13 12:13:52 [20180913-120619-375b] [WARNING] Train Tensorflow Model unrecognized output: INFO:tensorflow:/home/newnfs/Administrator/jobs/20180913-120619-375b/snapshot_24.ckpt is not in all_model_checkpoint_paths. Manually adding it.
+2018-09-13 12:14:10 [20180913-120619-375b] [WARNING] Train Tensorflow Model unrecognized output: INFO:tensorflow:/home/newnfs/Administrator/jobs/20180913-120619-375b/snapshot_25.ckpt is not in all_model_checkpoint_paths. Manually adding it.
+2018-09-13 12:14:29 [20180913-120619-375b] [WARNING] Train Tensorflow Model unrecognized output: INFO:tensorflow:/home/newnfs/Administrator/jobs/20180913-120619-375b/snapshot_26.ckpt is not in all_model_checkpoint_paths. Manually adding it.
+2018-09-13 12:14:48 [20180913-120619-375b] [WARNING] Train Tensorflow Model unrecognized output: INFO:tensorflow:/home/newnfs/Administrator/jobs/20180913-120619-375b/snapshot_27.ckpt is not in all_model_checkpoint_paths. Manually adding it.
+2018-09-13 12:15:06 [20180913-120619-375b] [WARNING] Train Tensorflow Model unrecognized output: INFO:tensorflow:/home/newnfs/Administrator/jobs/20180913-120619-375b/snapshot_28.ckpt is not in all_model_checkpoint_paths. Manually adding it.
+2018-09-13 12:15:25 [20180913-120619-375b] [WARNING] Train Tensorflow Model unrecognized output: INFO:tensorflow:/home/newnfs/Administrator/jobs/20180913-120619-375b/snapshot_29.ckpt is not in all_model_checkpoint_paths. Manually adding it.
+2018-09-13 12:15:43 [20180913-120619-375b] [WARNING] Train Tensorflow Model unrecognized output: INFO:tensorflow:/home/newnfs/Administrator/jobs/20180913-120619-375b/snapshot_30.ckpt is not in all_model_checkpoint_paths. Manually adding it.
+2018-09-13 12:15:45 [20180913-120619-375b] [WARNING] Train Tensorflow Model unrecognized output: Training wall-time: 555.706043959
+2018-09-13 12:15:46 [20180913-120619-375b] [INFO ] Train Tensorflow Model task completed.
+2018-09-13 12:15:46 [20180913-120619-375b] [INFO ] < System > < Resources Pool: [GTX-1060] > Deallocate the resources Successed . GPU=[1]
+2018-09-13 12:15:46 [20180913-120619-375b] [INFO ] Job complete.
+2018-09-13 12:15:46 [20180913-120619-375b] [INFO ] Release GPU: <Administrator> - 1
+2018-09-13 12:15:46 [20180913-120619-375b] [INFO ] 该用户 Administrator 已使用GPU: 0
+
+2018-09-14 14:07:54 [20180914-140754-12cd] [INFO ] Create train_db DB task started.
+2018-09-14 14:07:54 [20180914-140754-12cd] [INFO ] Task subprocess args: "/usr/bin/python2 /root/hyperai/hyperai/tools/create_generic_db.py 20180914-140754-12cd --stage=train_db --jobs_dir=/home/newnfs/Administrator/jobs"
+2018-09-14 14:07:55 [20180914-140754-12cd] [INFO ] Create val_db DB task started.
+2018-09-14 14:07:55 [20180914-140754-12cd] [INFO ] Task subprocess args: "/usr/bin/python2 /root/hyperai/hyperai/tools/create_generic_db.py 20180914-140754-12cd --stage=val_db --jobs_dir=/home/newnfs/Administrator/jobs"
+2018-09-14 14:07:55 [20180914-140754-12cd] [INFO ] Create test_db DB task started.
+2018-09-14 14:07:55 [20180914-140754-12cd] [INFO ] Task subprocess args: "/usr/bin/python2 /root/hyperai/hyperai/tools/create_generic_db.py 20180914-140754-12cd --stage=test_db --jobs_dir=/home/newnfs/Administrator/jobs"
+2018-09-14 14:07:58 [20180914-140754-12cd] [WARNING] Create val_db DB unrecognized output: [('GTX-1080TI', 4), ('GTX-1060', 4)] 1111111
+2018-09-14 14:07:58 [20180914-140754-12cd] [WARNING] Create val_db DB unrecognized output: 2018-09-14 14:07:58 [INFO ] Generic DB creation Done
+2018-09-14 14:07:58 [20180914-140754-12cd] [WARNING] Create train_db DB unrecognized output: [('GTX-1080TI', 4), ('GTX-1060', 4)] 1111111
+2018-09-14 14:07:58 [20180914-140754-12cd] [WARNING] Create train_db DB unrecognized output: 2018-09-14 14:07:58 [INFO ] Generic DB creation Done
+2018-09-14 14:07:58 [20180914-140754-12cd] [WARNING] Create test_db DB unrecognized output: [('GTX-1080TI', 4), ('GTX-1060', 4)] 1111111
+2018-09-14 14:07:58 [20180914-140754-12cd] [WARNING] Create test_db DB unrecognized output: 2018-09-14 14:07:58 [INFO ] Generic DB creation Done
+2018-09-14 14:07:58 [20180914-140754-12cd] [INFO ] Create val_db DB task completed.
+2018-09-14 14:07:59 [20180914-140754-12cd] [INFO ] Create train_db DB task completed.
+2018-09-14 14:07:59 [20180914-140754-12cd] [INFO ] Create test_db DB task completed.
+2018-09-14 14:07:59 [20180914-140754-12cd] [INFO ] Job complete.
+2018-09-14 14:09:40 [20180914-140754-12cd] [INFO ] Job deleted.
+2018-09-14 14:14:46 [20180914-141446-c16e] [INFO ] Create train_db DB task started.
+2018-09-14 14:14:46 [20180914-141446-c16e] [INFO ] Task subprocess args: "/usr/bin/python2 /root/hyperai/hyperai/tools/create_generic_db.py 20180914-141446-c16e --stage=train_db --jobs_dir=/home/newnfs/Administrator/jobs"
+2018-09-14 14:14:47 [20180914-141446-c16e] [INFO ] Create val_db DB task started.
+2018-09-14 14:14:47 [20180914-141446-c16e] [INFO ] Task subprocess args: "/usr/bin/python2 /root/hyperai/hyperai/tools/create_generic_db.py 20180914-141446-c16e --stage=val_db --jobs_dir=/home/newnfs/Administrator/jobs"
+2018-09-14 14:14:47 [20180914-141446-c16e] [INFO ] Create test_db DB task started.
+2018-09-14 14:14:47 [20180914-141446-c16e] [INFO ] Task subprocess args: "/usr/bin/python2 /root/hyperai/hyperai/tools/create_generic_db.py 20180914-141446-c16e --stage=test_db --jobs_dir=/home/newnfs/Administrator/jobs"
+2018-09-14 14:14:50 [20180914-141446-c16e] [WARNING] Create test_db DB unrecognized output: [('GTX-1080TI', 4), ('GTX-1060', 4)] 1111111
+2018-09-14 14:14:50 [20180914-141446-c16e] [WARNING] Create test_db DB unrecognized output: 2018-09-14 14:14:50 [INFO ] Generic DB creation Done
+2018-09-14 14:14:52 [20180914-141446-c16e] [INFO ] Create test_db DB task completed.
+2018-09-14 14:14:52 [20180914-141446-c16e] [WARNING] Create train_db DB unrecognized output: [('GTX-1080TI', 4), ('GTX-1060', 4)] 1111111
+2018-09-14 14:14:52 [20180914-141446-c16e] [WARNING] Create val_db DB unrecognized output: [('GTX-1080TI', 4), ('GTX-1060', 4)] 1111111
+2018-09-14 14:14:57 [20180914-141446-c16e] [WARNING] Create train_db DB unrecognized output: 2018-09-14 14:14:57 [INFO ] Generic DB creation Done
+2018-09-14 14:14:57 [20180914-141446-c16e] [WARNING] Create val_db DB unrecognized output: 2018-09-14 14:14:57 [INFO ] Generic DB creation Done
+2018-09-14 14:14:57 [20180914-141446-c16e] [INFO ] Create train_db DB task completed.
+2018-09-14 14:14:58 [20180914-141446-c16e] [INFO ] Create val_db DB task completed.
+2018-09-14 14:14:58 [20180914-141446-c16e] [INFO ] Job complete.
+2018-09-14 14:16:55 [20180914-141655-b7a7] [INFO ] Allocate GPU: <Administrator> - 1
+2018-09-14 14:16:55 [20180914-141655-b7a7] [INFO ] 该用户 Administrator 已使用GPU: 1
+
+2018-09-14 14:16:55 [20180914-141655-b7a7] [WARNING] Ignoring data_param.backend ...
+2018-09-14 14:16:55 [20180914-141655-b7a7] [WARNING] Ignoring data_param.backend ...
+2018-09-14 14:16:55 [20180914-141655-b7a7] [WARNING] Ignoring data_param.backend ...
+2018-09-14 14:16:55 [20180914-141655-b7a7] [WARNING] Ignoring data_param.backend ...
+2018-09-14 14:16:55 [20180914-141655-b7a7] [INFO ] Train Caffe Model task started.
+2018-09-14 14:16:55 [20180914-141655-b7a7] [INFO ] Task subprocess args: "/usr/local/bin/caffe train --solver=/home/newnfs/Administrator/jobs/20180914-141655-b7a7/solver.prototxt --gpu=all"
+2018-09-14 14:16:56 [20180914-141655-b7a7] [INFO ] * Create Pod: job "node04-hy73-20180914-141655-b7a7" created
+
+2018-09-14 14:16:59 [20180914-141655-b7a7] [INFO ] Pod Status:  [Pending]
+2018-09-14 14:17:00 [20180914-141655-b7a7] [INFO ] Pod Status:  [Pending]
+2018-09-14 14:17:02 [20180914-141655-b7a7] [INFO ] Pod Status:  [Pending]
+2018-09-14 14:17:04 [20180914-141655-b7a7] [INFO ] Pod Status:  [Pending]
+2018-09-14 14:17:05 [20180914-141655-b7a7] [INFO ] Pod Status:  [Pending]
+2018-09-14 14:17:07 [20180914-141655-b7a7] [INFO ] Pod Status:  [Pending]
+2018-09-14 14:17:08 [20180914-141655-b7a7] [INFO ] Pod Status:  [Pending]
+2018-09-14 14:17:10 [20180914-141655-b7a7] [INFO ] Pod Status:  [Pending]
+2018-09-14 14:17:11 [20180914-141655-b7a7] [INFO ] Pod Status:  [Pending]
+2018-09-14 14:17:13 [20180914-141655-b7a7] [INFO ] Pod Status:  [Pending]
+2018-09-14 14:17:14 [20180914-141655-b7a7] [INFO ] Pod Status:  [Pending]
+2018-09-14 14:17:16 [20180914-141655-b7a7] [INFO ] Pod Status:  [Pending]
+2018-09-14 14:17:17 [20180914-141655-b7a7] [INFO ] Pod Status:  [Pending]
+2018-09-14 14:17:19 [20180914-141655-b7a7] [INFO ] Pod Status:  [Pending]
+2018-09-14 14:17:20 [20180914-141655-b7a7] [INFO ] Pod Status:  [Pending]
+2018-09-14 14:17:22 [20180914-141655-b7a7] [INFO ] Pod Status:  [Pending]
+2018-09-14 14:17:24 [20180914-141655-b7a7] [INFO ] Pod Status:  [Pending]
+2018-09-14 14:17:25 [20180914-141655-b7a7] [INFO ] Pod Status:  [Pending]
+2018-09-14 14:17:27 [20180914-141655-b7a7] [INFO ] Pod Status:  [Pending]
+2018-09-14 14:17:28 [20180914-141655-b7a7] [INFO ] Pod Status:  [Pending]
+2018-09-14 14:17:30 [20180914-141655-b7a7] [INFO ] Pod Status:  [Pending]
+2018-09-14 14:17:31 [20180914-141655-b7a7] [INFO ] Pod Status:  [Pending]
+2018-09-14 14:17:33 [20180914-141655-b7a7] [INFO ] Pod Status:  [Pending]
+2018-09-14 14:17:34 [20180914-141655-b7a7] [INFO ] Pod Status:  [Pending]
+2018-09-14 14:17:36 [20180914-141655-b7a7] [INFO ] Pod Status:  [Pending]
+2018-09-14 14:17:37 [20180914-141655-b7a7] [INFO ] Pod Status:  [Pending]
+2018-09-14 14:17:39 [20180914-141655-b7a7] [INFO ] Pod Status:  [Pending]
+2018-09-14 14:17:40 [20180914-141655-b7a7] [INFO ] Pod Status:  [Pending]
+2018-09-14 14:17:42 [20180914-141655-b7a7] [INFO ] Pod Status:  [Pending]
+2018-09-14 14:17:44 [20180914-141655-b7a7] [INFO ] Pod Status:  [Pending]
+2018-09-14 14:17:45 [20180914-141655-b7a7] [INFO ] Pod Status:  [Pending]
+2018-09-14 14:17:47 [20180914-141655-b7a7] [INFO ] Pod Status:  [Pending]
+2018-09-14 14:17:48 [20180914-141655-b7a7] [INFO ] Pod Status:  [Pending]
+2018-09-14 14:17:50 [20180914-141655-b7a7] [INFO ] Pod Status:  [Pending]
+2018-09-14 14:17:51 [20180914-141655-b7a7] [INFO ] Pod Status:  [Pending]
+2018-09-14 14:17:53 [20180914-141655-b7a7] [INFO ] Pod Status:  [Pending]
+2018-09-14 14:17:54 [20180914-141655-b7a7] [INFO ] Pod Status:  [Pending]
+2018-09-14 14:17:56 [20180914-141655-b7a7] [INFO ] Pod Status:  [Pending]
+2018-09-14 14:17:57 [20180914-141655-b7a7] [INFO ] Pod Status:  [Pending]
+2018-09-14 14:17:59 [20180914-141655-b7a7] [INFO ] Pod Status:  [ContainerCreating]
+2018-09-14 14:18:00 [20180914-141655-b7a7] [INFO ] Pod Status:  [ContainerCreating]
+2018-09-14 14:18:02 [20180914-141655-b7a7] [INFO ] Pod Status:  [Running]
+2018-09-14 14:18:02 [20180914-141655-b7a7] [INFO ] < System > < Resources Pool: GTX-1080TI > Allocate the resources Successed . GPU=[1]
+2018-09-14 14:18:02 [20180914-141655-b7a7] [INFO ] - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+2018-09-14 14:18:02 [20180914-141655-b7a7] [INFO ] Created Pod Successed. 
+2018-09-14 14:18:02 [20180914-141655-b7a7] [INFO ] Task Start ...
+2018-09-14 14:19:48 [20180914-141655-b7a7] [INFO ] Delete pod by yaml: job "node04-hy73-20180914-141655-b7a7" deleted
+ 
+2018-09-14 14:19:48 [20180914-141655-b7a7] [INFO ] Train Caffe Model task completed.
+2018-09-14 14:19:48 [20180914-141655-b7a7] [INFO ] < System > < Resources Pool: [GTX-1080TI] > Deallocate the resources Successed . GPU=[1]
+2018-09-14 14:19:49 [20180914-141655-b7a7] [INFO ] Job complete.
+2018-09-14 14:19:49 [20180914-141655-b7a7] [INFO ] Release GPU: <Administrator> - 1
+2018-09-14 14:19:49 [20180914-141655-b7a7] [INFO ] 该用户 Administrator 已使用GPU: 0
+
+2018-09-19 15:41:27 [INFO ] Loaded 150 jobs.
+2018-09-19 15:41:27 [WARNING] Failed to load 242 jobs.
+2018-09-19 15:41:35 [INFO ] Loaded 150 jobs.
+2018-09-19 15:41:35 [WARNING] Failed to load 242 jobs.
+2018-09-19 16:07:55 [INFO ] Loaded 159 jobs.
+2018-09-19 16:07:55 [WARNING] Failed to load 241 jobs.
+2018-09-19 16:08:03 [INFO ] Loaded 159 jobs.
+2018-09-19 16:08:03 [WARNING] Failed to load 241 jobs.

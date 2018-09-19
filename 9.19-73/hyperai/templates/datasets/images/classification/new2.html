@@ -1,0 +1,660 @@
+{% from "helper.html" import print_flashes %}
+{% from "helper.html" import print_errors %}
+{% from "helper.html" import mark_errors %}
+
+{% extends 'new/public.html' %}
+
+{% block topfile %}
+<link rel="shortcut icon" href="{{url_for('static', filename='images/bitbug_favicon.ico')}}"/>
+<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/ZK_last4/public.css')}}"/>
+<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/ZK_last4/sub.css')}}"/>
+<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/ZK_last4/iconfont.css')}}"/>
+<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='plugins/iCheck/skins/minimal/grey.css')}}"/>
+<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/ZK_last4/calendar.css')}}"/>
+
+<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/style.css')}}"/>
+
+<script type="text/javascript" src="{{url_for('static', filename='js/jquery-1.7.2.js')}}"></script>
+<script type="text/javascript" src="{{url_for('static', filename='js/Feffects.js')}}"></script>
+<script type="text/javascript" src="{{url_for('static', filename='plugins/iCheck/icheck.min.js')}}"></script>
+<script type="text/javascript" src="{{url_for('static', filename='js/jq-datepicker.js')}}"></script>
+<script type="text/javascript" src="{{url_for('static', filename='js/jquery.nicescroll.js')}}"></script>
+<script type="text/javascript" src="{{url_for('static', filename='js/echarts.min.js')}}"></script>
+<script type="text/javascript" src="{{url_for('static', filename='js/jqmeter.min.js')}}"></script>
+<script type="text/javascript" src="{{url_for('static', filename='js/public.js')}}"></script>
+<script src="{{ url_for('static', filename='js/3rdparty/jquery.autocomplete-1.2.21.min.js', ver=dir_hash) }}" type="text/javascript" charset="utf-8"></script>
+{% endblock topfile %}
+
+{% block rightcontent %}
+<style>
+    @media screen and (max-width: 1300px){
+        .btn{
+            padding:0 5px;}
+    }
+</style>
+
+
+<!--提示框-->
+<style>
+    .prompt-box{    z-index: 99998;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, .6);
+        display: none;
+    }
+    .alert-div{
+        width: 400px;
+        height: 240px;
+        background: white;
+        margin: 0 auto;
+        margin-top: 10%;
+        position: relative;
+    }
+    .alert-div-nav{
+        height:40px;
+    }
+
+    .alert-div-content h3{height: 40px;
+        line-height: 40px;
+        text-align: center;
+        margin-top: 35px;
+    }
+    .alert-btn{height: 40px;
+        text-align: center;
+        position: absolute;
+        bottom: 35px;
+        width: 100%;
+    }
+    .alert-btn div{display: inline-block; }
+    .alert-btn  h3{
+        height:40px;
+        width: 100%;
+        /*padding: 0 30px;*/
+        line-height: 40px;
+    }
+
+    .alert-btn-yes{background: #00b5b8;
+        color: white;
+        width:100px;
+    }
+    .hover-red:hover{color: white;
+        background: #ff6376;
+    }
+</style>
+
+<div class="prompt-box">
+    <div class="alert-div">
+        <div class="alert-div-nav">
+
+        </div>
+        <div class="alert-div-content">
+            <h3></h3>
+        </div>
+        <div class="alert-btn">
+
+            <div class="alert-btn-yes hover-red">
+                <h3>确定</h3>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $('.prompt-box .alert-btn-yes').on('click',function () {
+        $('.prompt-box').css('display','none')
+    })
+</script>
+
+
+
+
+
+
+
+
+<div class="f-l title">
+    <h1 class="f-l c-grayblue"> 数据管理 </h1>
+    <span class="f-l c-gray"> Welcome back, {{request.cookies.username}} </span>
+</div>
+
+<div class="f-l sub-title bgc-white">
+    <a href="{{ url_for('hyperai.views.index') }}" class="f-l c-gray c-aqua-h"><span class="f-l"> Home   </span><em class="f-l c-gray"> / </em></a>
+    <a href="{{ url_for('hyperai.views.datasets') }}" class="f-l c-gray c-aqua-h"><span class="f-l"> 数据管理 </span><em class="f-l c-gray"> / </em></a>
+    <a href="#" class="f-l c-gray c-aqua-h"><span class="f-l"> 新建数据集 </span><em class="f-l c-gray"> / </em></a>
+</div>
+
+<div class="f-l title bgc-white">
+    <h3 class="f-l c-grayblue"> 新建数据集 </h3>
+</div>
+
+<div class="f-l lis-s bgc-white">
+    <form action="{{url_for('hyperai.dataset.images.classification.views.create')}}" enctype="multipart/form-data" method="post" class="form_all" >
+
+        {{ form.hidden_tag()}}
+        {{ print_errors(form)}}
+        <div class="c-box">
+            <div class="l-box w-68">
+                <div class="f-l title bgc-white">
+                    <h2 class="f-l c-grayblue"> 数据集属性 </h2>
+                </div>
+                <div class="c-box bdr lis-sl">
+                    <div class="f-l tab-box slide-tab">
+                        <div class="f-l hd">
+                            <ul class="f-l">
+                                <li {%if mark=='mark' %}class="f-l lis-sl-hdli on"{%else%}class="f-l lis-sl-hdli"{%endif%}>图像文件</li>
+                                {{form.method(style='display:none')}}
+                                <li {%if mark=='no_mark' %}class="f-l lis-sl-hdli on"{%else%}class="f-l lis-sl-hdli"{%endif%}>文本文件</li>
+                            </ul>
+                            <script>
+                                $('.lis-sl-hdli').on('click',function () {
+                                    if($(this).text()=='图像文件'){
+                                        $('#method')[0].selectedIndex=0;
+                                    }
+                                    else if($(this).text()=='文本文件'){
+                                        $('#method')[0].selectedIndex=1;
+                                    }
+                                })
+                            </script>
+                        </div>
+                        <div class="f-l bd">
+                            <ul class="f-l">
+                                <li class="f-l lis-sl-bdli">
+                                    <div class="c-box m-t15">
+                                        <h3 class="f-l w-20 c-grayblue"> 数据集名称: </h3>{{form.dataset_name(class='f-l input-info bdr w-75 dataset-name')}}
+                                    </div>
+                                    <div class="c-box m-t15">
+                                        <h3 class="f-l c-grayblue w-20"> 概述: </h3>
+                                        {{form.dataset_desc(class='f-l input-info bdr w-75 input-intro')}}
+                                    </div>
+                                    <div class="c-box m-t15 url_verify_alert" style="display: none;">
+                                        <h3 class="f-l c-grayblue w-20"></h3>
+                                        <p style="width:30%;border: none;color:red;" class='f-l input-info w-75 input-intro'>输入路径不存在</p>
+                                    </div>
+                                    <div class="c-box m-t15">
+                                        <h3 class="f-l w-20 c-grayblue"> 上传数据集: </h3>
+
+                                        {{ form.folder_train(class='url_verify f-l bdr w-75 input-info  input_file_text autocomplete_path
+                                        ', placeholder='folder or URL')}}
+
+                                    </div>
+                                    <div class="c-box m-t15">
+                                        <h3 class="f-l w-20 c-grayblue"> 每类最小样本数: </h3>
+                                        {{form.folder_train_min_per_class(class='f-l  input-info bdr w-75')}}
+                                    </div>
+                                    <div class="c-box m-t15">
+                                        <h3 class="f-l w-20 c-grayblue"> 每类最大样本数: </h3>{{
+                                        form.folder_train_max_per_class(class='f-l  input-info bdr w-75') }}
+                                    </div>
+                                    <div class="c-box m-t15">
+                                        <h3 class="f-l w-20 c-grayblue"> 验证集比例: </h3> {{ form.folder_pct_val(class='f-l
+                                        input-info bdr w-75') }}
+                                    </div>
+                                    <div class="c-box m-t15">
+                                        <h3 class="f-l w-20 c-grayblue"> 测试集比例: </h3> {{ form.folder_pct_test(class='f-l
+                                        input-info bdr w-75') }}
+                                    </div>
+                                    <div class="c-box m-t15">
+                                        <div class="l-box w-50 m-l40">
+                                            <div class="check-box">
+                                                {{form.has_val_folder(class="lis-slcheck-img-show-a")}}
+                                                <label class="c-grayblue"> 验证集目录是否单独隔离 </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="c-box">
+                                        <hr/>
+                                    </div>
+
+                                    <!-- lis-sl-img-hide-a 图像文件  验证集目录是否单独隔离  ------------->
+                                    <div class="f-l lis-sl-img-hide-a">
+                                        <div class="c-box m-t15">
+                                            <h3 class="f-l w-20 c-grayblue"> 选择验证图形集: </h3>
+                                            {{form.folder_val(class="f-l bdr w-75 input-info c-gray autocomplete_path")}}
+                                        </div>
+                                        <div class="c-box m-t15">
+                                            <h3 class="f-l w-20 c-grayblue"> 每类最小样本数: </h3>{{
+                                            form.folder_val_min_per_class(class='f-l input-info bdr c-gray w-75') }}
+                                        </div>
+                                        <div class="c-box m-t15">
+                                            <h3 class="f-l w-20 c-grayblue"> 每类最大样本数: </h3>{{
+                                            form.folder_val_max_per_class(class='f-l input-info bdr c-gray w-75') }}
+                                        </div>
+                                    </div>
+
+                                    <div class="c-box">
+                                        <div class="l-box w-50 m-l40">
+                                            <div class="check-box">
+                                                {{form.has_test_folder(class="lis-slcheck-img-show-b")}}
+                                                <label class="c-grayblue"> 测试集目录是否单独隔离 </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- lis-sl-img-hide-b 图像文件  测试集目录是否单独隔离  ------------->
+                                    <div class="f-l lis-sl-img-hide-b">
+                                        <div class="c-box m-t15">
+                                            <h3 class="f-l w-20 c-grayblue"> 选择验证图形集: </h3>
+                                            <!--<a href="javascript:void(0);"-->
+                                            <!--class="f-l bgc-red bgc-Aqua-h upload-file c-white w-10"><input-->
+                                            <!--type="file"/> 浏览 </a>-->
+                                            {{ form.folder_test(class='f-l bdr w-65 input-info c-gray autocomplete_path') }}
+                                        </div>
+                                        <div class="c-box m-t15">
+                                            <h3 class="f-l w-20 c-grayblue"> 每类最小样本数: </h3>{{
+                                            form.folder_test_min_per_class(class='f-l input-info bdr c-gray w-75') }}
+                                        </div>
+                                        <div class="c-box m-t15">
+                                            <h3 class="f-l w-20 c-grayblue"> 每类最大样本数: </h3> {{
+                                            form.folder_test_max_per_class(class='f-l input-info bdr c-gray w-75') }}
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                            <ul class="f-l">
+                                <div class="c-box m-t15">
+                                    <h3 class="f-l w-20 c-grayblue"> 数据集名称: </h3>{{ form.dataset_name_text(class='f-l
+                                    input-info bdr w-75') }}
+                                </div>
+                                <div class="c-box m-t15">
+                                    <h3 class="f-l c-grayblue w-20"> 概述: </h3>
+                                    {{form.dataset_desc_text(class='f-l input-info bdr w-75')}}
+                                </div>
+                                <div class="c-box m-t15">
+                                    <h3 class="f-l c-grayblue w-20"> 文件中图片数量: </h3>
+                                    {{form.pic_num(class='form-control f-l input-info bdr w-75')}}
+                                </div>
+                                <li class="f-l lis-sl-bdli">
+                                    <div class="c-box m-t15">
+                                        <h1 class="f-l w-20"> 数据集 </h1>
+                                        <h1 class="f-l w-40"> 文本文件 </h1>
+                                        <h1 class="f-l w-30"> 图片目录 </h1>
+                                    </div>
+
+                                    <div class="tab-pane" id="db-textfile">
+                                        <div class="row">
+                                            <table class="table">
+
+                                                <style>
+                                                    .label-style{
+                                                        float: left;
+                                                        display: inline-block;
+                                                        line-height: 35px;
+                                                        padding:0 10px;
+                                                        font-family: 宋体;
+                                                        font-size: 14px;
+                                                        font-weight: 200;
+                                                        text-align: center;
+                                                        white-space: nowrap;
+                                                        overflow: hidden;
+                                                        color: #999999;
+
+                                                    }
+                                                    .label-style1{display: inline-block;
+                                                        height: 40px;
+                                                        line-height: 40px;
+                                                        padding: 0 10px;
+                                                        font-family: "宋体";
+                                                        font-size: 14px;
+                                                        font-weight: 200;
+                                                        text-align: right;
+                                                        white-space: nowrap;
+                                                        overflow: hidden;}
+                                                    .radio-i{
+                                                        width: 18px;
+                                                        height: 18px;
+                                                        margin:0px;
+                                                        padding:0px;
+                                                        background:rgb(255, 255, 255);
+                                                        border:0px;
+                                                        /*opacity:0;*/
+                                                    }
+                                                    .text-align-l{text-align: left}
+                                                    #textfile_train_images_btn,#textfile_val_images_btn,#textfile_test_images_btn,#textfile_labels_file_btn{
+                                                        display:inline-block;
+                                                        /*padding: 0;*/
+                                                        height:42px;
+                                                        line-height:42px;
+                                                        position:relative;
+                                                        cursor:pointer;
+                                                        font-family:"宋体";
+                                                        font-size:14px;
+                                                        font-weight:200;
+                                                        overflow:hidden;
+                                                        color:#ffffff;
+                                                        background-color:#ff6376;
+                                                        float:left;
+                                                        border-radius: 0px;
+                                                    }
+                                                    #textfile_train_images_text,#textfile_local_test_images,#textfile_local_val_images,#textfile_local_train_images,#textfile_labels_file_text,#textfile_train_folder,#textfile_val_images_text,#textfile_val_folder,#textfile_test_images_text,#textfile_test_folder{
+                                                        display:inline-block;
+                                                        padding:0 10px;
+                                                        height:40px;
+                                                        line-height:40px;
+                                                        font-family:"宋体";
+                                                        font-size:12px;
+                                                        font-weight:200;
+                                                        text-align:left;
+                                                        white-space:nowrap;
+                                                        overflow:hidden;
+                                                        float: left;
+                                                        border:1px solid #d9dce1;
+                                                    }
+                                                    .m-b15{margin-bottom: 15px;}
+                                                    @media screen and (min-width: 1450px){
+                                                        #textfile_train_images_text,#textfile_train_folder,#textfile_val_images_text,#textfile_val_folder,#textfile_test_images_text,#textfile_test_folder{
+                                                            width: 62%;
+                                                        }
+                                                        #textfile_labels_file_text{
+                                                            width: 55%;
+                                                        }
+                                                        .w-text-h3{width: 20%}
+                                                        #textfile_shuffle,#textfile_local_labels_file{width: 67%;
+                                                            float: left;
+                                                        }
+                                                        #textfile_local_train_images,#textfile_local_val_images,#textfile_local_test_images{width: 85%;}
+                                                    }
+                                                    @media screen and (max-width: 1450px){
+                                                        #textfile_train_images_text,#textfile_train_folder,#textfile_val_images_text,#textfile_val_folder,#textfile_test_images_text,#textfile_test_folder{
+                                                            width: 48%;
+                                                        }
+                                                        #textfile_labels_file_text{
+                                                            width: 39%;
+                                                        }
+                                                        .w-text-h3{width: 26%}
+                                                        #textfile_shuffle,#textfile_local_labels_file,#textfile_local_test_images{width: 56%;
+                                                            float: left;
+                                                        }
+                                                        #textfile_local_train_images,#textfile_local_val_images,#textfile_local_test_images{width: 85%;}
+                                                    }
+                                                    tr{margin: 5px 0;
+                                                    }
+                                                    .select-style{
+                                                        display:inline-block;
+                                                        width:100%;
+                                                        /*position:elative;*/
+                                                        top:0;
+                                                        left:0;
+                                                        height:40px;
+                                                        line-height:40px;
+                                                    }
+                                                </style>
+                                                <tr>
+                                                    <td class="">
+                                                        <label class="label-style" for="{{form.textfile_use_local_files.name}}">
+                                                            {{form.textfile_use_local_files(class='radio-i')}}
+                                                            <span>是否使用本地服务器文件</span>
+                                                        </label>
+                                                        <span name="text_file_explanation"
+                                                              class="explanation-tooltip glyphicon glyphicon-question-sign"
+                                                              data-container="body"
+                                                              title="Check to use local paths on server, uncheck to upload files from client machine"
+                                                        ></span></td>
+                                                    <td>
+
+                                                    </td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="w-20"><b class="label-style1 c-gray">训练集</b></td>
+                                                    <td class="form-group{{mark_errors([form.textfile_train_images])}} cl-upload-files">
+                                                        {{ form.textfile_train_images(class='form-control') }}
+                                                    </td>
+                                                    <td class="form-group{{mark_errors([form.textfile_local_train_images])}} cl-local-files">
+                                                        {{ form.textfile_local_train_images(class='form-control autocomplete_path',placeholder='enter path') }}
+                                                    </td>
+                                                    <td class="form-group{{mark_errors([form.textfile_train_folder])}} w-40">
+                                                        {{ form.textfile_train_folder(class='form-control autocomplete_path') }}
+                                                    </td>
+                                                </tr>
+                                                <tr style="height: 55px;">
+                                                    <td class="w-20">
+                                                        <label class="label-style" for="{{form.textfile_use_val.name}}">
+                                                            {{form.textfile_use_val(class='radio-i')}}
+                                                            <span>验证集</span>
+                                                        </label>
+                                                    </td>
+                                                    <td class="form-group{{mark_errors([form.textfile_val_images])}} cl-upload-files">
+                                                        {{ form.textfile_val_images(class='form-control') }}
+                                                    </td>
+                                                    <td class="form-group{{mark_errors([form.textfile_local_val_images])}} cl-local-files">
+                                                        {{ form.textfile_local_val_images(class='form-control autocomplete_path',placeholder='enter path') }}
+                                                    </td>
+                                                    <td class="form-group{{mark_errors([form.textfile_val_folder])}}">
+                                                        {{ form.textfile_val_folder(class='form-control autocomplete_path') }}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="w-20">
+                                                        <label class="label-style" for="{{form.textfile_use_test.name}}">
+                                                            {{form.textfile_use_test(class='radio-i')}}
+                                                            <span>测试集</span>
+                                                        </label>
+                                                    </td>
+                                                    <td class="form-group{{mark_errors([form.textfile_test_images])}} cl-upload-files">
+                                                        {{ form.textfile_test_images(class='form-control') }}
+                                                    </td>
+                                                    <td class="form-group{{mark_errors([form.textfile_local_test_images])}} cl-local-files">
+                                                        {{ form.textfile_local_test_images(class='form-control autocomplete_path',placeholder='enter path') }}
+                                                    </td>
+                                                    <td class="form-group{{mark_errors([form.textfile_test_folder])}}">
+                                                        {{ form.textfile_test_folder(class='form-control autocomplete_path') }}
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-sm-6 col-sm-offset-1">
+                                                <div class="form-group c-box m-t15 m-b15">
+                                                    <h3 class="f-l w-text-h3 c-gray" style="text-align: center">随机线：</h3>
+                                                    {{ form.textfile_shuffle(class='form-control select-style')}}
+                                                </div>
+                                                <div class="form-group cl-upload-files c-box m-t15">
+                                                    <h3 class="f-l w-text-h3 c-gray" style="text-align: center">标签：</h3>
+                                                    {{ form.textfile_labels_file(class='form-control') }}
+                                                </div>
+                                                <div class="form-group cl-local-files">
+                                                    <h3 class="f-l w-text-h3 c-gray" style="text-align: center">标签：</h3>
+                                                    {{ form.textfile_local_labels_file(class='select-style form-control autocomplete_path',placeholder='enter path',style='border-width:1px') }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                {{ form.method(style="display:none;") }}
+                <script>
+                    // Disable form fields according to the checkboxes
+                    function textfile_image_sets_disabled() {
+                        var value = $("#textfile_use_val").prop("checked");
+                        var useLocalFiles = $("#textfile_use_local_files").prop("checked");
+                        if (useLocalFiles) {
+                            $(".cl-upload-files").hide();
+                            $(".cl-local-files").show();
+                        }
+                        else{
+                            $(".cl-upload-files").show();
+                            $(".cl-local-files").hide();
+                        }
+
+                        if (value) {
+                            $("#textfile_val_images_btn").removeClass("disabled");
+                        } else {
+                            $("#textfile_val_images_btn").addClass("disabled");
+                        }
+
+                        $("#textfile_val_images_text").prop("disabled", !value);
+                        $("#textfile_local_val_images").prop("disabled", !value);
+                        $("#textfile_val_folder").prop("disabled", !value);
+                        value = $("#textfile_use_test").prop("checked");
+
+                        if (value) {
+                            $("#textfile_test_images_btn").removeClass("disabled");
+                        } else {
+                            $("#textfile_test_images_btn").addClass("disabled");
+                        }
+
+                        $("#textfile_test_images_text").prop("disabled", !value);
+                        $("#textfile_local_test_images").prop("disabled", !value);
+                        $("#textfile_test_folder").prop("disabled", !value);
+                    }
+
+                    $("#textfile_use_val").click(function() {
+                        textfile_image_sets_disabled();
+                    });
+                    $("#textfile_use_test").click(function() {
+                        textfile_image_sets_disabled();
+                    });
+                    $("#textfile_use_local_files").click(function() {
+                        textfile_image_sets_disabled();
+                    });
+                    textfile_image_sets_disabled();
+
+                    function update_db_tab(tabName) {
+                        $('select[name=method]').val( tabName );
+                    }
+                    $('#db-tabs a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
+                        parts = e.target.href.split('-');
+                        update_db_tab( parts[parts.length-1] );
+                    });
+                    $('#db-tabs a[href="#db-{{ form.method.data }}"]').tab('show');
+
+                </script>
+            </div>
+            <div class="r-box w-30">
+                <div class="f-l title bgc-white">
+                    <h2 class="f-l c-grayblue"> 图像属性 </h2>
+                </div>
+                <div class="c-box bdr">
+                    <div class="c-box lis-sr">
+                        <h3 class="f-l w-50 c-grayblue"> 图像类型: </h3>
+                        <div class="f-l w-50 div-select">
+                            <div class="f-l select-box sub-select">
+                                {{ form.resize_channels(class='f-l select-box bdr sub-select') }}
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="c-box lis-sr">
+                        <h3 class="f-l w-50 c-grayblue"> 图像尺寸（宽X高）: </h3>
+                        {{ form.resize_width(size=4, placeholder='width', class='f-l bdr w-15 input-info') }}<b
+                            class="f-l c-gray"> x </b>
+                        {{ form.resize_height(size=4, placeholder='height', class='f-l bdr w-15 input-info') }}
+                    </div>
+
+                    <div class="c-box lis-sr">
+                        <h3 class="f-l w-50 c-grayblue"> 尺寸变化: </h3>
+                        <div class="f-l w-50 div-select">
+                            <div class="f-l select-box sub-select">
+                                {{ form.resize_mode(class='f-l select-box bdr sub-select') }}
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="f-l title bgc-white">
+                    <h2 class="f-l c-grayblue"> 数据库属性 </h2>
+                </div>
+                <div class="c-box bdr">
+                    <div class="c-box lis-sr">
+                        <div class="c-box z-idx-3">
+                            <h3 class="f-l w-50 c-grayblue"> 数据库类型: </h3>
+                            <div class="f-l w-50 div-select">
+                                <div class="f-l select-box sub-select">
+                                    {{ form.backend(class='f-l select-box bdr sub-select') }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="c-box m-t15 z-idx-2">
+                            <h3 class="f-l w-50 c-grayblue"> 图像编码格式: </h3>
+                            <div class="f-l w-50 div-select">
+                                <div class="f-l select-box sub-select">
+                                    {{form.encoding(class='f-l select-box bdr sub-select')}}
+                                </div>
+                            </div>
+                        </div>
+                        <!--<div class="c-box m-t15 z-idx-1">-->
+                        <!--<h3 class="f-l w-50 c-grayblue"> 图像压缩: </h3>-->
+                        <!--<div class="f-l w-50 div-select">-->
+                        <!--<div class="f-l select-box sub-select">-->
+                        <!--{{form.compression(class='f-l select-box bdr sub-select')}}-->
+                        <!--</div>-->
+                        <!--</div>-->
+                        <!--</div>-->
+                        <div class="c-box m-t15 z-idx-0">
+                            <h3 class="f-l w-50 c-grayblue"> 组名: </h3>
+                            {{ form.group_name(class='f-l bdr w-42 input-info',placeholder="请输入组名") }}
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+        <input class="f-l btn-8 m-t15 m-r15 c-grayblue bgc-red-h c-white-h bgc-gray-b sbmit" type="reset" name="" id="" value="取消" style="width: 130px;outline: none" />
+
+        <input class="f-l btn-8 m-t15 m-r15 c-white bgc-Aqua bgc-red-h sbmit click-none" type="button" name="" id="" value="提交" style="width: 130px;outline: none" />
+        <script>
+            var flag = true
+            $('.click-none').on('click',function () {
+                console.log('------------------------------')
+                if($('.on').html() == '图像文件'){
+
+
+                    if($('.dataset-name').val() === ''){
+
+                        $('.prompt-box').css('display','block')
+                        $('.prompt-box .alert-div-content h3').html('数据集名称不能为空！')
+//                    alert('数据集名称不能为空！')
+                        return false
+                    }else if($('.input-intro').val() === ''){
+
+                        $('.prompt-box').css('display','block')
+                        $('.prompt-box .alert-div-content h3').html('概述不能为空！')
+//                    alert('概述不能为空！')
+                        return false
+                    }else if($('.input_file_text').val() === ''){
+
+                        $('.prompt-box').css('display','block')
+                        $('.prompt-box .alert-div-content h3').html('上传数据集路径不能为空！')
+//                    alert('上传数据集路径不能为空！')
+                        return false
+                    }
+                    if(flag == false){
+                        return false
+                    }
+
+                }
+                flag = false
+                $('.form_all').submit()
+
+            })
+            $('#textfile_train_images').on('change',function (e) {
+                $('#textfile_train_images_text').val(e.currentTarget.files[0].name)
+            })
+            $('#textfile_val_images').on('change',function (e) {
+                $('#textfile_val_images_text').val(e.currentTarget.files[0].name)
+            })
+            $('#textfile_test_images').on('change',function (e) {
+                $('#textfile_test_images_text').val(e.currentTarget.files[0].name)
+            })
+            $('#textfile_labels_file').on('change',function (e) {
+                $('#textfile_labels_file_text').val(e.currentTarget.files[0].name)
+            })
+        </script>
+    </form>
+</div>
+
+
+
+{% endblock rightcontent %}

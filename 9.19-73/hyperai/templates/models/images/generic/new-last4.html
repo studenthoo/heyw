@@ -1,0 +1,1888 @@
+{% from "helper.html" import print_flashes %}
+{% from "helper.html" import print_errors %}
+{% from "helper.html" import mark_errors %}
+
+{% extends 'new/public.html' %}
+
+
+
+{% block topfile %}
+<link rel="shortcut icon" href="{{url_for('static', filename='images/bitbug_favicon.ico')}}"/>
+
+<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/bootstrap.min.css')}}"/>
+<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/bootstrap-theme.min.css')}}"/>
+<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/c3.min.css')}}"/>
+<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/style.css')}}"/>
+
+<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/ZK_last11/public.css')}}"/>
+<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/ZK_last11/sub.css')}}"/>
+<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/ZK_last11/iconfont.css')}}"/>
+<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='plugins/iCheck/skins/minimal/grey.css')}}" />
+<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/ZK_last11/calendar.css')}}" />
+<link rel="stylesheet" href="{{url_for('static', filename='css/modetrain_a.css')}}" />
+<script type="text/javascript" src="{{url_for('static', filename='js/jquery-1.7.2.js')}}"></script>
+<script type="text/javascript" src="{{url_for('static', filename='js/Feffects.js')}}"></script>
+<!--<script type="text/javascript" src="{{url_for('static', filename='plugins/iCheck/icheck.min.js')}}"></script>-->
+<!--<script type="text/javascript" src="{{url_for('static', filename='js/CustomScrollbar.js')}}"></script>-->
+<script type="text/javascript" src="{{url_for('static', filename='js/jquery.nicescroll.js')}}"></script>
+<script type="text/javascript" src="{{url_for('static', filename='js/jqmeter.min.js')}}"></script>
+<script type="text/javascript" src="{{url_for('static', filename='js/public.js')}}"></script>
+<script src="{{url_for('static', filename='js/html5shiv.js')}}"></script>
+<style>
+	.nav_h1  a{height: 80px!important;}
+	#side-menus a{color: #829bb9!important;}
+	#side-menus .nav_h1:nth-child(4) a{
+		background-color: #2c3850!important;
+		color: #00b5b8!important;}
+</style>
+{% endblock topfile %}
+
+<!--<article class="bgc-gray">&lt;!&ndash;right Start &ndash;&gt; -->
+<!--<section>-->
+{% block rightcontent %}
+
+
+
+<!--提示框-->
+<style>
+	.prompt-box,.alert-box{    z-index: 99998;
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background-color: rgba(0, 0, 0, .6);
+		display: none;
+	}
+	.alert-div{
+		width: 400px;
+		height: 240px;
+		background: white;
+		margin: 0 auto;
+		margin-top: 10%;
+		position: relative;
+	}
+	.alert-div-nav{
+		height:40px;
+	}
+
+	.alert-div-content h3{height: 40px;
+		line-height: 40px;
+		text-align: center;
+		margin-top: 35px;
+	}
+	.alert-btn{height: 40px;
+		text-align: center;
+		position: absolute;
+		bottom: 35px;
+		width: 100%;
+	}
+	.alert-btn div{display: inline-block; }
+	.alert-btn  h3{
+		height:40px;
+		width: 100%;
+		/*padding: 0 30px;*/
+		line-height: 40px;
+	}
+
+	.alert-btn-yes{background: #00b5b8;
+		color: white;
+		width:100px;
+	}
+	.hover-red:hover{color: white;
+		background: #ff6376;
+	}
+</style>
+
+<div class="prompt-box">
+	<div class="alert-div">
+		<div class="alert-div-nav">
+
+		</div>
+		<div class="alert-div-content">
+			<h3 style="font-size: 20px;"></h3>
+		</div>
+		<div class="alert-btn">
+
+			<div class="alert-btn-yes hover-red">
+				<h3 style="font-size: 20px;">确定</h3>
+			</div>
+		</div>
+	</div>
+</div>
+<style>
+	#side-menus .xitong-h1 .bg-a{
+		color: #00b5b8 !important;
+	}
+</style>
+<script>
+    $('.prompt-box .alert-btn-yes').on('click',function () {
+        $('.prompt-box').css('display','none')
+    })
+    $(".xitong-h1").toggle(function() {
+        $(this).addClass('current-la').siblings().removeClass('current-la')
+        $(this).find('a').addClass('bg-a')
+        $(this).next(".side-div").slideDown(500)
+        // $(this).find('a').css('color','#00b5b8')
+
+    }, function() {
+        $(this).removeClass('current-la')
+        $(this).find('a').removeClass('bg-a')
+        $(this).next(".side-div").slideUp(500)
+    });
+</script>
+
+
+
+
+
+<script>
+
+    $("#side-menus").niceScroll({
+        cursorcolor: "#829bb9",
+        cursoropacitymax: 1,
+        touchbehavior: false,
+        cursorwidth: "4px",
+        cursorborder: "4",
+        cursorborderradius: "0",
+        cursorminheight: 32,
+        railpadding:{
+            right:2
+        },
+        autohidemode: false ,
+        background: "#49586d"
+    });
+
+
+
+    var click_num = 0;
+    function formSubmit(){
+        if($('.homework_name').val() == ''){
+
+            $('.prompt-box').css('display','block')
+            $('.prompt-box .alert-div-content h3').html('作业名称不能为空！')
+
+            return false
+        }else if($('.input-intro').val() == ''){
+
+            $('.prompt-box').css('display','block')
+            $('.prompt-box .alert-div-content h3').html('作业概述不能为空！')
+
+            return false
+        }
+        if(click_num > 0){
+            return false
+        }
+        click_num++
+        // else if($('.select-dataset').val() == ''){
+        //     alert('没有选择数据集！')
+        //     return false
+        // }
+        return true
+    }
+    $("#side-menu").niceScroll({
+        cursorcolor: "#829bb9",
+        cursoropacitymax: 1,
+        touchbehavior: false,
+        cursorwidth: "4px",
+        cursorborder: "4",
+        cursorborderradius: "0",
+        cursorminheight: 32,
+        railpadding:{
+            right:2
+        },
+        autohidemode: false ,
+        background: "#49586d"
+    });
+    $(".l-sidemenu").toggle(function() {
+        $(".l-aside").width(50);
+//				        $(".l-aside").animate({width:'50'},500);
+        $(".lift-menu").removeClass("side-menu").addClass("side-menu-s");
+    }, function() {
+        $(".l-aside").width(200);
+//				        $(".l-aside").animate({width:'200'},500);
+        $(".lift-menu").addClass("side-menu").removeClass("side-menu-s");
+    });
+</script>
+<form action="{{url_for('hyperai.model.images.generic.views.create', extension_id=extension_id)}}" class="f-l form_all" method="post" enctype="multipart/form-data" onsubmit="return formSubmit()">
+	<!--<form action="" class="f-l">-->
+	<!--&lt;!&ndash;AAAAAAAAAAAAAAAAAAAAAAAAAA&ndash;&gt;-->
+	<div class=" container1">
+
+		{{ form.hidden_tag() }}
+		{{ print_errors(form) }}
+		<div class="f-l title">
+			<h1 class="f-l c-grayblue"> 模型训练 </h1>
+			<span class="f-l c-gray"> Welcome back, {{ request.cookies.username }} </span>
+		</div>
+
+		<div class="f-l sub-title bgc-white">
+			<a href="homeworkMonitor.html" class="f-l c-gray c-aqua-h"><span class="f-l"> Home </span><em class="f-l c-gray"> / </em></a>
+			<a href="#" class="f-l c-gray c-aqua-h"><span class="f-l select_model_xx_text">{%if extension_id%}{{extension_id|transfer}}{%else%}other{%endif%}</span><em class="f-l c-gray"></em></a>
+		</div>
+		<!--<div class="user-toggle vip-1">-->
+		<!--<a href="#"><img src="{{url_for('static',filename='images/pic/toggle.png')}}"/> 高级模式</a>-->
+		<!--</div>-->
+		<div class="f-l lis-z bgc-white">
+			<h2 class="f-l"> 选择场景 </h2>
+			<select name=""  class="f-l w-35 div-select m-l15 bdr select_model_xx Customize_select" style="height: 40px;">
+				<option value="图像分类">图像分类</option>
+				<option value="目标检测">目标检测</option>
+				<option value="图像分割">图像分割</option>
+				<!--<option value="图像处理">图像处理</option>-->
+				<!--<option value="文本分类">文本分类</option>-->
+				<!--<option value="其他">其他</option>-->
+				<option value="医疗影像">医疗影像</option>
+			</select>
+		</div>
+		<div class="lis-ac bgc-white">
+			<ul class="f-l">
+				<li class="f-l bdr current">
+					<div class="f-l c-gray">
+						<i class="f-l iconfont fz-65 "> &#xe629; </i>
+						<h3 class="f-r c-gray"> 选择类型及数据 </h3>
+					</div>
+					<em class="bgc-gray c-gray1"> 1 </em>
+				</li>
+				<li class="f-l bdr">
+					<div class="f-l c-gray">
+						<i class="f-l iconfont fz-65 "> &#xe618; </i>
+						<h3 class="f-r "> 填写参数 </h3>
+					</div>
+					<em class="bgc-gray c-gray1"> 2 </em>
+				</li>
+				<li class="f-l bdr">
+					<div class="f-l c-gray">
+						<i class="f-l iconfont fz-65"> &#xe61d; </i>
+						<h3 class="f-r"> 预览 </h3>
+					</div>
+					<em class="bgc-gray c-gray1"> 3 </em>
+				</li>
+			</ul>
+		</div>
+		<style>
+			.lis-ad_i{display: inline-block;
+				width: 100%;
+				margin: 0 auto;
+				text-align: center;}
+			.lis-ad_i h4{    line-height: 40px;
+				font-family: "宋体";
+				font-size: 14px;
+				font-weight: 200;
+				white-space: nowrap;
+				overflow: hidden;
+			}
+		</style>
+		<div class="f-l lis-ad_i">
+			<!--<h4 {%if mark == 'no_mark'%}class="f-l c-grayblue ta-l w-100 btn_i_node btn_all_node"{%else%}class="f-l c-grayblue ta-l w-100 btn_all_node"{%endif%}>单机任务</h4>-->
+			<!--<h4 {%if mark == 'mark'%}class="f-l c-grayblue ta-l w-100 btn_i_node btn_all_node"{%else%}class="f-l c-grayblue ta-l w-100 btn_all_node"{%endif%}>分布式任务</h4>-->
+		</div>
+		<div class="f-l lis-ad bgc-white">
+			<div class="c-box m-t15">
+				<h3 class="f-l c-grayblue w-12"> 项目名称 </h3>
+				<!--<input type="text" placeholder="user-data-D001" class="f-l input-info bdr w-85 neme__data" />-->
+				{{form.model_name(class='f-l input-info bdr w-85 neme__data homework_name')}}
+			</div>
+			<div class="c-box m-t15">
+				<h3 class="f-l c-grayblue w-12"> 概述 </h3>
+				{{ form.model_desc(class='f-l w-85 c-gray bdr input-info input-intro' )}}
+			</div>
+
+			<!--python层-->
+			<style>
+				.well {
+					padding:0;
+					position: relative;
+					height: 40px;
+					border:none!important;
+					background-color: white!important;
+					background: white;
+					box-shadow:none;
+					-webkit-box-shadow:none;
+				}
+				.python_layer_from_client_label{
+					position: absolute;
+					top: 55px;
+					right: 3%;
+				}
+				.well a{display: none}
+				#python_layer_client_file_btn,#python_layer_client_file_text,#python_layer_server_file{border-radius:0}
+				#python_layer_client_file_text,#python_layer_server_file{height: 40px;}
+				#python_layer_server_file{width: 100%;}
+				#python_layer_client_file_btn{background: rgb(0, 181, 184)}
+			</style>
+			<div class="c-box m-t15">
+				<div class="col" id="python-layers">
+					<div class="well">
+						<h4 class="f-l c-grayblue w-12" style="text-align: right">脚本层</h4>
+						{{form.python_layer_from_client.explanation(file='/models/python_layer_explanation.html')}}
+						<!--<br>-->
+						<div class="form-group python-layer-server-side-file f-l w-85 python_layer_from_client_i1">
+							<!--{{form.python_layer_server_file.label}}-->
+							<!--{{form.python_layer_server_file.tooltip}}-->
+							{{form.python_layer_server_file(class='form-control autocomplete_path')}}
+						</div>
+						<div class="form-group python-layer-client-side-file f-l w-85 python_layer_from_client_i2" style="display: none">
+							<!--{{form.python_layer_client_file.label}}-->
+							<!--{{form.python_layer_client_file.tooltip(class='f-l w-85  bdr input-info')}}-->
+							{{form.python_layer_client_file(class='form-control')}}
+						</div>
+
+						<label for="{{form.python_layer_from_client.name}}" class="python_layer_from_client_label">
+							{{form.python_layer_from_client}}
+							{{form.python_layer_from_client.label}}
+						</label>
+					</div>
+				</div>
+				<script>
+                    $('.python_layer_from_client_label').on('click',function () {
+//							console.log($('#python_layer_from_client').prop('checked'))
+                        if($('#python_layer_from_client').prop('checked')==true){
+                            $('.python_layer_from_client_i1').css('display','none')
+                            $('.python_layer_from_client_i2').css('display','block')
+                        }else{
+                            $('.python_layer_from_client_i1').css('display','block')
+                            $('.python_layer_from_client_i2').css('display','none')
+                        }
+                    })
+                    $('#python_layer_from_client').siblings().html('使用客户端文件')
+				</script>
+			</div>
+			<div class="c-box m-t15">
+
+				<h3 class="f-l c-grayblue w-12"> 选择数据 </h3>
+				<div class="f-l w-36 div-select select_data">
+					{{ form.dataset(class='select-box bdr sub-select c-grayblue select-dataset' )}}
+				</div>
+			</div>
+			<!--分布式-->
+			<!--<div class="c-box m-t15">-->
+			<!--<h3 class="f-l c-grayblue w-12"> 配置资源 </h3>-->
+			<!--<div class="f-l w-36 div-select" style="width:60%;">-->
+			<!--<h4 {%if mark == 'no_mark'%}class="f-l c-grayblue ta-l w-100 btn_i_node btn_all_node"{%else%}class="f-l c-grayblue ta-l w-100 btn_all_node"{%endif%}>单节点配置</h4>-->
+			<!--<h4 {%if mark == 'mark'%}class="f-l c-grayblue ta-l w-100 btn_i_node btn_all_node"{%else%}class="f-l c-grayblue ta-l w-100 btn_all_node"{%endif%}>分布式配置</h4>-->
+			<!---->
+			{{form.train_method(class='f-l c-grayblue ta-l w-100 node-i')}}
+			<style>
+				.node-i{display: none;}
+				.btn_all_node{display: inline!important;
+					width: 150px;
+					text-align: center;
+					color: #2c3850;
+					background: #d9dce1;
+					cursor: pointer;
+				}
+				.btn_i_node{color: white;
+					background: rgb(0, 181, 184);
+				}
+				.btn_duo_node_1{display: none}
+				#customFramework li{margin-right: 5px}
+				#network-tabs li a{color: #2c3850;
+					background: #d9dce1;}
+			</style>
+			<script>
+                // $('.btn_all_node').on('click',function () {
+                // 	$('.btn_all_node').removeClass('btn_i_node');
+                // 	$(this).addClass('btn_i_node')
+                // 	if($(this).text()=='单机任务'){
+                // 		$('.node-i')[0].selectedIndex=0;
+                // 		$('#network-tab-custom').css('display','none')
+                // 		$('.stdnetRole_all').css('display','none')
+                // 		$('#stdnetRole').children().eq(0).css('display','block')
+                // 		$('#stdnetRole').children().eq(1).css('display','none')
+                // 		$('#customFramework').children().eq(0).css('display','block')
+                // 		$('#customFramework').children().eq(1).css('display','block')
+                // 		console.log($('.node-i').val())
+                // 		$('.btn_dan_node_1').css('display','block')
+                // 		$('.btn_duo_node_1').css('display','none')
+                //
+                // 	}
+                // 	else if($(this).text()=='分布式任务'){
+                // 		$('.node-i')[0].selectedIndex=1;
+                // 		$('#network-tab-custom').css('display','none')
+                // 		$('.stdnetRole_all').css('display','none')
+                // 		$('#stdnetRole').children().eq(0).css('display','none')
+                // 		$('#stdnetRole').children().eq(1).css('display','none')
+                // 		$('#customFramework').children().eq(0).css('display','none')
+                // 		$('#customFramework').children().eq(1).css('display','none')
+                // 		console.log($('.node-i').val())
+                // 		$('.btn_dan_node_1').css('display','none')
+                // 		$('.btn_duo_node_1').css('display','block')
+                // 	}
+                // })
+                $(window).bind('load',function () {
+                    console.log($('.node-i').val())
+                    if($('.node-i').val()==0){
+                        $('#network-tab-custom').css('display','none')
+                        $('.stdnetRole_all').css('display','none')
+                        $('#stdnetRole').children().eq(0).css('display','block')
+                        $('#stdnetRole').children().eq(1).css('display','none')
+                        $('#customFramework').children().eq(0).css('display','block')
+                        $('#customFramework').children().eq(1).css('display','block')
+                        console.log($('.node-i').val())
+                        $('.btn_dan_node_1').css('display','block')
+                        $('.btn_duo_node_1').css('display','none')
+
+                    }else if($('.node-i').val()==1){
+                        $('#network-tab-custom').css('display','none')
+                        $('.stdnetRole_all').css('display','none')
+                        $('#stdnetRole').children().eq(0).css('display','none')
+                        $('#stdnetRole').children().eq(1).css('display','none')
+                        $('#customFramework').children().eq(0).css('display','none')
+                        $('#customFramework').children().eq(1).css('display','none')
+                        console.log($('.node-i').val())
+                        $('.btn_dan_node_1').css('display','none')
+                        $('.btn_duo_node_1').css('display','block')
+                    }
+                })
+			</script>
+			<!--</div>-->
+			<!--</div>-->
+			<style>
+				.nav-tabs{
+					border-bottom: none;
+				}
+				.nav-tabs>li>a{
+					border-radius: inherit;
+				}
+				.nav>li>a{
+					padding: 0 15px;
+				}
+			</style>
+			<div class="c-box m-t15">
+				<!--<select id="method" name="method" style="display:none;">-->
+				<!--<option selected="" value="standard" style="color: rgb(44, 56, 80); background: rgb(217, 220, 225);">Standard network</option>-->
+				<!--<option value="previous" style="color: rgb(44, 56, 80); background: rgb(217, 220, 225);">Previous network</option>-->
+				<!--<option value="pretrained" style="color: rgb(44, 56, 80); background: rgb(217, 220, 225);">Pretrained network</option>-->
+				<!--<option value="custom" style="color: rgb(44, 56, 80); background: rgb(217, 220, 225);">Custom network</option>-->
+				<!--</select>-->
+				{{ form.method(style="display:none;") }}
+				<h3 class="f-l c-grayblue w-12"> 选择网络</h3>
+				<div class="f-l  div-select" style="width: 60%">
+					<ul class="nav nav-tabs" id="network-tabs">
+						<li class="active"><a href="#network-tab-standard" data-toggle="tab">Standard Networks</a></li>
+						<li><a href="#network-tab-custom" data-toggle="tab" style="margin: 0 10px">Custom Network</a></li>
+						<!--<li class="active"><a href="#network-tab-standard" data-toggle="tab" style="cursor: not-allowed">Standard Networks</a></li>-->
+					</ul>
+					<!--分布式选择网络-->
+					<div id="network-tab-custom" class="tab-pane">
+						<div style="display:none;">{{form.framework(class='form-control')}}</div>
+						<ul class="nav nav-tabs" id="customFramework">
+							{% for fw in frameworks %}
+							<li id="{{ fw.get_id() }}" class="f-l" style="width: auto;">
+								<a href="#{{ fw.get_id() }}_custom">
+									<label>
+										<input type="radio" name="1">
+										<span>{{fw.get_name()}}</span>
+									</label>
+								</a>
+							</li>
+
+							{% endfor %}
+						</ul>
+						<!--分布式-->
+						<div class="form-group{{mark_errors([form.custom_network])}}">
+							<div style="display: none;">{{form.custom_network(class='form-control', rows=10)}}</div>
+
+						</div>
+						<a href=# class="btn btn-info f-l" style="color: white; background: rgb(0, 181, 184);border-radius: 0px;font-weight: 200" onClick="return visualizeNetwork();">Visualize</a>
+						<div id="ace-editor">
+
+						</div>
+						<!--<div class="form-group{{mark_errors([form.custom_network_snapshot])}}" style="text-align: left;">-->
+						<!--{{form.custom_network_snapshot.label}}-->
+						<!--&lt;!&ndash;{{form.custom_network_snapshot.tooltip}}&ndash;&gt;-->
+						<!--</br>-->
+						<!--{{form.custom_network_snapshot(class='form-control autocomplete_path')}}-->
+						<!--</div>-->
+
+						<style>
+							#ace-editor{width: 100%;
+								height:600px;
+								border:solid #999999 1px;
+								line-height: 1.42857143;
+								color: #333;
+							}
+							.ace_scroller{text-align: left}
+							.autocomplete_path{
+								display: block;
+								width: 99%;
+								height: 34px;
+								padding: 6px;
+								font-size: 14px;
+								line-height: 1.42857143;
+								color: #555;
+								background-color: #fff;
+								background-image: none;
+								border: 1px solid #ccc;
+								border-radius: 4px;
+
+							}
+						</style>
+					</div>
+					<!--{{ form.method(style="display:none;") }}-->
+
+
+				</div>
+
+				<!--新添加-->
+				<style>
+					#network-tabs  a{
+						color: rgb(44, 56, 80)!important;
+						background: rgb(217, 220, 225)!important;
+					}
+					#network-tabs  .active a{color: white!important;
+						background: rgb(0, 181, 184)!important;
+					}
+
+					#stdnetRole .active a{color: white!important;
+						background: rgb(0, 181, 184)!important;
+					}
+					.path_name_width{width: 12%;text-align: right;font-weight:100!important;
+						font-size:14px;font-family: "宋体";padding: 0 10px;}
+					.path_name_width2{width: 85%!important;}
+				</style>
+				<script>
+                    $(window).bind('load',function () {
+                        $('#stdnetRole').css('display','block')
+                        $('#network-tab-standard-contents').css('display','block')
+                    })
+                    $('#network-tabs a').on('click',function () {
+                        if($(this).text()=='Standard Networks'){
+                            $('#network-tab-custom').css('display','none')
+                            $('.Standard_Networks').css('display','block')
+                            $('.Standard_Networks').children().css('display','block')
+                            $('#stdnetRole').css('display','block')
+                            $("#network-tab-standard-contents").css('display','block')
+                        }else {
+                            $('#network-tab-custom').css('display','block')
+                            $('.Standard_Networks').css('display','none')
+                            $('.Standard_Networks').children().css('display','none')
+                        }
+                    })
+				</script>
+				<div class="c-box m-t15 Standard_Networks stdnetRole_all" style="display: none">
+					<h3 class="f-l c-grayblue w-12"> 选择框架</h3>
+					<div style="">{{form.framework(class='form-control')}}</div>
+					<div class="f-l w-36 div-select" style="width:60%;">
+						{% include "models/images/generic/partials/new/network_tab_standard.html" %}
+						<!--分布式框架-->
+					</div>
+
+
+					<!--<div style="float: left" class="Now_work">-->
+					<!--<div></div>-->
+					<!--</div>-->
+				</div>
+			</div>
+			<style>
+				.path_name_width{
+					height: 34px;
+					line-height: 34px;
+					color: #2c3850;
+				}
+			</style>
+			<div class="c-box m-t15">
+				<div class="form-group{{mark_errors([form.custom_network_snapshot])}}" style="text-align: left;">
+					<label class='f-l path_name_width' for="custom_network_snapshot">预训练模型</label>
+					<!--{{form.custom_network_snapshot.label(class='f-l path_name_width')}}-->
+					<!--{{form.custom_network_snapshot.tooltip}}-->
+					{{form.custom_network_snapshot(class='form-control autocomplete_path path_name_width2 f-l')}}
+				</div>
+			</div>
+
+
+
+
+			<style>
+				.check_box{
+					width: 45%;
+					text-align: left;
+					height: 30px;
+					line-height: 30px;
+					color: #2c3850;
+
+				}
+				.res-name,.discrip-info{
+					display: inline-block;
+					height: 30px;
+					line-height: 30px;
+					margin-left: 20px;
+					color: #2c3850;
+					font-family: '宋体';
+				}
+				.res-name{
+					margin-left: 5px;
+				}
+				/*#test input{*/
+				/*display: inline-block;*/
+				/*width: 20px;*/
+				/*height: 15px;*/
+
+				/*}*/
+
+			</style>
+
+			<div class="c-box m-t15">
+				<h3 class="f-l c-grayblue w-12"> 选择资源池 </h3>
+				<input type="hidden" value="" name="resource" id="res-value"/>
+				<div class="r-box w-88 bdr plr-bt20" style="float: left;width: 85%;">
+					<div class="c-box" id="test">
+
+						{% for subfield in form.node_label_choice %}
+						<div class="check_box f-l">
+							<tr>
+								<td>{{ subfield }}</td>
+								<td>{{ subfield.label }}</td>
+								<td><span class="discrip-info"></span></td>
+							</tr>
+						</div>
+						{% endfor %}
+
+
+					</div>
+				</div>
+			</div>
+			<script>
+                var gpu_num = "{{ usable_label_gpu_count }}"
+                var gpu1 =gpu_num.substr(0,gpu_num.length-1)
+                var gpu2 = gpu1.substr(1)
+                // var s = gpu_num.split(', ')
+                console.log('*****-----*****', gpu_num)
+                var arr_gpu = gpu2.split(', ')
+                $('#test .discrip-info').each(function (e) {
+                    console.log('---',e)
+                    for (var i = 0; i < arr_gpu.length; i++){
+                        if(e == i){
+                            console.log('-----------------------------')
+                            $(this).html('目前可用GPU：'+arr_gpu[i])
+                        }
+
+                    }
+                })
+
+
+			</script>
+
+
+
+			<div class="c-box m-t15">
+				<h3 class="f-l c-grayblue w-12"> 资源配置 </h3>
+				<div class="r-box bdr plr-bt20" style="float: left;width: 85%;">
+					<div class="c-box m-t15 btn_dan_node_1">
+						<h4 class="f-l c-grayblue ta-r w-12"> CPU(Core) </h4>
+						<div class="f-l w-12 div-select">
+							{{form.cpu_count(class='f-l select-box bdr sub-select c-grayblue select_cpu')}}
+						</div>
+						<h4 class="f-l c-grayblue ta-r w-12"> 内存(GB) </h4>
+						<div class="f-l w-12 div-select">
+							{{form.memory_count(class='f-l select-box bdr sub-select c-grayblue')}}
+						</div>
+						<h4 class="f-l c-grayblue ta-r w-12"> GPU数量 </h4>
+						<div class="f-l w-12 div-select">
+							{{form.gpu_count_new(class='f-l f-l select-box bdr sub-select')}}
+						</div>
+					</div>
+
+					<div class="c-box m-t15 btn_duo_node_1">
+						<h4 class="f-l c-grayblue ta-r w-12">  CPU(Core)  </h4>
+						<div class="f-l w-12 div-select">
+							{{form.cpu_count_more(class='f-l select-box bdr sub-select c-grayblue select_cpu')}}
+						</div>
+						<h4 class="f-l c-grayblue ta-r w-12">  内存(GB)  </h4>
+						<div class="f-l w-12 div-select">
+							{{form.memory_count_more(class='f-l select-box bdr sub-select c-grayblue')}}
+						</div>
+						<h4 class="f-l c-grayblue ta-r w-12"> GPU数量 </h4>
+						<div class="f-l w-12 div-select">
+							{{form.gpu_count_new_more(class='f-l f-l select-box bdr sub-select')}}
+						</div>
+					</div>
+					<div class="c-box m-t15 btn_duo_node_1">
+						<h4 class="f-l c-grayblue ta-r w-12"> 节点数量 </h4>
+						<div class="f-l w-12 div-select">
+							{{form.node_count(class='f-l select-box bdr sub-select c-grayblue node_num')}}
+						</div>
+
+					</div>
+					<div class="c-box">
+						<!--<h4 class="f-l c-grayblue ta-l w-90"> 目前可用资源：<strong class="c-aqua" style="font-weight: bold; font-family: initial;"> {% if total_gpu_count %}-->
+						<!--{{remaining_gpu_count}}/{{total_gpu_count}}-->
+
+						<!--{%endif%}	</strong></h4>-->
+					</div>
+				</div>
+			</div>
+			<input type="reset" value="重置" class="f-l btn-8 m-t35 m-r15 c-grayblue bgc-red-h c-white-h bgc-gray-b btn_m"/>
+			<input type="button" value="下一步" class="f-l btn-8 m-t35 m-r15 c-white bgc-Aqua bgc-red-h btn_m btn_data_1"/>
+
+		</div>
+	</div>
+
+	<!--Bbbbbbbbbbbbbbbbbbbbbbbb-->
+	<div class=" container2">
+		<div class="f-l title">
+			<h1 class="f-l c-grayblue"> 模型训练 </h1>
+			<span class="f-l c-gray"> Welcome back, {{request.cookies.username}} </span>
+		</div>
+
+		<div class="f-l sub-title bgc-white">
+			<a href="homeworkMonitor.html" class="f-l c-gray c-aqua-h"><span class="f-l"> Home </span><em class="f-l c-gray"> / </em></a>
+			<a href="#" class="f-l c-gray c-aqua-h"><span class="f-l"> {%if extension_id%}{{extension_id|transfer}}{%else%}other{%endif%}    </span><em class="f-l c-gray"> / </em></a>
+		</div>
+		<!--<div class="user-toggle vip-2">			      	-->
+		<!--<a href="#"><img src="{{url_for('static',filename='images/pic/toggle.png')}}"/> 高级模式</a>-->
+		<!--</div>-->
+		<div class="f-l lis-z bgc-white">
+			<h2 class="f-l"> 选择模型 </h2>
+			<select name=""  class="f-l w-35 div-select m-l15 bdr select_model_xx" style="height: 40px;">
+				<option value="图像分类">图像分类</option>
+				<option value="目标检测">目标检测</option>
+				<option value="图像分割">图像分割</option>
+				<!--<option value="图像处理">图像处理</option>-->
+				<!--<option value="文本分类">文本分类</option>-->
+				<!--<option value="其他">其他</option>-->
+				<option value="医疗影像">医疗影像</option>
+			</select>
+		</div>
+
+		<div class="lis-ac bgc-white">
+			<ul class="f-l">
+				<li class="f-l bdr current">
+					<div class="f-l c-gray">
+						<i class="f-l iconfont fz-65 "> &#xe629; </i>
+						<h3 class="f-r c-gray"> 选择类型及数据 </h3>
+					</div>
+					<em class="bgc-gray c-gray1"> 1 </em>
+				</li>
+				<li class="f-l bdr current">
+					<div class="f-l c-gray">
+						<i class="f-l iconfont fz-65 "> &#xe618; </i>
+						<h3 class="f-r "> 填写参数 </h3>
+					</div>
+					<em class="bgc-gray c-gray1"> 2 </em>
+				</li>
+				<li class="f-l bdr">
+					<div class="f-l c-gray">
+						<i class="f-l iconfont fz-65"> &#xe61d; </i>
+						<h3 class="f-r"> 预览 </h3>
+					</div>
+					<em class="bgc-gray c-gray1"> 3 </em>
+				</li>
+			</ul>
+		</div>
+
+		<style>
+			.chin-tishi{
+				display: inline-block;
+				height: 40px;
+				line-height: 40px;
+				padding-left: 10px;
+				display: none;
+				color:red;
+			}
+		</style>
+
+		<div class="f-l lis-ad bgc-white">
+			<div class="title"><h1 class="f-l c-grayblue"> 通用参数 </h1></div>
+			<div class="c-box">
+				<div class="c-box m-t15" style="position: relative;">
+					<h3 class="f-l c-grayblue w-12"> 迭代次数 </h3>
+					{{form.train_epochs(class='f-l input-info bdr w-18 select_demo_number')}}
+
+					<h3 class="f-l c-grayblue w-12"> 基础学习率 </h3>
+					{{form.learning_rate(class='f-l input-info bdr w-18')}}
+					<span class="chin-tishi f-l" style="position: absolute;top: -30px;left: 54%">含有中文逗号</span>
+					<h3 class="f-l c-grayblue w-12"> 样本大小 </h3>
+					{{form.batch_size(class='f-l input-info bdr w-18', placeholder='[network defaults]')}}
+					<span class="chin-tishi f-l" style="position: absolute;top: -30px;left: 84%">含有中文逗号</span>
+					<!--<h3 class="f-l c-grayblue w-12"> 迭代次数 </h3>-->
+					<!--{{form.train_epochs(class='f-l input-info bdr w-18 select_demo_number')}}-->
+					<!--<h3 class="f-l c-grayblue w-12"> 模型自动保存间隔 </h3>-->
+					<!--<input type="text" value="30s" class="f-l input-info bdr w-18 select_demo_time1" />-->
+					<!--<h3 class="f-l c-grayblue w-12"> 日志保存间隔 </h3>-->
+					<!--<input type="text" value="0s" class="f-l input-info bdr w-18 select_demo_time2" />-->
+				</div>
+
+				<div class="c-box m-t15">
+					<h3 class="f-l c-grayblue w-12"> 优化器类型 </h3>
+					<div class="f-l w-18 div-select">
+						{{ form.solver_type(class='f-l select-box bdr sub-select')}}
+					</div>
+					<h3 class="f-l c-grayblue w-12"> 减平均 </h3>
+					<div class="f-l w-18 div-select">
+						{{form.use_mean(class='f-l select-box bdr sub-select')}}
+					</div>
+					<!--<h3 class="f-l c-grayblue w-12"> 快照间隔 </h3>-->
+					<!--{{form.snapshot_interval(class='f-l input-info bdr w-18')}}-->
+					<!--<h3 class="f-l c-grayblue w-12"> 验证间隔 </h3>-->
+					<!--{{form.val_interval(class='f-l input-info bdr w-18')}}-->
+					<!--<h3 class="f-l c-grayblue w-12"> 跟踪间隔 </h3>-->
+					<!--{{form.traces_interval(class='f-l input-info bdr w-18')}}-->
+				</div>
+
+				<!--<div class="c-box m-t15">-->
+				<!--<h3 class="f-l c-grayblue w-12"> 随机种子 </h3>-->
+				<!--{{form.random_seed(class='f-l input-info bdr w-18', placeholder='[none]')}}-->
+				<!--<h3 class="f-l c-grayblue w-12"> 优化器类型 </h3>-->
+				<!--<div class="f-l w-18 div-select">-->
+				<!--{{ form.solver_type(class='f-l select-box bdr sub-select')}}-->
+				<!--</div>-->
+				<!--<h3 class="f-l c-grayblue w-12"> 减平均 </h3>-->
+				<!--<div class="f-l w-18 div-select">-->
+				<!--{{form.use_mean(class='f-l select-box bdr sub-select')}}-->
+				<!--</div>-->
+				<!--</div>-->
+				<!--<div class="c-box m-t15">-->
+				<!--<h3 class="f-l c-grayblue w-12"> 切块大小 </h3>-->
+				<!--{{form.crop_size(class='f-l input-info bdr w-18', placeholder='none')}}-->
+				<!--<h3 class="f-l c-grayblue w-12"> 基础学习率 </h3>-->
+				<!--{{form.learning_rate(class='f-l input-info bdr w-18')}}-->
+				<!--<h3 class="f-l c-grayblue w-12"> 样本大小 </h3>-->
+				<!--{{form.batch_size(class='f-l input-info bdr w-18',placeholder='[network defaults]')}}-->
+				<!--</div>-->
+				<style>
+					.w-78{width: 78%;}
+				</style>
+
+
+
+
+				<div class="c-box m-t15">
+					<div class="check-box"><input type="checkbox" id="lis-adcheck-1" name="" class="lis-adcheck-show" />
+						<label for="lis-adcheck-1" class="c-grayblue"> 学习率高级选项 </label>
+					</div>
+					<div class="check-box" style="margin-left: 5%;">
+						<input type="checkbox" id="height_model_btn" name="" class="height_model_btn" />
+						<label for="height_model_btn" class="c-grayblue"> 模型高级选项 </label>
+					</div>
+				</div>
+
+				<!----lis-adcheck-hide -------------------->
+				<script>
+
+                    $('#lis-adcheck-1').on('click',function () {
+                        $('.lis-adcheck-hide').slideToggle()
+                    })
+                    $(".height_model_btn").on('click',function () {
+                        console.log($(this).prop('checked'))
+                        if($(this).prop('checked')){
+                            $(".height_model_box").slideDown(500)
+                        }
+                        else{
+                            $(".height_model_box").slideUp(500)
+                        }
+                    })
+				</script>
+				<div class="f-l w-100 lis-adcheck-hide">
+					<div class="c-box m-t15">
+						<h3 class="f-l c-grayblue w-12"> 规则 </h3>
+						<div class="f-l w-18 div-select">
+							{{ form.lr_policy(class='f-l select-box bdr sub-select') }}
+						</div>
+						<h3 class="f-l c-grayblue w-12"> 步长 </h3>
+						{{form.lr_step_size(class='f-l input-info bdr w-18')}}
+						<h3 class="f-l c-grayblue w-12"> 灰度系数 </h3>
+						{{form.lr_step_gamma(class='f-l input-info bdr w-18')}}
+					</div>
+				</div>
+				<div class="f-l w-100 height_model_box" style="display: none">
+					<div class="c-box m-t15">
+						<h3 class="f-l c-grayblue w-12"> 运行时限(分钟) </h3>
+						{{form.max_run_time(class='f-l input-info bdr w-18 run_num')}}
+						<!--<h3 class="f-l c-grayblue run_num_prompt" style="width: 10%;">以分钟为单位</h3>-->
+						<h3 class="f-l c-grayblue w-12"> 模型自动保存间隔 </h3>
+						<input type="text" value="30s" class="f-l input-info bdr w-18 select_demo_time1" />
+						<h3 class="f-l c-grayblue w-12"> 日志保存间隔 </h3>
+						<input type="text" value="0s" class="f-l input-info bdr w-18 select_demo_time2" />
+
+					</div>
+					<div class="c-box m-t15">
+
+						<h3 class="f-l c-grayblue w-12"> 快照间隔 </h3>
+						{{form.snapshot_interval(class='f-l input-info bdr w-18')}}
+						<h3 class="f-l c-grayblue w-12"> 验证间隔 </h3>
+						{{form.val_interval(class='f-l input-info bdr w-18')}}
+						<h3 class="f-l c-grayblue w-12"> 跟踪间隔 </h3>
+						{{form.traces_interval(class='f-l input-info bdr w-18')}}
+					</div>
+					<style>
+						.c-box .run_num_prompt{
+							color: red;
+							display: none;
+							text-align: left;
+						}
+					</style>
+					<div class="c-box m-t15">
+						<h3 class="f-l c-grayblue w-12"> 切块大小 </h3>
+						{{form.crop_size(class='f-l input-info bdr w-18', placeholder='none')}}
+						<h3 class="f-l c-grayblue w-12"> 随机种子 </h3>
+						{{form.random_seed(class='f-l input-info bdr w-18', placeholder='[none]')}}
+						<h3 class="f-l c-grayblue w-12"> 样本处理积累 </h3>
+						{{form.batch_accumulation(class='f-l input-info bdr w-18')}}
+						<!--<h3 class="f-l c-grayblue w-12"> 最大运行时限 </h3>-->
+						<!--{{form.max_run_time(class='f-l input-info bdr w-18 run_num')}}-->
+						<!--<h3 class="f-l c-grayblue run_num_prompt" style="width: 10%;">以分钟为单位</h3>-->
+					</div>
+
+					<!--<div  class="c-box m-t15">-->
+					<!--<h3 class="f-l c-grayblue w-12" style="width: 20%;">作业运行错误时，是否自动创建作业？</h3>-->
+					<!--<input type="text" value="0" class="run_num input-info bdr w-10 f-l"/>-->
+					<!--<h3 class="f-l c-grayblue run_num_prompt">范围0-2</h3>-->
+					<!--&lt;!&ndash;<div class="f-l" style="margin-top: 10px;">&ndash;&gt;-->
+					<!--&lt;!&ndash;<input type="radio" />是&ndash;&gt;-->
+					<!--&lt;!&ndash;<input type="radio" style="margin-left: 20px;"/>否&ndash;&gt;-->
+					<!--&lt;!&ndash;</div>&ndash;&gt;-->
+
+					<!--</div>-->
+					<script>
+                        $('.run_num').on('focus',function () {
+                            $('.run_num_prompt').css('display','block')
+                        })
+                        $('.run_num').on('blur',function () {
+                            $('.run_num_prompt').css('display','none')
+//								if(($(this).val() > 2) || ($(this).val() < 0)){
+//									alert('超出允许范围的最大值或最小值')
+//								}
+                        })
+
+					</script>
+				</div>
+			</div>
+			<input type="button" value="上一步" class="f-l btn-8 m-t35 m-r15 c-grayblue bgc-red-h c-white-h bgc-gray-b btn_m btn_data_2-no"/>
+			<input type="button" name="" id="" value="下一步" class="f-l btn-8 m-t35 m-r15 c-white bgc-Aqua bgc-red-h btn_m btn_data_2"/>
+
+		</div>
+	</div>
+
+	<!--Cccccccccccccccccc-->
+	<div class=" container3">
+		<div class="f-l title">
+			<h1 class="f-l c-grayblue"> 模型训练 </h1>
+			<span class="f-l c-gray"> Welcome back, {{ request.cookies.username }} </span>
+		</div>
+
+		<div class="f-l sub-title bgc-white">
+			<a href="homeworkMonitor.html" class="f-l c-gray c-aqua-h"><span class="f-l"> Home         </span><em class="f-l c-gray"> / </em></a>
+			<a href="#" class="f-l c-gray c-aqua-h"><span class="f-l">{%if extension_id%}{{extension_id|transfer}}{%else%}other{%endif%}</span><em class="f-l c-gray"> / </em></a>
+		</div>
+		<!--<div class="user-toggle vip-3">		      	-->
+		<!--<a href="#"><img src="{{url_for('static', filename='images/pic/toggle.png')}}"/> 高级模式</a>-->
+		<!--</div>-->
+		<div class="f-l lis-z bgc-white">
+			<h2 class="f-l"> 选择模型 </h2>
+			<select name="" i class="f-l w-35 div-select m-l15 bdr select_model_xx" style="height: 40px;">
+				<option value="图像分类">图像分类</option>
+				<option value="目标检测">目标检测</option>
+				<option value="图像分割">图像分割</option>
+				<!--<option value="图像处理">图像处理</option>-->
+				<!--<option value="文本分类">文本分类</option>-->
+				<!--<option value="其他">其他</option>-->
+				<option value="医疗影像">医疗影像</option>
+			</select>
+		</div>
+
+		<div class="lis-ac bgc-white">
+			<ul class="f-l">
+				<li class="f-l bdr current">
+					<div class="f-l c-gray">
+						<i class="f-l iconfont fz-65 "> &#xe629; </i>
+						<h3 class="f-r c-gray"> 选择类型及数据 </h3>
+					</div>
+					<em class="bgc-gray c-gray1"> 1 </em>
+				</li>
+				<li class="f-l bdr current">
+					<div class="f-l c-gray">
+						<i class="f-l iconfont fz-65 "> &#xe618; </i>
+						<h3 class="f-r "> 填写参数 </h3>
+					</div>
+					<em class="bgc-gray c-gray1"> 2 </em>
+				</li>
+				<li class="f-l bdr current">
+					<div class="f-l c-gray">
+						<i class="f-l iconfont fz-65"> &#xe61d; </i>
+						<h3 class="f-r"> 预览 </h3>
+					</div>
+					<em class="bgc-gray c-gray1"> 3 </em>
+				</li>
+			</ul>
+		</div>
+
+		<div class="f-l lis-ad bgc-white">
+			<div class="c-box">
+				<div class="title"><h1 class="f-l c-grayblue"> 预览 </h1></div>
+				<div class="c-box bdr plr-bt20">
+					<div class="title bdr-b"><h2 class=" c-grayblue"> 基本信息 </h2></div>
+					<div class="c-box m-t15">
+						<div class="f-l l-div bdr-l w-20">
+							<h2 class="c-grayblue"> 项目名称 </h2>
+							<p class="f-l p-text-2 c-aqua demo_name"> {{form.model_name.data}} </p>
+						</div>
+						<div class="f-l l-div bdr-l w-20">
+							<h2 class="c-grayblue"> 应用场景 </h2>
+							<p class="f-l p-text-2 c-aqua demo_back"> 图像分类 </p>
+						</div>
+						<div class="f-l l-div bdr-l w-20">
+							<h2 class="c-grayblue"> 训练框架 </h2>
+							<p class="f-l p-text-2 c-aqua demo_border">{{form.framework.data}} </p>
+						</div>
+						<div class="f-l l-div bdr-l w-20">
+							<h2 class="c-grayblue"> 选取网络 </h2>
+							<p class="f-l p-text-2 c-aqua demo_wang">{{form.standard_networks.data}}</p>
+						</div>
+						<div class="f-l l-div bdr-l w-20">
+							<h2 class="c-grayblue"> 样本数据 </h2>
+							<p class="f-l p-text-2 c-aqua demo_data"> {{ form.dataset.data}} </p>
+						</div>
+					</div>
+				</div>
+				<div class="c-box bdr plr-bt20 m-t30">
+					<div class="title bdr-b"><h2 class=" c-grayblue"> 参数信息 </h2></div>
+					<div class="c-box m-t15">
+						<div class="f-l l-div bdr-l w-16">
+							<h2 class="c-grayblue"> 迭代次数 </h2>
+							<p class="f-l p-text-2 c-aqua demo_number"> {{form.data.train_epochs}}</p>
+						</div>
+						<div class="f-l l-div bdr-l w-16">
+							<h2 class="c-grayblue"> 基础学习率 </h2>
+							<p class="f-l p-text-2 c-aqua learning_rate_content"> 0.01 </p>
+						</div>
+						<div class="f-l l-div bdr-l w-16">
+							<h2 class="c-grayblue"> 优化器类型 </h2>
+							<p class="f-l p-text-2 c-aqua solver_type_content"> SGD </p>
+						</div>
+						<div class="f-l l-div bdr-l w-16">
+							<h2 class="c-grayblue"> 样本大小 </h2>
+							<p class="f-l p-text-2 c-aqua sample_max"> 默认</p>
+						</div>
+						<!--<div class="f-l l-div bdr-l w-16">-->
+						<!--<h2 class="c-grayblue"> 参数1 </h2>-->
+						<!--<p class="f-l p-text-2 c-aqua demo_set1"> 1111 </p>-->
+						<!--</div>                	-->
+						<!--<div class="f-l l-div bdr-l w-16">-->
+						<!--<h2 class="c-grayblue"> 参数2 </h2>-->
+						<!--<p class="f-l p-text-2 c-aqua demo_set2"> 222 </p>-->
+						<!--</div>  -->
+						<!--<div class="f-l l-div bdr-l w-16">-->
+						<!--<h2 class="c-grayblue"> 参数3 </h2>-->
+						<!--<p class="f-l p-text-2 c-aqua demo_set3"> 333 </p>-->
+						<!--</div>  -->
+					</div>
+				</div>
+				<div class="c-box bdr plr-bt20 m-t30">
+					<div class="title bdr-b"><h2 class=" c-grayblue"> 资源信息 </h2></div>
+					<div class="c-box m-t15">
+						<div class="f-l l-div bdr-l w-50">
+							<h2 class="c-grayblue"> 资源类型 </h2>
+							<p class="f-l p-text-2 c-aqua">
+								<!--CPU: 1Core <br/>
+                                内存: 4GB  <br/>
+                                GPU: 1Card <br/> -->
+								<span>CPU: </span><span class="demo_CPU"> 1Core </span> <br/>
+								<span>内存: </span><span class="demo_gp"> 4GB </span> <br/>
+								<span>GPU: </span><span class="demo_GPU"> 1Card </span> <br/>
+							</p>
+						</div>
+						<div class="f-l l-div bdr-l w-50">
+							<h2 class="c-grayblue"> 资源数量 </h2>
+							<h1 class="f-l c-orange demo_all_num">
+								1
+							</h1>
+						</div>
+					</div>
+				</div>
+			</div>
+			<input type="button" value="上一步" class="f-l btn-8 m-t35 m-r15 c-grayblue bgc-red-h c-white-h bgc-gray-b btn_m btn_cancel btn_data_3-no" style="width: 140px;outline: none;border: none;"/>
+			<!--<a href="#" class="f-l btn-8 m-t35 m-r15 c-white bgc-Aqua bgc-red-h"> 上一步 </a>-->
+			<input type="button" value="提交" class="f-l btn-8 m-t35 m-r15 c-white bgc-Aqua bgc-red-h click-none" style="width: 140px;outline: none;border: none;"/>
+			<!--<a href="#" class="f-l btn-8 m-t35 m-r15 c-white bgc-Aqua bgc-red-h"> 提交 </a>-->
+			<script>
+                $('.click-none').on('click',function () {
+                    $('.form_all').submit()
+//							$(this).attr('disabled','disabled')
+//						$('.container1').css('display','none')
+//						$('.container2').css('display','none')
+                })
+                // $('.btn_cancel').on('click',function(){
+                //     location.reload()
+                // })
+			</script>
+		</div>
+	</div>
+</form>
+<!--<style>-->
+<!--.alert-box{    z-index: 99998;-->
+<!--position: fixed;-->
+<!--top: 0;-->
+<!--left: 0;-->
+<!--width: 100%;-->
+<!--height: 100%;-->
+<!--background-color: rgba(0, 0, 0, .6);-->
+<!--display: none;-->
+<!--}-->
+<!--.alert-div{-->
+<!--width: 450px;-->
+<!--height: 240px;-->
+<!--background: white;-->
+<!--margin: 0 auto;-->
+<!--margin-top: 10%;-->
+<!--position: relative;-->
+<!--}-->
+<!--.alert-div-nav{-->
+<!--height:40px;-->
+<!--}-->
+
+<!--.alert-div-content h3{height: 40px;-->
+<!--line-height: 40px;-->
+<!--text-align: center;-->
+<!--padding: 50px 10px;-->
+<!---->
+<!--}-->
+<!--.alert-btn{height: 40px;-->
+<!--text-align: center;-->
+<!--position: absolute;-->
+<!--bottom: 20px;-->
+<!--width: 100%;-->
+<!--}-->
+<!--.alert-btn div{display: inline-block; }-->
+<!--.alert-btn  h3{-->
+<!--height:40px;-->
+<!--padding: 0 30px;-->
+<!--line-height: 40px;-->
+<!--}-->
+
+<!--.alert-btn-yes{background: #00b5b8;-->
+<!--color: white;-->
+<!--}-->
+<!--.hover-red:hover{color: white;-->
+<!--background: #ff6376;-->
+<!--}-->
+<!--</style>-->
+<div class="alert-box">
+	<div class="alert-div">
+		<div class="alert-div-nav">
+			<!--<i class="fz-24 iconfont f-r hover-red"> &#xe676; </i>-->
+		</div>
+		<div class="alert-div-content">
+			<h3 style="font-size: 20px;"></h3>
+		</div>
+		<div class="alert-btn">
+
+			<div class="alert-btn-yes hover-red">
+				<h3 style="font-size: 20px;">确定</h3>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock rightcontent %}
+
+{% block bottomfile %}
+
+
+
+<script src="{{url_for('static', filename='js/modelTrain.js')}}" type="text/javascript" charset="utf-8"></script>
+<!--<script src="{{url_for('static', filename='js/mode_abc_last4.js')}}" type="text/javascript"></script>-->
+
+<script type="text/javascript" src="{{url_for('static', filename='js/3rdparty/jquery-1.11.1.min.js')}}"></script>
+<script src="{{ url_for('static', filename='js/3rdparty/bootstrap-3.3.6.min.js', ver=dir_hash) }}" type="text/javascript" charset="utf-8"></script>
+<script src="{{ url_for('static', filename='js/3rdparty/bootbox-4.3.0.min.js', ver=dir_hash) }}" type="text/javascript" charset="utf-8"></script>
+<script src="{{ url_for('static', filename='js/hyperai.js', ver=dir_hash) }}" type="text/javascript" charset="utf-8"></script>
+<script src="{{ url_for('static', filename='js/3rdparty/d3-3.5.5.min.js', ver=dir_hash) }}" type="text/javascript" charset="utf-8"></script>
+<script src="{{ url_for('static', filename='js/3rdparty/c3-0.4.10.min.js', ver=dir_hash) }}" type="text/javascript" charset="utf-8"></script>
+<script src="{{ url_for('static', filename='js/3rdparty/jquery.autocomplete-1.2.21.min.js', ver=dir_hash) }}" type="text/javascript" charset="utf-8"></script>
+<script src="{{ url_for('static', filename='js/file_field.js', ver=dir_hash) }}" type="text/javascript" charset="utf-8"></script>
+<script src="{{ url_for('static', filename='js/3rdparty/underscore-1.8.3.min.js', ver=dir_hash) }}" type="text/javascript" charset="utf-8"></script>
+
+<script src="{{ url_for('static', filename='js/3rdparty/ace-1.2.3.min.js', ver=dir_hash) }}" type="text/javascript" charset="utf-8"></script>
+<script src="{{ url_for('static', filename='js/3rdparty/ace.mode-python-1.2.3.min.js', ver=dir_hash) }}" type="text/javascript" charset="utf-8"></script>
+<script src="{{ url_for('static', filename='js/3rdparty/ace.mode-lua-1.2.3.min.js', ver=dir_hash) }}" type="text/javascript" charset="utf-8"></script>
+<script src="{{ url_for('static', filename='js/3rdparty/ace.theme-chrome-1.2.3.min.js', ver=dir_hash) }}" type="text/javascript" charset="utf-8"></script>
+<script src="{{ url_for('static', filename='js/3rdparty/ace.ext-searchbox-1.2.3.min.js', ver=dir_hash) }}" type="text/javascript" charset="utf-8"></script>
+
+
+<!--<style>-->
+<!--#torch{display: none;}-->
+<!--#tensorflow{display: none;}-->
+<!--tbody tr{display: none}-->
+<!--tbody tr:first-child{display: block}-->
+<!--</style>-->
+<script>
+    if($('.select_model_xx_text').text()=='目标检测'){
+        $('.select_model_xx').each(function () {
+            $(this)[0].selectedIndex='1'
+        })
+    }
+    else if($('.select_model_xx_text').text()=='图像分割'){
+        $('.select_model_xx').each(function () {
+            $(this)[0].selectedIndex='2'
+        })
+    }
+    else if($('.select_model_xx_text').text()=='图像处理'){
+        $('.select_model_xx').each(function () {
+            $(this)[0].selectedIndex='3'
+        })
+    }
+    else if($('.select_model_xx_text').text()=='文本分类'){
+        $('.select_model_xx').each(function () {
+            $(this)[0].selectedIndex='3'
+        })
+    }
+//	else if($('.select_model_xx_text').text()=='other'){
+//		$('.select_model_xx').each(function () {
+//			$(this)[0].selectedIndex='5'
+//		})
+//	}
+    else if($('.select_model_xx_text').text()=='医疗影像'){
+        $('.select_model_xx').each(function () {
+//			$(this)[0].selectedIndex='4'
+            $(this)[0].selectedIndex='3'
+        })
+    }
+    $('.select_model_xx').on('change',function () {
+        console.log($(this).val())
+        if($(this).val()=='图像分类'){
+            window.location.href='/models/images/classification/new'
+        }
+        else if ($(this).val()=='图像分割'){
+            window.location.href='/models/images/generic/new/image-segmentation'
+        }
+        else if ($(this).val()=='目标检测'){
+            window.location.href='/models/images/generic/new/image-object-detection'
+        }
+        else if ($(this).val()=='图像处理'){
+            window.location.href='/models/images/generic/new/image-processing'
+        }
+        else if ($(this).val()=='文本分类'){
+            window.location.href='/models/images/generic/new/text-classification'
+        }
+        else if ($(this).val()=='其他'){
+            window.location.href='/models/images/generic/new'
+        }
+        else if ($(this).val()=='医疗影像'){
+            window.location.href='/models/images/generic/new/image-sunnybrook'
+        }
+    })
+    //last4
+    // 框架选择
+    // $('.nav-tabs').append('<li><a href="#">自定义</a></li>')
+    $('#network-tab-custom').css('display','none')
+    $('#stdnetRole').css('display','none')
+    $('#network-tab-standard-contents').css('display','none')
+    $('#network-tabs li').on('click',function () {
+        if($(this).children().text()=='Custom Network'){
+            $('#network-tab-standard-contents').slideUp(500)
+            $(this).children().css({
+                'color':'white',
+                'background':' #00b5b8'
+            })
+            $(this).siblings().children().css({
+                'color':'#2c3850',
+                'background':' #d9dce1'
+            })
+            $('#stdnetRole').css('display','none')
+            $('#network-tab-custom').css('display','block')
+            $('#method')[0].selectedIndex=3
+        }
+        else{
+            $('#method')[0].selectedIndex=0
+        }
+
+    })
+    $("#stdnetRole li").on('click',function () {
+        $('.demo_border').html($(this).children().text())
+        if($(this).children().text()=='Caffe'){
+            $('#framework').attr('value','caffe')
+        }
+        else if($(this).children().text()=='Torch'){
+            $('#framework').attr('value','torch')
+        }
+        else if($(this).children().text()=='Tensorflow'){
+            $('#framework').attr('value','tensorflow')
+        }
+        console.log($('#framework').attr('value'))
+
+    })
+    $('#stdnetRole li').css('display','none')
+    $("tbody tr").css('display','none')
+    $(document).ready(function () {
+        if($('.select_model_xx_text').text()=='目标检测'){
+            $('#framework').attr('value','caffe')
+            $('#stdnetRole li').eq(0).css('display','block').siblings().css('display','none')
+            $('tbody tr').eq(0).css('display','block').siblings().css('display','none')
+        }
+        else if($('.select_model_xx_text').text()=='图像分割'){
+            $('#framework').attr('value','caffe')
+            $('#stdnetRole li').eq(0).css('display','block').siblings().css('display','none')
+            $('tbody tr').eq(1).css('display','block').siblings().css('display','none')
+        }
+        else if($('.select_model_xx_text').text()=='文本分类'){
+            $('#framework').attr('value','torch')
+            $('#stdnetRole li').eq(1).css('display','block').siblings().css('display','none')
+            $('tbody tr').eq(2).css('display','block').siblings().css('display','none')
+        }
+        else if($('.select_model_xx_text').text()=='医疗影像'){
+            $('#framework').attr('value','caffe')
+            $('#stdnetRole li').eq(0).css('display','block').siblings().css('display','none')
+            $('tbody tr').eq(1).css('display','block').siblings().css('display','none')
+        }
+
+    })
+    $('.table input').on('click',function () {
+        $(this).parent().parent().css('background','#d9dce1').siblings().css('background','white')
+        $('.demo_wang').html($(this).siblings().text())
+    })
+    // 自定义
+    $('#customFramework li').on('click',function () {
+        // console.log($(this).children().children().children('span').text())
+        $('.demo_border').html($(this).children().text())
+        if($(this).children().children().children('span').text()=='Caffe'){
+            $('#framework').attr('value','caffe')
+        }
+        else if($(this).children().children().children('span').text()=='Torch'){
+            $('#framework').attr('value','torch')
+        }
+        else if($(this).children().text()=='Torch'){
+            $('#framework').attr('value','torch')
+        }
+        else {
+            $('#framework').attr('value','tensorflow')
+        }
+
+        $(this).children().css({
+            'color':'white',
+            'background':' #00b5b8'
+        })
+        $(this).siblings().children().css({
+            'color':'#2c3850',
+            'background':' #d9dce1'
+        })
+        console.log($('#framework').attr('value'))
+    })
+
+    $('.container2').css('display','none');
+    $('.container3').css('display','none');
+    $('.btn_data_2-no').on('click',function() {
+        $('.container1').css('display', 'block').siblings().css('display', 'none')
+    })
+    $('.btn_data_3-no').on('click',function() {
+        $('.container2').css('display', 'block').siblings().css('display', 'none')
+    })
+    $('.btn_data_1').on('click',function(){
+
+        $('.container2').css('display','block').siblings().css('display','none')
+        $('.container1').css('display','none')
+        $('.container3').css('display','none')
+
+
+
+        // var gpu_count = '';
+        // var cpu_count = '';
+        // var memory_count = '';
+        // if($('.btn_i_node').html() == '单机任务'){
+        // 	gpu_count = $('#gpu_count_new').val()
+        // 	cpu_count = $('#cpu_count').val()
+        // 	memory_count = $('#memory_count').val()
+        //
+        // }else if($('.btn_i_node').html() == '分布式任务'){
+        // 	gpu_count = $('#gpu_count_new_more').val()
+        // 	cpu_count = $('#cpu_count_more').val()
+        // 	memory_count = $('#memory_count_more').val()
+        //
+        // }
+        // $.ajax({
+        // 	type:'GET',
+        // 	url:'/models/images/classification/check_res',
+        // 	data:{
+        // 		gpu_count:gpu_count,
+        // 		cpu_count:cpu_count,
+        // 		memory_count:memory_count,
+        // 		node_count:$('#node_count').val(),
+        // 		ismpi:$('#train_method').val()
+        // 	},
+        // 	success:function (e) {
+        // 		console.log(e)
+        // 		if(e.a=='1'){
+        // 			$('.container2').css('display','block').siblings().css('display','none')
+        // 			$('.container1').css('display','none')
+        // 			$('.container3').css('display','none')
+        // 		}
+        // 		else {
+        // 			$('.alert-box').css('display','block')
+        // 			$('.alert-div-content').find('h3').html(e.res)
+        // 			$('.alert-box .alert-btn-yes').on('click',function () {
+        // 				$('.alert-box').css('display','none')
+        // 			})
+        // 			// alert(e.res)
+        // 		}
+        // 	}
+        // })
+    })
+
+
+
+    $('#learning_rate').blur(function(){
+        if (($(this).val().split(',').length == 1 && $(this).val().indexOf('，') !== -1) || ($(this).val().split(',').length > 1 && $(this).val().indexOf('，') !== -1)) {
+            $(this).next('.chin-tishi').show()
+        } else{
+            console.log('通过')
+        }
+    })
+    $('#learning_rate').focus(function () {
+        $(this).next('.chin-tishi').hide()
+    })
+    $('#batch_size').blur(function(){
+        if (($(this).val().split(',').length == 1 && $(this).val().indexOf('，') !== -1) || ($(this).val().split(',').length > 1 && $(this).val().indexOf('，') !== -1)) {
+            $(this).next('.chin-tishi').show()
+        } else{
+            console.log('通过')
+        }
+    })
+    $('#batch_size').focus(function () {
+        $(this).next('.chin-tishi').hide()
+    })
+
+
+
+
+
+    $('.btn_data_2').on('click',function(){
+        // 第三页交互
+        $('.demo_name').html($('.neme__data').val())  //项目名字
+        $('.demo_back').html($('.select_model_xx').val())   //  应用场景
+        // console.log($('.acen_select').val())
+        $('.demo_border').html($('.select_kuangjia').val())  //训练框架
+        // console.log($('.select_kuangjia').val())
+        console.log('---------',$('#network-tabs .active a').html())
+        if($('#network-tabs .active a').html() == 'Standard Networks'){
+            $('.demo_wang').html($('.select_wang').val())  //选取网络
+        }else if($('#network-tabs .active a').html() == 'Custom Network'){
+            $('.demo_wang').html('custom')
+        }
+
+        console.log($('.select_wang').val())
+        $('.demo_data').html($('.select_data').children().val())  //样本数据
+        $('.demo_number').html($('.select_demo_number').val())  //迭代次数
+        $('.demo_CPU').html($('#cpu_count').val()+'Core')  //CPU
+        $('.demo_gp').html($('#memory_count').val()+'G')  //内存
+        $('.demo_GPU').html($('#gpu_count_new').val())  //GPU
+        $('.learning_rate_content').html($('#learning_rate').val())  //基础学习率
+        $('.solver_type_content').html($('#solver_type').val())  //优化器类型
+        if($('#batch_size').val() !=""){
+            $(".sample_max").html($('#batch_size').val())
+        }
+        $('.demo_all_num').html('1')
+        // if($('.btn_i_node').text() == '单机任务'){
+        // 	$('.demo_all_num').html('1')
+        // }else if($('.btn_i_node').text() == '分布式任务'){
+        // 	$('.demo_all_num').html($('.node_num').val())
+        // }
+
+
+        var learn_rate = $('#learning_rate').val()
+        var batch_size = $('#batch_size').val()
+
+        var gpu_count = '';
+        var cpu_count = '';
+        var memory_count = '';
+
+        gpu_count = $('#gpu_count_new').val()
+        cpu_count = $('#cpu_count').val()
+        memory_count = $('#memory_count').val()
+
+        // if($('.btn_i_node').html() == '单机任务'){
+        //     gpu_count = $('#gpu_count_new').val()
+        //     cpu_count = $('#cpu_count').val()
+        //     memory_count = $('#memory_count').val()
+        //
+        // }else if($('.btn_i_node').html() == '分布式任务'){
+        //     gpu_count = $('#gpu_count_new_more').val()
+        //     cpu_count = $('#cpu_count_more').val()
+        //     memory_count = $('#memory_count_more').val()
+        //
+        // }
+
+
+        $.ajax({
+            type:'GET',
+            url:'/models/images/classification/check_res',
+            data:{
+                gpu_count:gpu_count,
+                cpu_count:cpu_count,
+                memory_count:memory_count,
+                node_count:$('#node_count').val(),
+                ismpi:$('#train_method').val(),
+                lr_count:learn_rate.split(',').length,
+                bs_count:batch_size.split(',').length
+            },
+            success:function (e) {
+                console.log(e)
+                if(e.a=='1'){
+                    $('.container3').css('display','block').siblings().css('display','none')
+                    $('.container1').css('display','none')
+                    $('.container2').css('display','none')
+                }
+                else {
+                    $('.alert-box').css('display','block')
+                    $('.alert-div-content').find('h3').html(e.res)
+                    $('.alert-box .alert-btn-yes').on('click',function () {
+                        $('.alert-box').css('display','none')
+                    })
+                    // alert(e.res)
+                }
+            }
+        })
+
+
+
+
+
+        // 跳转
+        // $('.container3').css('display','block').siblings().css('display','none')
+        // $('.container1').css('display','none')
+        // $('.container2').css('display','none')
+    })
+    //页面数据
+    $(function(){
+        //checkbox
+        $(".lis-adcheck-show").on("ifChecked", function(event) {
+            $(".lis-adcheck-hide").show();
+        });
+        $(".lis-adcheck-show").on("ifUnchecked", function(event) {
+            $(".lis-adcheck-hide").hide();
+        });
+
+        //自定义参数
+        // $(".customize-add").on("click", function() {
+        //     customizeAdd(), $(".customize-addlis").each(function() {
+        //         $(this) && $(this).find(".customize-remove").on("click", function() {
+        //             $(this).parents(".customize-addlis").remove();
+        //         }), $(this) && $(this).find(".customize-remove").on("click", function() {
+        //                 $(this).children(".customize-addlis").remove();
+        //             });
+        //     });
+        // });
+        // $(".customize-remove").on("click", function() {
+        //     $(this).parents(".customize-addlis").remove();
+        // });
+    })
+
+
+
+
+
+
+    function customizeAdd() {$(".lis-customizebox").append('<div class="c-box customize-addlis m-t15">'+'<input type="text" placeholder="Image1" class="f-l input-info bdr w-16-1 ml-12" />'+'<input type="text" placeholder="12444" class="f-l input-info bdr w-18 ml-12" />'+'<input type="text" placeholder="12444" class="f-l input-info bdr w-18 ml-12" />'+'<a href="#" class="f-r c-red customize-remove m-t5"> <i class="iconfont fz-20 plr-5"> &#xe638; </i></a>'+'</div>');};
+
+    //	可视化
+    //	1//////////////
+    function syncAceEditor(){
+        // Syncs (copies) the ace editor's contents to the custom_network flask container
+        $("textarea#custom_network").val(editor.getValue());
+    }
+
+    //2////////////////////
+    function process_tf_vis(data){
+        // Processes a tensorflow graph_def string such that it is loaded in a tensorboard-style graph
+        var height = String($(window).height() - 200) + 'px' // Bootbox dynamic height hack
+        var the_data = '<script>function load() {document.getElementById("test1").pbtxt = ' + data + ' ;}</scr'+'ipt>';
+        the_data += '<link rel="import" href="{{ url_for('static', filename='tb/tf-graph-basic.build.html', ver=dir_hash) }}" onload=load()>';
+        the_data += '<div style="height:' + height + '"><tf-graph-basic id="test1"></tf-graph-basic></div>';
+        return the_data;
+    }
+    //3///////////////////////////
+    function customizeNetwork(network, snapshot_list, framework) {
+        function fillCustomTab(network, snapshot_list, framework) {
+            data = null;
+            if (snapshot_list)
+                data = {'snapshot_epoch': $('#'+snapshot_list).val()};
+            $.ajax("{{url_for('hyperai.model.views.customize')}}?network=" + network + "&framework="+framework,
+                {
+                    type: "POST",
+                    data: data
+                }
+            )
+                .done(function(data) {
+                    data = $.parseJSON(data);
+                    console.log(data);
+                    editor.setValue(data['network']);
+                    editor.selection.moveTo(0, 0);
+                    if (data['snapshot'])
+                        $('input[name=custom_network_snapshot]').val(data['snapshot']);
+                    else
+//                    $('input[name=custom_network_snapshot]').val('');
+                        $('input[name=custom_network_snapshot]').val($('input[name=custom_network_snapshot]')[0].defaultValue);
+                    if (data['python_layer'])
+                        $('#python_layer_server_file').val(data['python_layer']);
+                    else
+                        $('#python_layer_server_file').val('');
+                })
+                .fail(function(data) {
+                    editor.setValue('');
+                    editor.selection.moveTo(0, 0);
+                    $('input[name=custom_network_snapshot]').val('');
+                    errorAlert(data);
+                });
+            $('#network-tabs a:last').tab('show');
+            $('#customFramework a[href="'+"#"+framework+"_custom"+'"]').tab('show');
+        }
+        console.log('12312312')
+        if (!framework)
+            var $tab = $('#stdnetRole'), $active = $tab.find('.active'), framework = $active.attr('id');
+
+        if (editor.getValue() != "") {
+            bootbox.confirm(
+                'This will overwrite data in the Custom Network tab. Continue?',
+                function(result) { if (result) fillCustomTab(network, snapshot_list, framework); }
+            );
+        } else {
+            fillCustomTab(network, snapshot_list, framework);
+        }
+        $('#network-tab-custom').css('display','block')
+        $('.Standard_Networks').css('display','none')
+        $('#method').val('custom')
+        $('#network-tabs li').eq(1).children().css({
+            'color':'white',
+            'background':'rgb(0, 181, 184)'
+        })
+        $('#network-tabs li').eq(0).children().css({
+            'color':'rgb(44, 56, 80)',
+            'background':'rgb(217, 220, 225)'
+        })
+        $('#'+$('#framework').attr('value')).children('a').css({
+            'color':'white',
+            'background':'rgb(0, 181, 184)'
+        })
+        $('#'+$('#framework').attr('value')).children().children().children('input').prop('checked',true)
+        $('#'+$('#framework').attr('value')).siblings().children('a').css({
+            'color':'rgb(44, 56, 80)',
+            'background':'rgb(217, 220, 225)'
+        })
+        $('#'+$('#framework').attr('value')).siblings().children().children().children('input').prop('checked',false)
+//		$('#network-tabs')
+
+    }
+    //4/////////////////
+    var frameworks = {};
+    {% for fw in frameworks %}
+    framework = {
+        name : '{{ fw.get_name() }}',
+        can_shuffle : '{{ fw.can_shuffle_data() }}'=='True',
+        can_accumulate_gradients : '{{ fw.can_accumulate_gradients() }}'=='True',
+        supports_python_layers_file : '{{ fw.supports_python_layers_file() }}'=='True',
+        supports_timeline_traces : '{{ fw.supports_timeline_traces() }}'=='True',
+        data_aug_types : [{% for dttype in fw.SUPPORTED_DATA_AUGMENTATION_TYPES %} '{{dttype}}' {% if not loop.last %} , {% endif %} {% endfor %}],
+    data_trans_types : [{% for datype in fw.SUPPORTED_DATA_TRANSFORMATION_TYPES %} '{{datype}}' {% if not loop.last %} , {% endif %} {% endfor %}],
+    };
+    frameworks['{{ fw.get_id() }}'] = framework;
+    {% endfor %}
+
+    function setFramework(fwid)
+    {
+        $('#framework').val(fwid);
+        if (frameworks[fwid].can_shuffle)
+            $("#shuffle-data").show();
+        else
+            $("#shuffle-data").hide();
+
+        $("select[name=solver_type] > option." + fwid).prop('disabled', false);
+        $("select[name=solver_type] > option").not("." + fwid).prop('disabled', true);
+        if (! $("select[name=solver_type] > option:selected").hasClass(fwid)) {
+            $("select[name=solver_type] > option:selected").prop("selected", false);
+        }
+
+        if (frameworks[fwid].supports_python_layers_file)
+            $("#python-layers").show();
+        else
+            $("#python-layers").hide();
+
+        if (frameworks[fwid].supports_timeline_traces)
+            $("#timeline-traces").show();
+        else
+            $("#timeline-traces").hide();
+
+        $(".data-transformation-input").hide();
+        $(".data-augmentation-input").hide();
+        $.each(frameworks[fwid].data_trans_types, function( index, value ) {
+            $("#"+value).show();
+        });
+        $.each(frameworks[fwid].data_aug_types, function( index, value ) {
+            $("#"+value).show();
+        });
+
+        // Hide the entire box including title when none is available
+        if (frameworks[fwid].data_trans_types.length)
+            $("#data-transformation").show();
+        else
+            $("#data-transformation").hide();
+
+        if (frameworks[fwid].data_aug_types.length)
+            $("#data-augmentation").show();
+        else
+            $("#data-augmentation").hide();
+
+        if (fwid == 'torch'){
+            editor.session.setMode(new LuaMode()); // Change editor syntax environment
+        } else {
+            editor.session.setMode(new PythonMode()); // Change editor syntax environment
+        }
+        $('#stdnetRole a[href="'+"#"+fwid+"_standard"+'"]').tab('show');
+        $('#customFramework a[href="'+"#"+fwid+"_custom"+'"]').tab('show');
+
+        if (frameworks[fwid].can_accumulate_gradients) {
+            $('#batch_accumulation').prop('disabled', false);
+            $('#batch-accumulation-option').show();
+        } else {
+            $('#batch-accumulation-option').hide();
+            $('#batch_accumulation').prop('disabled', true);
+        }
+    }
+    //5///////////////////////
+    function isChrome() {
+        var isChromium = window.chrome,
+            winNav = window.navigator,
+            vendorName = winNav.vendor,
+            isOpera = winNav.userAgent.indexOf("OPR") > -1,
+            isIEedge = winNav.userAgent.indexOf("Edge") > -1,
+            isIOSChrome = winNav.userAgent.match("CriOS");
+
+        if(isIOSChrome){
+            return true;
+        } else if(isChromium !== null && isChromium !== undefined && vendorName === "Google Inc." && isOpera == false && isIEedge == false) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    //6///////////////////
+    function visualizeNetwork() {
+        var framework = $('#framework').val();
+        var is_tf = framework.includes("ensorflow")
+
+        if (is_tf) {
+            if (!isChrome()) {
+                bootbox.alert({title: "Visualization Error", message: "Tensorflow network visualization is only available for Google Chrome"});
+                return;
+            }
+        }
+
+        var num_sel_gpus = 0
+        var sel_gpus = $("#select_gpus").val()
+        if (sel_gpus) {
+            num_sel_gpus = sel_gpus.length
+        } else if ($("#select_gpu_count").val()) {
+            num_sel_gpus = $("#select_gpu_count").val()
+        }
+        var bootboxClass = (is_tf ? "full-bootbox" : "wide-bootbox");
+        syncAceEditor(); // Sync ace editor to custom_network editor
+        var bbox_content = $('<div class="text-center"><i class="glyphicon glyphicon-refresh glyphicon-spin"></i> Loading...</div>' );
+        var bbox = bootbox.alert({
+            message: bbox_content,
+            animate: false,
+            closeButton: false,
+            className: bootboxClass,
+        });
+        $.ajax("{{url_for('hyperai.model.views.visualize_network')}}?framework="+framework,
+            {
+                type: "POST",
+                data: {custom_network: $('#custom_network').val(),
+                    dataset_id: $('#dataset').val(),
+                    solver_type: $('#solver_type').val(),
+                    use_mean: document.getElementById('use_mean').value,
+                    crop_size: document.getElementById('crop_size').value,
+                    num_gpus: num_sel_gpus,
+                },
+            }
+        )
+            .done(function(data) {
+                if (is_tf)
+                    data = process_tf_vis(data);
+                bbox_content.html(data);
+                $("."+bootboxClass).animate({scrollTop: 0}, "");
+            })
+            .fail(function(data) {
+                bbox.modal("hide")
+                errorAlert(data);
+            });
+        return false;
+    }
+    //7///////////////////////////
+
+    var editor = ace.edit("ace-editor");
+    editor.$blockScrolling = Infinity;
+    editor.setTheme("ace/theme/chrome");
+    editor.session.setFoldStyle('manual');
+    editor.setShowPrintMargin(false);
+    var PythonMode = ace.require("ace/mode/python").Mode;
+    var LuaMode = ace.require("ace/mode/lua").Mode;
+    $( document ).ready(function() {
+        editor.setValue($('textarea#custom_network').val());
+        editor.selection.moveTo(0, 0);
+    });
+    $('body').on('click',function () {
+//                            console.log(editor.getValue())
+        $('#custom_network').val(editor.getValue())
+    })
+
+    $('.btn-sm').on('click',function () {
+        console.log($('.btn-sm').index(this))
+        if($('.Customize_select').val()=='目标检测'){
+            customizeNetwork('detectnet');
+        }
+        else if($('.Customize_select').val()=='文本分类'){
+            customizeNetwork('char-cnn');
+        }
+        else if($('.Customize_select').val()=='图像分割'){
+            customizeNetwork('fcn-alexnet');
+        }
+        else if($('.Customize_select').val()=='医疗影像'){
+            customizeNetwork('fcn-alexnet');
+        }
+//	if($('.btn-sm').index(this)==0){
+//		customizeNetwork('detectnet');
+//	}
+//	else if($('.btn-sm').index(this)==1){
+//		customizeNetwork('alexnet');
+//	}
+//	else if($('.btn-sm').index(this)==2){
+//		customizeNetwork('googlenet');
+//	}
+    })
+    //	退出登陆
+    $('.top-select').on('mouseover',function () {
+        $('.option').css('display','block')
+    })
+
+    $('.option').on('mouseout',function () {
+        $('.option').css('display','none')
+    })
+
+    $('.top-select').on('mouseout',function () {
+        $('.option').css('display','none')
+    })
+    $(function(){
+        //checkbox
+        $(".lis-adcheck-show").on("ifChecked", function(event) {
+            $(".lis-adcheck-hide").show();
+        });
+        $(".lis-adcheck-show").on("ifUnchecked", function(event) {
+            $(".lis-adcheck-hide").hide();
+        });
+
+        //自定义参数
+        $(".customize-add").on("click", function() {
+            customizeAdd(), $(".customize-addlis").each(function() {
+                $(this) && $(this).find(".customize-remove").on("click", function() {
+                    $(this).parents(".customize-addlis").remove();
+                }), $(this) && $(this).find(".customize-remove").on("click", function() {
+                    $(this).children(".customize-addlis").remove();
+                });
+            });
+        });
+        $(".customize-remove").on("click", function() {
+            $(this).parents(".customize-addlis").remove();
+        });
+    })
+
+</script>
+{% endblock bottomfile%}

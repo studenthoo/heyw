@@ -1,0 +1,14 @@
+.r-box img{
+	position: relative;
+	bottom: 50px;
+}
+.modelforecast-meter{height: 40px;
+	background: #dfe6ea;
+}
+.modelforecast-meter div{height: 40px;
+	float: left;
+	background: #00b5b8;
+	text-align: center;
+	width: 0;
+	line-height: 40px;
+}

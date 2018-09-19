@@ -1,0 +1,49 @@
+.tuning-box{
+	min-height: 200px;
+}
+.rmsprop-box,.adam-box,.momentum-box,.checkbox-lr{
+	display: none;
+}
+.tuning-btn{
+	width: 130px;
+    height: 50px;
+    line-height: 50px;
+    font-family: "微软雅黑";
+    font-size: 20px;
+    font-weight: 300;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    border: none;
+}
+.load-file {
+    position: absolute;
+    right: 15px;
+    top: 0px;
+    display: inline-block;
+    width: 100px;
+    color: #fff;
+    text-align: center;
+    height: 34px;
+    line-height: 34px;
+    background: #ff6376;
+    z-index: 2;
+}
+.load-file input {
+    position: absolute;
+    font-size: 20px;
+    width: 100px;
+    height: 34px;
+    right: 0px;
+    top: 0px;
+    opacity: 0;
+    cursor: pointer;
+}
+.format-box{
+	position: relative;
+}
+.format{
+	position: absolute;
+	top: -20px;
+	display: none;
+}

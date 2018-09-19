@@ -1,0 +1,390 @@
+{% extends 'new/public.html'%}
+
+
+{% block head %}
+    {% if job.status.is_running() %}
+        {% with namespace = "/jobs" %}
+            {% set room = job.id() %}
+            {% include 'socketio.html' %}
+        {% endwith %}
+        <script>
+
+//条形图
+function tiao(url,arr1,arr2,color1) {
+    c3.generate($.extend({
+            bindto: url,
+//          图例样式
+            legend: {show: false},//隐藏图例
+            color: {
+                pattern: color1
+            },
+        },
+        {
+            'data': {
+                'type': 'bar',
+//              		数据
+                'columns': arr1
+            },
+            'axis': {
+                'x': {
+                    'type': 'category',
+//              					单个条形备注信息
+                    'categories': arr2,
+                    tick: {
+                        count: 1
+                    },
+                }
+            }
+        }
+    ));
+}
+var color1=['#00b5b8']
+var color2=['#ff6376']
+//三线折线图
+var c3_a=function(a){
+        c3.generate($.extend({
+            bindto: '#mychart-a2',
+//          title:{text:'zuoye',},//标题
+            axis: {
+                x: {
+                    tick: {
+                        // 3 sig-digs
+                        format: function(x) { return Math.round(x * 1000) / 1000; },
+                      fit: false,   //坐标位点偏移量
+//						count:7
+//						culling: {
+//						                    max: 7 //刻度显示数量
+//						                }
+                    },
+                    min: 0,
+                    padding: {left: 0},
+                     label: {
+                        text: '[轮数]',
+                        position: 'outer-right',
+                    },
+                },
+                y: {
+                    min: 0,
+//                  max:90,
+                    padding: {bottom: 0},
+                },
+                y2: {
+                    show: true,
+//                 		 最值
+                    min: 0,
+                    max: 100,
+                    padding: {top: 0, bottom: 0},
+                },
+            },
+            color: {
+       			 pattern: ['#0e9aef', 'red', '#11c888', '#ababab','#e5e6e8']
+
+       		},
+       		point: {
+//     			参数点半径
+			      r: 2,
+			},
+            grid: {x: {show: true},
+//            	y: {show: true}
+            },
+            legend: {position: 'bottom'},
+        },
+        {
+             data: a,
+//            data: {
+//		    	axes: {
+////		    		给data3额外添加Y轴
+//			        "accuracy-val": 'y2' // ADD
+//			     },
+//		        columns: a
+//		    },
+            transition: {
+                duration: 0,
+            },
+            subchart: {
+                show: true,
+            },
+            zoom: {
+                rescale: true,
+            },
+        }
+        ));
+}
+c3_a_data=[]
+
+//单线折线图
+var c3_data_b=function(a){
+        c3.generate($.extend({
+            bindto: '#mychart-a1',
+//          title:{text:'zuoye',},//标题
+             axis: {
+            x: {
+                label: {
+                    text: 'Epoch',
+                    position: 'outer-center',
+                },
+                tick: {
+                    // 3 sig-digs
+                    format: function(x) { return Math.round(x * 1000) / 1000; },
+                    fit: false,
+                },
+                min: 0,
+                padding: {left: 0},
+            },
+            y: {
+//              label: {
+//                  text: 'Learning Rate',
+//                  position: 'outer-middle',
+//              },
+                min: 0,
+                padding: {bottom: 0},
+            },
+             },
+                grid: {x: {show: true} },
+                legend: {show: false}
+            },
+            {data:a}
+//            {data: {
+//        //  	数据内容
+//                        columns: [
+//        //		        数据
+//                            a
+//                        ]
+//                    }}
+        ));
+}
+
+var jindutiao=null;
+//socket
+		socket.on('task update', function (msg) {
+//		    console.log('all')
+			if (msg['update'] == 'progress') {
+//			    console.log(msg)
+				if(msg['task'] == 'task-create_db-train'){
+				}
+				else{
+//				    进度条
+				     jindutiao=msg['percentage']
+//				    console.log(jindutiao)
+                    if(jindutiao==100){
+				          $('.length_i_c').html(' ')
+                         $('.length_i_c').css('width','0px')
+                          $('.length_i_cm').html(' ')
+                          $('.length_i_cm').css('width', '0px')
+                         $('.length_i_g').html(' ')
+                         $('.length_i_g').css('width','0px')
+                          $('.length_i_gm').html(' ')
+                          $('.length_i_gm').css('width', '0px')
+                        $('.model_scene_I').css('display','block')
+                    }
+                    $('.train_time').html( msg['eta'])
+                }
+
+      	  }
+      	  else if(msg['update'] == 'distribution'){
+                if(msg['task']=='task-create_db-train'){
+                    var arr1_1=msg['data']['data']['columns'];
+                    var arr1_2=msg['data']['axis']['x']['categories'];
+                    tiao('#mychart-c1',arr1_1,arr1_2 ,color1)
+                }
+                 else if(msg['task']=='task-create_db-val'){
+                    var arr2_1=msg['data']['data']['columns'];
+                    var arr2_2=msg['data']['axis']['x']['categories'];
+                    tiao('#mychart-c2',arr2_1,arr2_2,color2)
+                }
+                $('#mychart-c1 .tick').first().css('display','none')
+                $('#mychart-c2 .tick').first().css('display','none')
+			}
+            else if(msg['update'] == 'combined_graph'){
+                msg['data']['axes']['mAP-val']= 'y2';
+                msg['data']['axes']['precision-val']= 'y2';
+                msg['data']['axes']['recall-val']= 'y2';
+                msg['data']['axes']['accuracy-val']= 'y2';
+//                msg['data']['axes']['dice-val']= 'y2';
+//                msg['data']['axes']['dice-train']= 'y2';
+
+                console.log('********************',msg['data'])
+                c3_a(msg['data'])
+
+            }
+            else if(msg['update'] == 'lr_graph'){
+                c3_data_b(msg['data'])
+            }
+            else if(msg['update'] == 'gpu_utilization'){
+//                GPU CPU
+//                console.log(msg['data'])
+                console.log(msg)
+                $('.resource-content').children().remove()
+
+                var resource_parent=msg['data']['data_gpu'].length
+                for(var i=0;i<resource_parent;i++){
+                    $('.resource-all .resource-parent').clone().appendTo($('.resource-content'))
+                }
+                for(var i=0;i<resource_parent;i++){
+                    $('.resource-content .resource-parent').eq(i).children().eq(0).children().children().children().html(i+1)
+                    for(var j=0;j<msg['data']['data_gpu'][i]['value'].length;j++){
+                        $('.resource-all .resource-children').clone().appendTo($('.resource-content').children().eq(i))
+                        $('.resource-content').children().css('display','block')
+                        $('.resource-content').children().children().css('display','block')
+                        $('.resource-content .resource-parent').eq(i).children('.resource-children').eq(j).children().eq(0).children().children().children().html(msg['data']['data_gpu'][i]['value'][j]['name'])
+                        $('.resource-content .resource-parent').eq(i).children('.resource-children').eq(j).children().eq(2).children().children().children().children().children().children().css('width',msg['data']['data_gpu'][i]['value'][j]['utilization']['gpu'])
+                        $('.resource-content .resource-parent').eq(i).children('.resource-children').eq(j).children().eq(2).children().children().children().children().children().children().html(msg['data']['data_gpu'][i]['value'][j]['utilization']['gpu'])
+                        $('.resource-content .resource-parent').eq(i).children('.resource-children').eq(j).children().eq(4).children().children().children().children().children().children().css('width',(Math.floor(msg['data']['data_gpu'][i]['value'][j]['memory']['used']/msg['data']['data_gpu'][i]['value'][j]['memory']['total']*100)+'%'))
+                        $('.resource-content .resource-parent').eq(i).children('.resource-children').eq(j).children().eq(4).children().children().children().children().children().children().html((Math.floor(msg['data']['data_gpu'][i]['value'][j]['memory']['used']/msg['data']['data_gpu'][i]['value'][j]['memory']['total']*100)+'%'))
+                        $('.resource-content .resource-parent').eq(i).children('.resource-children').eq(j).children().eq(6).children().children().children().children().children().children().css('width','100%')
+                        $('.resource-content .resource-parent').eq(i).children('.resource-children').eq(j).children().eq(6).children().children().children().children().children().children().html(msg['data']['data_gpu'][i]['value'][j]['temperature']+'℃')
+//                        if(msg['data']['data_gpu'][i]['value'][j]['other']['cpu'] < 100){
+//                            $('.resource-content .resource-parent').eq(i).children('.resource-children').eq(j).children().eq(10).children().children().children().children().children().children().css('width',msg['data']['data_gpu'][i]['value'][j]['other']['cpu']+'%')
+//                            $('.resource-content .resource-parent').eq(i).children('.resource-children').eq(j).children().eq(10).children().children().children().children().children().children().html(Math.floor(msg['data']['data_gpu'][i]['value'][j]['other']['cpu'])+'%')
+//                        }else{
+//                            $('.resource-content .resource-parent').eq(i).children('.resource-children').eq(j).children().eq(10).children().children().children().children().children().children().css('width','100%')
+//                            $('.resource-content .resource-parent').eq(i).children('.resource-children').eq(j).children().eq(10).children().children().children().children().children().children().html(Math.floor(msg['data']['data_gpu'][i]['value'][j]['other']['cpu'])+'%')
+//                        }
+//                        $('.resource-content .resource-parent').eq(i).children('.resource-children').eq(j).children().eq(12).children().children().children().children().children().children().css('width',Math.floor(msg['data']['data_gpu'][i]['value'][j]['other']['mem']*100)+'%')
+//                        $('.resource-content .resource-parent').eq(i).children('.resource-children').eq(j).children().eq(12).children().children().children().children().children().children().html(Math.floor(msg['data']['data_gpu'][i]['value'][j]['other']['mem']*100)+'%')
+//                        $('.resource-content .resource-parent').eq(i).children('.resource-children').eq(j).children().eq(14).children().children().children().children().children().children().css('width','100%')
+//                        $('.resource-content .resource-parent').eq(i).children('.resource-children').eq(j).children().eq(14).children().children().children().children().children().children().html(Math.floor(msg['data']['data_gpu'][i]['value'][j]['other']['network_rx']+msg['data']['data_gpu'][i]['value'][j]['other']['network_tx'])+'kb/s')
+
+
+                    }
+                }
+            }
+		})
+
+//进度条
+socket.on('job update', function (msg) {
+    console.log('job update',msg)
+   if(!isNaN(msg['percentage'])){
+       $('.home_work_state').text(msg['percentage']+'%')
+    $('.preview-dataset-meter').children().text(msg['percentage'] + '%')
+    $('.preview-dataset-meter').children().css({
+        'height':'40px',
+        'background':"rgb(0, 181, 184)",
+        'color':'white',
+        'lineHeight':'40px',
+        'textAlign':'center',
+        'width':msg['percentage'] + '%'
+    })
+    if (msg['percentage'] == '100') {
+        $('.btn-toggle li').css('display', 'block')
+        $('.btn_all li').css('display', 'block')  
+     } 
+   }
+    if($('.home_work_state').text()=='Aborted'){
+        $('.home_work_state').text('终止')
+    }
+    else if($('.home_work_state').text()==='Done'){
+        console.log("hello")
+        $('.home_work_state').text('完成')
+    }
+    else if($('.home_work_state').text()=='Error'){
+        $('.home_work_state').text('错误')
+    }
+    else if($('.home_work_state').text()=='Running' ){
+        $('.home_work_state').text('运行中')
+    }
+    else if($('.home_work_state').text()=='Waiting' ){
+        $('.home_work_state').text('等待')
+    }
+
+    if($('.home_work_state').text() == "运行中"){
+//		console.log(1)
+        $('.home_work_state').css('backgroundColor','#17d49c')
+    }
+    else if($('.home_work_state').text() == "完成"){
+        $('.home_work_state').css('background-color','#ff6376')
+    }
+    else if($('.home_work_state').text() == "终止"){
+        $('.home_work_state').css('background-color','#9eb7c6')
+    }
+    else if($('.home_work_state').text() == "错误"){
+        $('.home_work_state').css('background-color','#ff976a')
+    }
+    else if($('.home_work_state').text() == "等待"){
+        $('.home_work_state').css('background-color','#ff976a')
+    }
+    else{
+        $('.home_work_state').css('backgroundColor','#17d49c')
+    }
+
+
+
+    if(msg['update']=="status"){
+        console.log('home_work_state')
+        $('.home_work_state').text(msg['status'])
+
+        if(($('.home_work_state').text() == "Error") || ($('.home_work_state').text() == "Done") || ($('.home_work_state').text() == "Aborted") ){
+//                                    console.log('+++++++++++')
+            $.ajax({
+                type:'GET',
+                url:'/get_gpu_number',
+                success:function (e) {
+                    console.log(e)
+                    $('.resources-box strong').eq(0).html( e.gpu_max)
+                    $('.resources-box strong').eq(1).html(e.gpu_used )
+                    $('.resources-box strong').eq(2).html(e.total_gpu_count)
+                    $('.resources-box strong').eq(3).html(e.remaining_gpu_count)
+                }
+
+            })
+        }
+        if($('.home_work_state').text()=='Aborted'){
+            $('.home_work_state').text('终止')
+        }
+        else if($('.home_work_state').text()==='Done'){
+            console.log("hello")
+            $('.home_work_state').text('完成')
+        }
+        else if($('.home_work_state').text()=='Error'){
+            $('.home_work_state').text('错误')
+        }
+        else if($('.home_work_state').text()=='Running' ){
+            $('.home_work_state').text('运行中')
+        }
+        else if($('.home_work_state').text()=='Waiting' ){
+            $('.home_work_state').text('等待')
+        }
+
+        if($('.home_work_state').text() == "运行中"){
+//		console.log(1)
+            $('.home_work_state').css('backgroundColor','#17d49c')
+        }
+        else if($('.home_work_state').text() == "完成"){
+            $('.home_work_state').css('background-color','#ff6376')
+        }
+        else if($('.home_work_state').text() == "终止"){
+            $('.home_work_state').css('background-color','#9eb7c6')
+        }
+        else if($('.home_work_state').text() == "错误"){
+            $('.home_work_state').css('background-color','#ff976a')
+        }
+        else if($('.home_work_state').text() == "等待"){
+            $('.home_work_state').css('background-color','#ff976a')
+        }
+        else{
+            $('.home_work_state').css('backgroundColor','#17d49c')
+        }
+    }
+})
+
+
+        </script>
+    {% endif %}
+<script>
+    $('document').ready(function () {
+    console.log($('.length_YN').text())
+    if ($('.length_YN').text()=='D'){
+    console.log(1)
+     $(".length_i").css('width','100%')
+    $(".length_i").html('100%')
+    $('.btn-toggle li').css('display', 'block')
+    $('.btn_all li').css('display', 'block')
+
+    }
+    else  if($('.length_YN').text()=='I'){
+        console.log(2)
+    }
+
+})
+</script>
+{% endblock head%}

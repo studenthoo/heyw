@@ -1,0 +1,310 @@
+{% extends 'job1.html' %}
+{% from "helper.html" import print_flashes, print_exception,serve_file%}
+{% block topfile %}
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/bitbug_favicon.ico') }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/ZK_last4/public.css') }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/ZK_last4/sub.css') }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/ZK_last4/iconfont.css') }}"/>
+    <!--<link rel="stylesheet" type="text/css" href="plugins/iCheck/skins/minimal/grey.css" />-->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/ZK_last4/calendar.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='c3/c3.css') }}"/>
+
+
+
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-1.7.2.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/Feffects.js') }}"></script>
+
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jq-datepicker.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.nicescroll.js') }}"></script>
+
+    <script type="text/javascript" src="{{ url_for('static', filename='js/CustomScrollbar.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jqmeter.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/public.js') }}"></script>
+
+{% endblock topfile %}
+
+
+{% block rightcontent %}
+<div class="url_i1" style="display: none">/datasets/images/classification/explore?db=train_db&job_id={{job.id()}}</div>
+<div class="url_i2" style="display: none">/datasets/images/classification/explore?db=val_db&job_id={{job.id()}}</div>
+<script>
+    console.log($('.url_i1').text())
+
+</script>
+    <div class="f-l title">
+        <h1 class="f-l c-grayblue"> 数据管理 </h1>
+        <span class="f-l c-gray"> Welcome back,{{request.cookies.username}} </span>
+    </div>
+
+    <div class="f-l sub-title bgc-white">
+        <a href="{{ url_for('hyperai.views.index') }}" class="f-l c-gray c-aqua-h"><span class="f-l"> Home   </span><em class="f-l c-gray"> / </em></a>
+        <a href="{{ url_for('hyperai.views.datasets') }}" class="f-l c-gray c-aqua-h"><span class="f-l"> 数据管理 </span><em class="f-l c-gray"> / </em></a>
+        <a href="#" class="f-l c-gray c-aqua-h"><span class="f-l"> 图像分类数据集预览 </span><em class="f-l c-gray"> / </em></a>
+    </div>
+
+    <div class="f-l lis-m bgc-white">
+        <div class="c-box">
+            <div class="l-box w-48">
+                <div class="div-box" style="height: 430px">
+                    <a href="{{ url_for('hyperai.views.datasets') }}" class="f-l btn-9 bdr bgc-white c-grayblue c-aqua-h" style="z-index: 8;"><i class="fz-14 iconfont ">
+                        &#xe6c5; </i> 返回 </a>
+                    <!--<em class="f-l bgc-gray-c"></em>-->
+                     {%set num = ['1','2','3','4','5']|random%}
+                    <img src="{{ url_for('static', filename='images/e-'+num+'.png') }}" class="f-l" style="height: 350px"/>
+                </div>
+            </div>
+
+
+            <div class="r-box w-50">
+                <div class="div-box">
+                    <div class="c-box m-t30">
+                        <h2 class="f-l"> {{job.name()}}</h2>
+                    </div>
+                    <style>
+                        .w-40{width: 40%}
+                        .w-55{width: 55%}
+                        @media screen and (max-width: 1440px) {
+                            .w-40{
+                                width: 45%;
+                            }
+                        }
+                        .c3-axis-x .tick{
+                            display: none;
+                        }
+                    </style>
+                    <div class="c-box">
+                        <div class="l-box w-40"><h2 class="f-l c-gray"><i class="f-l fz-18 iconfont "> &#xe669; </i>
+                            用户名: </h2><span class="f-l c-gray"> {{job.username}}    </span></div>
+                        <div class="r-box w-55"><h2 class="f-l c-gray"><i class="f-l fz-18 iconfont "> &#xe60d; </i>
+                            创建时间: </h2><span class="f-l c-gray"> {{job.create_time}}  </span></div>
+                    </div>
+                    <div class="c-box">
+                        <div class="l-box w-40"><h2 class="f-l c-gray"><i class="f-l fz-18 iconfont "> &#xe72a; </i>
+                            应用场景: </h2><span class="f-l c-gray"> 图像分类 </span></div>
+                        <div class="r-box w-55"><h2 class="f-l c-gray"><i class="f-l fz-18 iconfont "> &#xe623; </i>
+                            数据库类型: </h2><span class="f-l c-gray"> {{job.get_backend()}} </span></div>
+                    </div>
+                    <div class="c-box">
+                        <div class="l-box w-40"><h2 class="f-l c-gray"><i class="f-l fz-20 iconfont "> &#xe66b; </i>
+                            数据个数： </h2><span class="f-l c-gray num_all_i">  {{job.create_db_tasks()|get_count}}      </span></div>
+                    </div>
+                    <div class="c-box">
+                        <p class="f-l p-text c-gray Scrollbars">
+                          {{job.desc}}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="c-box m-t15">
+            <div class="f-l preview-dataset-meter">
+                <div class="length_i"></div>
+                <style>
+                    .length_i{height: 40px;
+                            float: left;
+                            width: 0;
+                            background: #00b5b8;
+                            line-height: 40px;
+                        text-align: center;
+                    }
+                </style>
+                <div class="length_YN" style="display: none">{{job.status}}</div>
+            </div>
+        </div>
+    </div>
+    <div class="f-l lis-t bgc-white m-t15">
+        <div class="f-l tab-box slide-tab">
+            <div class="f-l hd">
+                <ul class="f-l">
+                    <li class="f-l lis-tl-hdli"> 训练集</li>
+                    <li class="f-l lis-tl-hdli"> 验证集</li>
+                </ul>
+            </div>
+            <div class="f-l bd">
+                <ul class="f-l">
+                    <li class="f-l lis-tl-bdli">
+                        <h4 class="f-l"> 图像数量 </h4>
+                        <div class="title">
+                            <div class="l-box">
+                                <h2 class="f-l c-grayblue"><i class="f-l iconfont fz-34 pr-5"> &#xe60f; </i> 训练集</h2>
+                            </div>
+                        </div>
+                        <div class="f-l chart-box" id="mychart-c1"></div>
+                        <div class="c-box">
+                            <a href="#" class="f-l m-t20 btn-10 bgc-red-h bgc-Aqua c-white showDataset-xl"> 点击展示训练集 </a>
+                        </div>
+                    </li>
+                </ul>
+                <ul class="f-l">
+                    <li class="f-l lis-tl-bdli">
+                        <h4 class="f-l"> 图像数量 </h4>
+                        <div class="title">
+                            <div class="l-box">
+                                <h2 class="f-l c-grayblue"><i class="f-l iconfont fz-34 pr-5"> &#xe607; </i> 验证集</h2>
+                            </div>
+                        </div>
+                        <div class="f-l chart-box" id="mychart-c2"></div>
+                        <div class="c-box">
+                            <a href="#" class="f-l m-t20 btn-10 bgc-red-h bgc-Aqua c-white showDataset-yz"> 点击展示验证集 </a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- 点击展示训练集数据集  ------------------------------------->
+    <div class="f-l lis-tview-xl bgc-white m-t15">
+
+
+        <div style="width: 100%;height: 2600px;">
+            <!--训练集-->
+            <iframe src="" frameborder="0" width="100%" height="100%"></iframe>
+            <!--/datasets/images/classification/explore?db=train_db&job_id={{job.id()}}-->
+        </div>
+    </div>
+
+    <!-- 点击展示验证集数据集  ------------------------------------>
+    <div class="f-l lis-tview-yz bgc-white m-t15">
+
+        <!--<div class="c-box">
+            <h2 class="f-l"> 浏览mnist（训练集）图像 </h2>
+          </div>
+          <div class="c-box">
+            <p class="f-l c-gray"> 显示所有图片 或  按类别区分:0 1 2 3 4 5 6 7 8 9 ... </p>
+          </div>
+          <div class="c-box">
+           <p class="f-l c-gray"> 每页图像数量：10-25-50-100 </p>
+        </div>
+                      <div class="f-l lis-t-page">
+                        <div class="pager"><span class="arrow">首页</span><span class="prev arrow">上一页</span><span><a href="#?page=1" class="current">1</a></span><span><a href="#?page=2">2</a></span><span><a href="#?page=3">3</a></span><span><a href="#?page=4">4</a></span><span><a href="#?page=5">5</a></span><span><a href="#?page=6">6</a></span><span><a href="#?page=7">7</a></span><span><a href="#?page=8">8</a></span><span><a href="#?page=9">9</a></span><span><a href="#?page=10">10</a></span><span class="next arrow">下一页</span><span class="last arrow">尾页</span></div>
+                      </div>
+                  <div class="lis-tview dataset-view">
+                    <div class="f-l bd">
+                         <a href="javascript:void(0);" class="f-l next bgc-red-h bgc-gray-a c-white-h c-grayblue"> &lt; </a>
+                            <a href="javascript:void(0);" class="f-l prev bgc-red-h bgc-gray-a c-white-h c-grayblue"> &gt; </a>
+                        <ul class="f-l">
+                  <li class="f-l bdr"><img src="images/pic/n-1.png" class="f-l" /></li>
+                  <li class="f-l bdr"><img src="images/pic/n-1.png" class="f-l" /></li>
+                  <li class="f-l bdr"><img src="images/pic/n-1.png" class="f-l" /></li>
+                  <li class="f-l bdr"><img src="images/pic/n-1.png" class="f-l" /></li>
+                  <li class="f-l bdr"><img src="images/pic/n-1.png" class="f-l" /></li>
+                  <li class="f-l bdr"><img src="images/pic/n-1.png" class="f-l" /></li>
+                  <li class="f-l bdr"><img src="images/pic/n-1.png" class="f-l" /></li>
+                  <li class="f-l bdr"><img src="images/pic/n-1.png" class="f-l" /></li>
+                  <li class="f-l bdr"><img src="images/pic/n-1.png" class="f-l" /></li>
+                            </ul>
+                      </div>-->
+        <div style="width: 100%;height: 2600px;">
+            <!--验证集-->
+            <iframe src="" frameborder="0" width="100%" height="100%"></iframe>
+            <!--/datasets/images/classification/explore?db=val_db&job_id={{job.id()}}-->
+        </div>
+    </div>
+{% for task in job.create_db_tasks() %}
+{% if task.distribution_data() %}
+       {% if task.html_id() == 'task-create_db-train'%}
+           {% set count1 = task.entries_count %}
+             <div class="num_all_i1" style="display: none">{{count1}}</div>
+        <script>
+
+            var arr1= {% autoescape false %}
+                {{task.distribution_data()}}
+                {% endautoescape %}
+            var arr1_1=arr1.data.columns
+            var arr1_2=arr1.axis.x.categories
+//            if ($('.length_YN').text()=='D'){
+//                tiao_c3('#mychart-c1',arr1_1,arr1_2 ,color1)
+//            }
+//            console.log(arr1)
+//        1 训练集
+            console.log('==========',arr1_1)
+            console.log('-----------',arr1_2)
+        </script>
+       {%elif task.html_id()== 'task-create_db-val'%}
+          {% set count2 = task.entries_count %}
+             <div class="num_all_i2" style="display: none;">{{count2}}</div>
+ <script>
+     var arr2={% autoescape false %}
+                {{task.distribution_data()}}
+                {% endautoescape %}
+     var arr2_1=arr2.data.columns
+     var arr2_2=arr2.axis.x.categories
+//     if ($('.length_YN').text()=='D'){
+//                tiao_c3('#mychart-c2',arr2_1,arr2_2 ,color2)
+//            }
+//     console.log(arr2_1)
+//     console.log(arr2_2)
+//     2验证集
+
+//     var num_all_i1=parseInt($('.num_all_i1').text())
+//
+//     var num_all_i2=parseInt($('.num_all_i2').text())
+//     var num_alll=num_all_i1+num_all_i2
+//$('.num_all_i').html(num_alll+'个')
+        </script>
+{%endif%}
+    {% endif %}
+{%endfor%}
+
+{% endblock rightcontent %}
+<!---------------->
+
+{% block bottomfile %}
+    <script type="text/javascript" src="{{ url_for('static', filename='c3/d3.v3.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='c3/c3.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/data-dataPreview_c3.js') }}"></script>
+        <script>
+//    c3函数
+function tiao_c3(url,arr1,arr2,color1) {
+    c3.generate($.extend({
+            bindto: url,
+//          图例样式
+            legend: {show: false},//隐藏图例
+            color: {
+                pattern: color1
+            },
+        },
+        {
+            'data': {
+                'type': 'bar',
+//              		数据
+                'columns': arr1
+            },
+            'axis': {
+                'x': {
+                    'type': 'category',
+//              					单个条形备注信息
+                    'categories': arr2,
+                    tick: {
+                        count: 1
+                    },
+                }
+            }
+        }
+    ));
+}
+var color1=['#00b5b8']
+var color2=['#ff6376']
+    if ($('.length_YN').text()=='D'){
+         tiao_c3('#mychart-c1',arr1_1,arr1_2 ,color1)
+        tiao_c3('#mychart-c2',arr2_1,arr2_2 ,color2)
+        $('#mychart-c1 .tick').first().css('display','none')
+        $('#mychart-c2 .tick').first().css('display','none')
+        $('.length_i').html('100%');
+         $('.length_i').css('width','100%')
+    }
+//console.log(arr1)
+tiao_c3('#mychart-c1',arr1_1,arr1_2 ,color1)
+tiao_c3('#mychart-c2',arr2_1,arr2_2 ,color2)
+            $(window).bind('load',function () {
+                $('.l-sidemenu').on('click',function () {
+                    tiao_c3('#mychart-c1',arr1_1,arr1_2 ,color1)
+                    tiao_c3('#mychart-c2',arr2_1,arr2_2 ,color2)
+                })
+            })
+    </script>
+
+
+
+{% endblock bottomfile %}

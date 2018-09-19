@@ -1,0 +1,590 @@
+{% extends 'job1.html' %}
+{% from "helper.html" import print_flashes, print_exception,serve_file%}
+
+{% block topfile %}
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/bitbug_favicon.ico') }}" />
+    <link rel="stylesheet" type='text/css'  href="{{ url_for('static', filename='css/public.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/sub.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/iconfont.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/homework.css') }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='c3/c3.css') }}" />
+    <style>
+    	/*#mychart-a2 .c3-line-损失率（训练）,#mychart-a1 .c3-line-sample,#mychart-准确率（验证） .c3-line-data2 ,#mychart-a2 .c3-line-损失率（验证）{*/
+				  /*stroke-width: 2px;*/
+				/*}*/
+			.c3-legend-item-sample{display: none;}
+		#mychart-a2 .c3-line,#mychart-a1 .c3-line,#mychart-准确率（验证） .c3-line ,#mychart-a2 .c3-line{
+				  stroke-width: 2px;
+				}
+		.title .home_work_state{
+			/*background: #ff6376;*/
+			color: #fff;
+			border-radius: 5px;
+			font-size: 15px;
+			height: 30px;
+			line-height: 30px;
+			padding: 0 5px;
+			width: 70px;
+		}
+    </style>
+ <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-1.7.2.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/html5shiv.js') }}"></script>
+
+    <script type="text/javascript" src="{{ url_for('static', filename='js/Feffects.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.nicescroll.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='c3/d3.v3.min.js') }}" ></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='c3/c3.min.js') }}" ></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/public.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/homeworke.js') }}" ></script>
+{% endblock topfile %}
+
+{% block rightcontent %}
+   {%block up%}
+            <div class="f-l title">
+            	<h1 class="f-l c-grayblue"> 作业监控 </h1>
+            	<span class="f-l c-gray"> Welcome back, {{ request.cookies.username }} </span>
+            </div>
+            
+			      <div class="f-l sub-title bgc-white">
+			      	<a href="{{ url_for('hyperai.views.index') }}" class="f-l c-gray c-aqua-h"><span class="f-l"> Home   </span><em class="f-l c-gray"> / </em></a>
+			      	<a href="#" class="f-l c-gray c-aqua-h"><span class="f-l"> 作业监控 </span><em class="f-l c-gray"> / </em></a> 
+			      </div>
+ 
+            <div class="f-l lis-g bgc-white">
+              <div class="title">
+            		<div class="l-box">
+            			<h2 class="f-l c-grayblue"><i class="f-l iconfont fz-38 pr-5 m-t5 c-aqua"> &#xe625; </i> 作业名称： <strong> {{job.name()}} </strong></h2>
+						<h2 class="f-l c-grayblue" style="margin-left: 100px;"> 作业状态： <strong class="home_work_state">{%if 'Dataset' in job.job_type()%}{{job.status.name}}{%elif 'Model' in job.job_type()%}{{job.train_task().status.name}}{% else%}{{job.get_status()}}{%endif%}</strong></h2>
+            	  </div>
+	            </div>
+				<ul>
+
+
+	            {% set task_m = job.train_task() %}
+
+{%if job.dataset.create_db_tasks() %}
+{%set task_d = job.dataset.create_db_tasks()[0]%}
+				{%set task_v= job.dataset.create_db_tasks()[1]%}
+					{%endif%}
+
+	            <div class="f-l c-box bdr m-t15">
+			        	<dl class="f-l">
+						      <dt class="f-l w-10 bdr-l c-grayblue bgc-gray-c"></dt>
+						      <dt class="f-l w-90 bdr-l c-grayblue"> 基本信息 </dt>
+						    </dl> 
+						    <dl class="f-l bdr-t">
+						      <dd class="f-l w-10 bdr-l c-grayblue bgc-gray-c"> 用户名 </dd>
+						      <dd class="f-l w-10 bdr-l c-gray"> {{ job.username }} </dd>
+						      <dd class="f-l w-10 bdr-l c-grayblue bgc-gray-c"> 创建时间 </dd>
+						      <dd class="f-l w-20 bdr-l c-gray"> {{job.create_time}} </dd>
+						      <dd class="f-l w-10 bdr-l c-grayblue bgc-gray-c"> 训练时长 </dd>
+						      <dd class="f-l w-10 bdr-l c-gray train_time"> {{job.runtime_of_tasks()|print_time_diff}} </dd>
+						      <!--<dd class="f-l w-10 bdr-l c-grayblue bgc-gray-c"> 作业状态</dd>-->
+								<!--<dd class="f-l w-20 bdr-l c-gray home_work_state">{%if 'Dataset' in job.job_type()%}{{job.status.name}}{%elif 'Model' in job.job_type()%}{{job.train_task().status.name}}{% else%}{{job.get_status()}}{%endif%}</dd>-->
+						    </dl>
+						    <dl class="f-l bdr-t">  {% if job.dataset %}
+						      <dd class="f-l w-10 bdr-l c-grayblue bgc-gray-c"> 应用场景 </dd>
+						      <dd class="f-l w-10 bdr-l c-gray"> {{job.apply_scence|transfer}} </dd>
+						      <dd class="f-l w-10 bdr-l c-grayblue bgc-gray-c"> 训练框架 </dd>
+						      <dd class="f-l w-20 bdr-l c-gray">{{task_m.get_framework_id()}} </dd>
+						      <dd class="f-l w-10 bdr-l c-grayblue bgc-gray-c"> 训练网络 </dd>
+						      <dd class="f-l w-10 bdr-l c-gray"> {{job.network}}</dd>
+						      <dd class="f-l w-10 bdr-l c-grayblue bgc-gray-c"> 数据库类型 </dd>
+						      <dd class="f-l w-20 bdr-l c-gray">{{job.dataset.get_backend()}}</dd>
+						    </dl>					      
+						    <dl class="f-l bdr-t">
+						      <dd class="f-l w-10 bdr-l c-grayblue bgc-gray-c"> 所用数据集名称 </dd>
+						      <dd class="f-l w-10 bdr-l c-gray"> <a href="{%if job.dataset%}/datasets/{{job.dataset.id()}}{%else%}{%endif%}" style="color: #00b5b8;">{{job.dataset.name()}}</a> </dd>
+						      <dd class="f-l w-10 bdr-l c-grayblue bgc-gray-c"> 图像类型 </dd>
+						      <dd class="f-l w-20 bdr-l c-gray"></dd>
+						      <dd class="f-l w-10 bdr-l c-grayblue bgc-gray-c"> 训练集数量 </dd>
+
+						      <dd class="f-l w-10 bdr-l c-gray">{%if job.dataset.create_db_tasks()%} {{ task_d.entry_count }} {%else%} None{%endif%}</dd>
+						      <dd class="f-l w-10 bdr-l c-grayblue bgc-gray-c"> 验证集数量 </dd>
+						      <dd class="f-l w-20 bdr-l c-gray">{%if job.dataset.create_db_tasks()%} {{ task_v.entry_count }} {%else%} None{%endif%}</dd>
+						    </dl>						  	
+					    </div>{%endif%}
+            </div>
+          {%endblock up%}
+            <div class="f-l lis-h bgc-white">
+              <div class="title">
+            		<div class="l-box">
+            			<h2 class="f-l c-grayblue"><i class="f-l iconfont fz-38 pr-5 m-t5 c-aqua"> &#xe639; </i> 训练监控：</h2>
+            	  </div>
+            	</div>
+            	<!--表格-->
+            	<div class="chart-box" id="mychart-a2">
+            		
+            	</div>
+            	 <h4 class="f-l"> 损失率 </h4>
+            	 <h4 class="f-r"> 准确率 </h4>
+            	 <a href="{{url_for('hyperai.model.images.classification.views.large_graph', job_id=job.id())}}" class="f-r btn-7 c-white bgc-Aqua bgc-red-h"> 详情 </a>
+            </div> 
+            {%block down%}
+
+            <div class="f-l lis-j bgc-white">
+              <div class="title">
+            		<div class="l-box">
+            			<h2 class="f-l c-grayblue"><i class="f-l iconfont fz-38 pr-5 m-t5 c-aqua"> &#xe60a; </i> 学习率监控：</h2>
+            	  </div>
+            	</div>
+            	<div class="chart-box" id="mychart-a1"></div>
+            	 <h4 class="f-l"> 学习率 </h4>
+            	 <!--<h4 class="f-r"> 学习率 </h4>-->
+            </div>  
+            
+            <div class="f-l lis-k bgc-white">
+              <div class="title">
+            		<div class="l-box">
+            			<h2 class="f-l c-grayblue"><i class="f-l iconfont fz-38 pr-5 m-t5 c-aqua"> &#xe632; </i> 资源使用监控：</h2>
+            	  </div>
+            	</div>
+				<style>
+					.w-5{width: 5%}
+					.w-95{width: 95%}
+					.w-25{width: 25%}
+					.w-15{width: 15%}
+					.sub-table-tr-i1{
+						float: left;
+						display: table-row;
+						width: 100%;
+						padding: 0;
+						height: 70px;
+						vertical-align: middle;
+					}
+
+					/*.sub-table-ka1,.sub-table-ka2,.sub-table-ka3,.sub-table-ka4,.sub-table-ka5,.sub-table-ka6,.sub-table-ka7,.sub-table-ka8{display: none;}*/
+
+
+
+				</style>
+				<!--r容器1-->
+				<!--clone-框架+容器-->
+				<style>
+
+					@font-face {font-family: "iconfont";
+						src: url('iconfont.eot?t=1529980529900'); /* IE9*/
+						src: url('iconfont.eot?t=1529980529900#iefix') format('embedded-opentype'), /* IE6-IE8 */
+						url('data:application/x-font-woff;charset=utf-8;base64,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') format('woff'),
+						url('iconfont.ttf?t=1529980529900') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
+						url('iconfont.svg?t=1529980529900#iconfont') format('svg'); /* iOS 4.1- */
+					}
+
+					.iconfont {
+						font-family:"iconfont" !important;
+						font-style:normal;
+						-webkit-font-smoothing: antialiased;
+						-moz-osx-font-smoothing: grayscale;
+					}
+
+					.icon-wangluo:before { content: "\e66d"; }
+
+					.icon-IO:before { content: "\e74b"; }
+
+					.icon-wenduji:before { content: "\e67d"; }
+
+
+
+				</style>
+				<div class="resource-all">
+					<div class="table-tr bdr-t gpu_cpu_all resource-parent" style="display: none;height: 100%;">
+						<div class="bdr-l table-td w-5">
+							<div class="sub-table">
+								<div class="sub-table-tr-i1">
+									<div class="sub-table-td bdr-b ta-c h-70"> 容器  </div>
+								</div>
+							</div>
+						</div>
+
+					</div>
+					<!--clone&#45;&#45;卡-->
+					<div class="bdr-l table-td w-95  resource-children" style="display: none;float: right;">
+						<!--name-->
+						<div class="bdr-l table-td w-25">
+							<div class="sub-table sub-table-ka1">
+								<div class="sub-table-tr-i1">
+									<div class="sub-table-td bdr-b ta-c h-70 sub-table-ka1-name"> 卡  </div>
+								</div>
+							</div>
+						</div>
+						<!--GPU**************************************-->
+						<div class="bdr-l table-td w-10">
+							<div class="sub-table sub-table-ka1">
+								<div class="sub-table-tr-i1">
+									<div class="sub-table-td bdr-b ta-l h-70"><i class="f-l iconfont fz-36 pr-5 c-orange"> &#xe62a; </i> GPU </div>
+								</div>
+							</div>
+						</div>
+						<div class="bdr-l table-td w-15">
+							<div class="sub-table sub-table-ka1">
+								<div class="sub-table-tr-i1">
+									<div class="sub-table-td bdr-b h-70">
+										<div class="f-l m-t5 cpu-meter">
+											<div class="threm cpu-threm">
+												<div class="length_i length_i_g">
+
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!--CPU*9***************************************-->
+						<div class="bdr-l table-td w-10">
+							<div class="sub-table sub-table-ka1">
+								<div class="sub-table-tr-i1">
+									<div class="sub-table-td bdr-b ta-l h-70"><i class="f-l iconfont fz-30 pr-5 c-green"> &#xe670; </i> 显存 </div>
+								</div>
+							</div>
+						</div>
+						<div class="bdr-l table-td w-15">
+							<div class="sub-table sub-table-ka1">
+								<div class="sub-table-tr-i1">
+									<div class="sub-table-td bdr-b h-70">
+										<div class="f-l m-t5 gpu-meter">
+											<div class="threm gpu-threm">
+												<div class="length_i length_i_gm">
+
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!--温度 temperature************************************-->
+						<div class="bdr-l table-td w-10">
+							<div class="sub-table sub-table-ka1">
+								<div class="sub-table-tr-i1">
+
+									<div class="sub-table-td bdr-b ta-l h-70"><i class="f-l iconfont fz-30 pr-5 c-green icon-wenduji"> </i> 温度 </div>
+								</div>
+							</div>
+						</div>
+						<div class="bdr-l table-td w-15">
+							<div class="sub-table sub-table-ka1">
+								<div class="sub-table-tr-i1">
+									<div class="sub-table-td bdr-b h-70">
+										<div class="f-l m-t5 gpu-meter">
+											<div class="threm gpu-threm">
+												<div class="length_i_t length_i">
+
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+
+						<!--新加-->
+						<!--CPU-->
+						<!--<div class="bdr-l table-td w-10 h-70">-->
+
+						<!--</div>-->
+						<!--<div class="table-td w-15 h-70">-->
+
+						<!--</div>-->
+						<!--<div class="bdr-l table-td w-10">-->
+							<!--<div class="sub-table sub-table-ka1">-->
+								<!--<div class="sub-table-tr-i1">-->
+									<!--<div class="sub-table-td bdr-b ta-l h-70"><i class="f-l iconfont fz-36 pr-5 c-orange"> &#xe688; </i> CPU </div>-->
+									<!--&lt;!&ndash;<div class="sub-table-td bdr-b ta-l h-70"><i class="f-l iconfont fz-30 pr-5 c-green icon-IO"></i> 磁盘IO </div>&ndash;&gt;-->
+
+								<!--</div>-->
+							<!--</div>-->
+						<!--</div>-->
+						<!--<div class="bdr-l table-td w-15">-->
+							<!--<div class="sub-table sub-table-ka1">-->
+								<!--<div class="sub-table-tr-i1">-->
+									<!--<div class="sub-table-td bdr-b h-70">-->
+										<!--<div class="f-l m-t5 gpu-meter">-->
+											<!--<div class="threm gpu-threm">-->
+												<!--<div class="length_i_t length_i">-->
+
+												<!--</div>-->
+											<!--</div>-->
+										<!--</div>-->
+									<!--</div>-->
+								<!--</div>-->
+							<!--</div>-->
+						<!--</div>-->
+						<!--&lt;!&ndash;内存**************************************&ndash;&gt;-->
+						<!--<div class="bdr-l table-td w-10">-->
+							<!--<div class="sub-table sub-table-ka1">-->
+								<!--<div class="sub-table-tr-i1">-->
+									<!--<div class="sub-table-td bdr-b ta-l h-70"><i class="f-l iconfont fz-30 pr-5 c-green"> &#xe616; </i> 内存 </div>-->
+									<!--&lt;!&ndash;<div class="sub-table-td bdr-b ta-l h-70"><i class="f-l iconfont fz-36 pr-5 c-orange"> &#xe688; </i> CPU </div>&ndash;&gt;-->
+								<!--</div>-->
+							<!--</div>-->
+						<!--</div>-->
+						<!--<div class="bdr-l table-td w-15">-->
+							<!--<div class="sub-table sub-table-ka1">-->
+								<!--<div class="sub-table-tr-i1">-->
+									<!--<div class="sub-table-td bdr-b h-70">-->
+										<!--<div class="f-l m-t5 cpu-meter">-->
+											<!--<div class="threm cpu-threm">-->
+												<!--<div class="length_i length_i_g">-->
+
+												<!--</div>-->
+											<!--</div>-->
+										<!--</div>-->
+									<!--</div>-->
+								<!--</div>-->
+							<!--</div>-->
+						<!--</div>-->
+						<!--&lt;!&ndash;网络1*9***************************************&ndash;&gt;-->
+						<!--<div class="bdr-l table-td w-10">-->
+							<!--<div class="sub-table sub-table-ka1">-->
+								<!--<div class="sub-table-tr-i1">-->
+									<!--<div class="sub-table-td bdr-b ta-l h-70"><i class="f-l iconfont fz-30 pr-5 c-green icon-wangluo"></i> 网络 </div>-->
+									<!--&lt;!&ndash;<div class="sub-table-td bdr-b ta-l h-70"><i class="f-l iconfont fz-30 pr-5 c-green"> &#xe616; </i> 内存 </div>&ndash;&gt;-->
+								<!--</div>-->
+							<!--</div>-->
+						<!--</div>-->
+						<!--<div class="bdr-l table-td w-15">-->
+							<!--<div class="sub-table sub-table-ka1">-->
+								<!--<div class="sub-table-tr-i1">-->
+									<!--<div class="sub-table-td bdr-b h-70">-->
+										<!--<div class="f-l m-t5 gpu-meter">-->
+											<!--<div class="threm gpu-threm">-->
+												<!--<div class="length_i length_i_gm">-->
+
+												<!--</div>-->
+											<!--</div>-->
+										<!--</div>-->
+									<!--</div>-->
+								<!--</div>-->
+							<!--</div>-->
+						<!--</div>-->
+						<!--网络************************************-->
+
+
+
+					</div>
+				</div>
+
+				<!--资源监控主体-->
+				<div class="f-l c-box m-t15">
+					<div class="table bdr">
+						<div class="table-tr bgc-gray" style="height: 100%">
+							<div class="table-th w-5">容器</div>
+							<div class="table-th w-95">
+								<div class="table-th w-25">显卡</div>
+								<div class="table-th w-10" style="height: 50px"> </div>
+								<div class="table-th w-15">使用率</div>
+								<div class="table-th w-10" style="height: 50px"> </div>
+								<div class="table-th w-15">使用率</div>
+								<div class="table-th w-10" style="height: 50px"> </div>
+								<div class="table-th w-15">温度</div>
+							</div>
+
+						</div>
+						<div class="table-tr bgc-gray  resource-content">
+
+						</div>
+
+
+
+					</div>
+				</div>
+            </div>
+<script>
+	if($('.home_work_state').text()=='Aborted'){
+		$('.home_work_state').text('终止')
+	}
+	else if($('.home_work_state').text()==='Done'){
+		console.log("hello")
+		$('.home_work_state').text('完成')
+	}
+	else if($('.home_work_state').text()=='Error'){
+		$('.home_work_state').text('错误')
+	}
+	else if($('.home_work_state').text()=='Running' ){
+		$('.home_work_state').text('运行中')
+	}
+	else if($('.home_work_state').text()=='Waiting' ){
+		$('.home_work_state').text('等待')
+	}
+
+	if($('.home_work_state').text() == "运行中"){
+//		console.log(1)
+		$('.home_work_state').css('backgroundColor','#17d49c')
+	}
+	else if($('.home_work_state').text() == "完成"){
+		$('.home_work_state').css('background-color','#ff6376')
+	}
+	else if($('.home_work_state').text() == "终止"){
+		$('.home_work_state').css('background-color','#9eb7c6')
+	}
+	else if($('.home_work_state').text() == "错误"){
+		$('.home_work_state').css('background-color','#ff976a')
+	}
+	else if($('.home_work_state').text() == "等待"){
+		$('.home_work_state').css('background-color','#ff976a')
+	}
+	else{
+		$('.home_work_state').css('backgroundColor','#17d49c')
+	}
+</script>
+{% endblock down%}
+ {% set combined_graph_data = job.train_task().combined_graph_data() %}
+            {% if combined_graph_data %}
+<script>
+//	cpu进度条
+$('.length_i').each(function () {
+	$(this).css('width',$(this).text())
+})
+               var drawComb= {% autoescape false %}{{combined_graph_data}}{% endautoescape %};
+               if(drawComb=='undefined'){
+					console.log('zhexian1')
+			   }
+			   else{
+                   var c3_aa=function(a){
+        c3.generate($.extend({
+            bindto: '#mychart-a2',
+//          title:{text:'zuoye',},//标题
+            axis: {
+                x: {
+                    tick: {
+                        // 3 sig-digs
+                        format: function(x) { return Math.round(x * 1000) / 1000; },
+                      fit: false,   //坐标位点偏移量
+//						count:7
+//						culling: {
+//						                    max: 7 //刻度显示数量
+//						                }
+                    },
+                    min: 0,
+                    padding: {left: 0},
+                     label: {
+                        text: '[轮数]',
+                        position: 'outer-right',
+                    },
+                },
+                y: {
+                    min: 0,
+//                  max:90,
+                    padding: {bottom: 0},
+                },
+                y2: {
+                    show: true,
+//                 		 最值
+                    min: 0,
+                    max: 100,
+                    padding: {top: 0, bottom: 0},
+                },
+            },
+            color: {
+       			 pattern: ['#0e9aef', 'red', '#11c888', '#ababab','#e5e6e8']
+
+       		},
+       		point: {
+//     			参数点半径
+			      r: 2,
+			},
+            grid: {x: {show: true},
+//            	y: {show: true}
+            },
+            legend: {position: 'bottom'},
+        },
+        {
+             data: a,
+//            data: {
+//		    	axes: {
+////		    		给data3额外添加Y轴
+//			        "accuracy-val": 'y2' // ADD
+//			     },
+//		        columns: a
+//		    },
+            transition: {
+                duration: 0,
+            },
+            subchart: {
+                show: true,
+            },
+            zoom: {
+                rescale: true,
+            },
+        }
+        ));
+}
+//				   {'mAP-val': 'y2', 'precision-val': 'y2', 'recall-val': 'y2'}
+				   var obkect_all={% autoescape false %}{{combined_graph_data}}{% endautoescape %};
+				   obkect_all['axes']={'mAP-val': 'y2', 'precision-val': 'y2', 'recall-val': 'y2','accuracy-val':'y2','accuracy-train':'y2'}
+				   console.log(obkect_all)
+                  c3_aa(obkect_all)
+                   $(window).bind('load',function () {
+                       $('.l-sidemenu').on('click',function () {
+                           c3_aa(obkect_all)
+                       })
+                   })
+			   }
+            </script>
+            {% endif %}
+
+
+
+{% set lr_graph_data = job.train_task().lr_graph_data() %}
+            {% if lr_graph_data %}
+            <script>
+  		var drawLRG11={% autoescape false %}{{lr_graph_data}}{% endautoescape %};
+		if(drawLRG11=='undefined'){
+		    console.log('zhexian2--1')
+		}
+		else{
+		                   //单线折线图
+			var c3_data_b=function(a){
+					c3.generate($.extend({
+						bindto: '#mychart-a1',
+			//          title:{text:'zuoye',},//标题
+						 axis: {
+						x: {
+							label: {
+								text: 'Epoch',
+								position: 'outer-center',
+							},
+							tick: {
+								// 3 sig-digs
+								format: function(x) { return Math.round(x * 1000) / 1000; },
+								fit: false,
+							},
+							min: 0,
+							padding: {left: 0},
+						},
+						y: {
+			//              label: {
+			//                  text: 'Learning Rate',
+			//                  position: 'outer-middle',
+			//              },
+							min: 0,
+							padding: {bottom: 0},
+						},
+						 },
+							grid: {x: {show: true} },
+							legend: {show: false}
+						},
+						{data: a}
+					));
+			}
+			c3_data_b({% autoescape false %}{{lr_graph_data}}{% endautoescape %})
+            $(window).bind('load',function () {
+                $('.l-sidemenu').on('click',function () {
+                    c3_data_b({% autoescape false %}{{lr_graph_data}}{% endautoescape %})
+                })
+            })
+		}
+            </script>
+            {% endif %}
+{% endblock rightcontent %}
+{% block bottomfile %}
+    <!--<script type="text/javascript" src="{{ url_for('static', filename='js/jquery-1.7.2.js') }}"></script>-->
+    <!--<script type="text/javascript" src="{{ url_for('static', filename='js/Feffects.js') }}"></script>-->
+    <!--<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.nicescroll.js') }}"></script>-->
+    <!--<script type="text/javascript" src="{{ url_for('static', filename='c3/d3.v3.min.js') }}" ></script>-->
+    <!--<script type="text/javascript" src="{{ url_for('static', filename='c3/c3.min.js') }}" ></script>-->
+    <!--<script type="text/javascript" src="{{ url_for('static', filename='js/public.js') }}"></script>-->
+    <!--<script type="text/javascript" src="{{ url_for('static', filename='js/homeworke.js') }}" ></script>-->
+{% endblock bottomfile %}

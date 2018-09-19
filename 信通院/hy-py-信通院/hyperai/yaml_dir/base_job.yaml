@@ -1,0 +1,53 @@
+apiVersion: batch/v1
+kind: $kind$
+metadata:
+  name: $metadata-name$
+spec:
+  template:
+    metadata:
+      labels:
+        name: $labels-name$
+        role: hyperaijob
+    spec:
+#      nodeSelector:
+#          kubernetes.io/hostname: $selector-node$
+#          kubernetes.io/hostname: node02
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: In
+                values: $matchExpressions-values$
+      containers:
+        - name: $container-name$
+          image: $image$
+          command: $command$
+          args: $args$
+          env:
+          - name: HYPERAI_ROOT
+            value: "/root/hyperai"
+          - name: HYPERAI_JOBS_DIR
+            value: "/home/nfsdir"
+          - name: PYTHONPATH
+            value: $pythonpath$
+          volumeMounts:
+          - name: nfs-storage
+            readOnly: false
+            mountPath: "/home/newnfs"
+#            mountPath: $nfspath$
+          resources:
+            limits:
+              nvidia.com/gpu: $gpu$
+              cpu: $cpu$
+              memory: $memory$
+      restartPolicy: OnFailure
+#      restartPolicy: Never
+      volumes:
+        - name: nfs-storage
+          nfs:
+            server: $nfsip$
+#            path: "/home/nfsdir"
+            path: $nfspath$
+

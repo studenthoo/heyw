@@ -1,0 +1,98 @@
+{% extends 'job1.html' %}
+
+
+{% block topfile %}
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/bitbug_favicon.ico') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/ZK_last11/public.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/ZK_last11/sub.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/iconfont.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='plugins/iCheck/skins/minimal/grey.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/ZK_last11/calendar.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/index.css') }}"/>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-1.7.2.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/Feffects.js') }}"></script>
+    <!--<script type="text/javascript" src="plugins/iCheck/icheck.min.js"></script>--> 
+    <script type="text/javascript" src="{{ url_for('static', filename='js/CustomScrollbar.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jq-datepicker.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.nicescroll.js') }}"></script>
+    <!--<script type="text/javascript" src="js/echarts.min.js"></script>-->   
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jqmeter.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='plugins/jqueryraty/jquery.raty.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/public.js') }}"></script>
+    <!--[if lt IE 9]>
+      <script src="{{ url_for('static', filename='js/html5shiv.js') }}"></script>
+    <![endif]--> 
+ {% endblock %}
+
+{% block rightcontent %}
+            <div class="f-l title">
+            	<h1 class="f-l c-grayblue"> 模型预测 </h1>
+            	<span class="f-l c-gray"> Welcome back,{{request.cookies.username}}</span>
+            </div>
+            
+			      <div class="f-l sub-title bgc-white">
+			      	<a href="{{ url_for('hyperai.views.index') }}" class="f-l c-gray c-aqua-h"><span class="f-l"> Home           </span><em class="f-l c-gray"> / </em></a>
+			      	<a href="{{url_for('hyperai.show.views.model_forecast_new') }}" class="f-l c-gray c-aqua-h"><span class="f-l"> 模型预测       </span><em class="f-l c-gray"> / </em></a>
+			      	<a href="#" class="f-l c-gray c-aqua-h"><span class="f-l"> 模型预测结果--多张 </span><em class="f-l c-gray"> / </em></a> 
+			      </div>
+ 
+            <div class="f-l lis-wb bgc-white" style="min-height: 650px">
+            	<div class="title">
+            		<h3 class="f-l">  {{model_job.name()}} </h3>
+            	</div>
+            	<div class="f-l c-div">
+            		<div class="w-40 bgc-gray-c bdr">
+            			<!--<p class="f-l c-grayblue"> 测试耗时:   <strong class="c-aqua"> </strong></p>-->
+            			<p class="f-r c-grayblue"> 测试数量:   <strong class="c-aqua"> {{paths|length}} </strong></p>
+            		</div>
+            	</div>
+				<style>
+					.w-3{width: 3%}
+					.w-11{width: 11.4%}
+					.w-57{width: 57%}
+					.w-66{width: 66%}
+					.position-r{
+						position: relative;}
+					.position-absolute{position: absolute;
+						right: 0;
+						height: 24px;
+						line-height: 17px;
+						top: 25px;
+
+					}
+				</style>
+					  	<div class="table bdr bgc-white">
+					    	<div class="table-tr bgc-gray-c">
+					      	<div class="table-th bdr-l w-3 c-grayblue">序号</div>
+					      	<div class="table-th bdr-l w-30 c-grayblue">路径</div>
+					      	<div class="table-th bdr-l w-10 c-grayblue">测试结果</div>
+								<div class="table-th bdr-l w-57 c-grayblue"> 结果分布</div>
+					    	</div>
+{% for path in paths %}
+							{% set result = classifications[loop.index0] %}
+    {% set ground_truth = ground_truths[loop.index0] %}
+					    	<div class="table-tr">
+					      	<div class="bdr-l bdr-t table-td w-3"><p class="f-l p-text-1 fz-12 ta-c c-gray">{{loop.index}}</p></div>
+					      	<div class="bdr-l bdr-t table-td w-30"><p class="f-l p-text-1 fz-12 ta-c c-gray">{{path}} </p></div>
+
+					      	<div class="bdr-l bdr-t table-td w-10"><p class="f-l p-text-1 fz-12 ta-c c-gray">{%if result%} {{result[0][0]}}{%else%} {%endif%}</p></div>
+								{% for r in result %}
+					      	<div class="bdr-l bdr-t table-td w-11"><p class="f-l p-text-1 fz-12 ta-c c-gray position-r"> <span class="f-l w-66">{{r[0]}}</span><strong class="bgc-Aqua c-white position-absolute"> {{r[1]}}%</strong></p></div>
+                               {%endfor%}
+
+					    	</div>
+							{%endfor%}
+					  	</div>
+					  	<div class="f-l page-box">
+								<!--<div class="pager"><span class="arrow">首页</span><span class="prev arrow">上一页</span><span><a href="#?page=1" class="current">1</a></span><span><a href="#?page=2">2</a></span><span><a href="#?page=3">3</a></span><span><a href="#?page=4">4</a></span><span><a href="#?page=5">5</a></span><span><a href="#?page=6">6</a></span><span><a href="#?page=7">7</a></span><span><a href="#?page=8">8</a></span><span><a href="#?page=9">9</a></span><span><a href="#?page=10">10</a></span><span class="next arrow">下一页</span><span class="last arrow">尾页</span></div>-->		        
+								<!--<div id="page" class="page_div">-->
+									<!---->
+								<!--</div>-->
+					  	</div>       	
+            </div>
+	          {% endblock %}
+
+{% block bottomfile %}
+  	<script src="{{ url_for('static', filename='js/paging.js') }}" type="text/javascript" charset="utf-8"></script>
+  	<script src="{{ url_for('static', filename='js/model-ForecastMany.js') }}" type="text/javascript" charset="utf-8"></script>
+ {% endblock bottomfile %}

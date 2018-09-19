@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+
+		{% include 'new/public/meta.html'%}
+
+		<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='advance/css/advance_user.css')}}" />
+
+	</head>
+
+	<body>
+<style>
+	.search{
+		display: inline-block;
+		width: 100px;
+		background: #00b5b8;
+		text-align: center;
+		color: #fff;
+		/* font-size: 20px; */
+		height: 34px;
+		line-height: 34px;
+		/* border-radius: 5px; */
+		position: absolute;
+		z-index: 9;
+		right: 0px;
+	}
+</style>
+	{% include 'new/public/header.html'%}
+
+		<div class="container-fluid" style="margin-top: 51px;">
+			<div class="row" id="row-box">
+
+				{% include 'new/public/left.html'%}
+
+				<div class="col-sm-11 col-sm-offset-3 col-md-20 col-md-offset-2 main" style="padding: 10px 20px;">
+
+					<h4 class="page-header h-50" style="margin: 0">模型训练</h4>
+					<div class="col-md-12 c-gray pd-n "> Welcome back, <span>{{request.cookies.username}}</span></div>
+					<div class="col-md-12 b-nav bg-white mt-30">
+						<ol class="breadcrumb bg-white mb-0 pdtb-15" >
+							<li>
+								<a href="#" class="c-gray">Home</a>
+							</li>
+
+							<li class="c-green">模型训练</li>
+						</ol>
+					</div>
+					
+					<div class="col-md-12 mt-30 " style="background: #FFFFFF; padding:20px 30px; ">
+
+						<div class="col-md-12 home-btn-box bdr-b">
+							<span class="tab-btn1 tab-color">单机任务</span>
+							<span class="tab-btn2">分布式任务</span>
+						</div>
+
+
+
+						<!--提示框-->
+						<div class="static">
+							<div id="myAlert" class="alert col-md-6 alert-warning">
+								<a href="#" class="close" data-dismiss="alert">&times;</a>
+								<strong>成功！</strong>
+							</div>
+						</div>
+
+
+						
+						<form action="{{url_for('hyperai.vip.views.single_create')}}" enctype="multipart/form-data" method="post" class="form1" onSubmit="return mySubmit1()" id="single-form">
+
+
+							<input type="hidden" value="" class="img-name" name="framework_name" />
+							<input type="hidden" value="" class="img-tag" name="framework_tag" />
+							<input type="hidden" value="" class="img-time" name="framework_time" />
+							<input type="hidden" value="" class="fen-name" name="matchExpressions_values" />
+						
+						
+						<!--step1-->
+						<div class="step">
+							<span>1</span>
+							<h4>基本配置</h4>
+						</div>
+						<div class="c-box">
+							<div class="input-box col-md-12">
+
+								<div class="c-box mt-30">
+									<h4 class="col-md-3"><span class="x-span">*</span>任务名</h4>
+									<div class="input-group col-md-6">
+										<input type="text" class="form-control vname" name="homework_name">
+										<!--<span class="input-group-addon">.00</span>-->
+									</div>
+								</div>
+								<div class="c-box mt-30">
+									<h4 class="col-md-3">代码文件</h4>
+									<div class="input-group col-md-6">
+										<input type="text" class="form-control image_list_i_1">
+										<span href="#" class="load-file">上传
+											<input type="file" name="image_list" id="image_list1" value=""  multiple="multiple"/>
+										</span>
+									</div>
+								</div>
+								<div class="c-box mt-30">
+									<h4 class="col-md-3">主文件名</h4>
+									<div class="input-group col-md-6" style="position: relative;">
+										<input type="text" class="form-control main_name" name="main_name" placeholder='文件全名'>
+
+
+									</div>
+								</div>
+								<div class="c-box mt-30 other-frame">
+									<h4 class="col-md-3">服务器路径</h4>
+									<div class="input-group col-md-6">
+										<input type="text" class="form-control autocomplete_path load-path1" name="server_path">
+										<!--<span class="input-group-addon">.00</span>-->
+									</div>
+								</div>
+
+								<div class="c-box mt-30 caffe-load">
+									<div class="c-box col-md-12 pd-n" style="padding-left: 0">
+										<h4 class="col-md-3">solver文件路径</h4>
+										<div class="input-group col-md-6">
+											<input type="text" class="form-control autocomplete_path caffe-load-path1" name="solver_path">
+											<!--<span class="input-group-addon">.00</span>-->
+										</div>
+									</div>
+									<div class="c-box col-md-12 mt-30 pd-n" style="padding-left: 0">
+										<h4 class="col-md-3">train_val文件路径</h4>
+										<div class="input-group col-md-6">
+											<input type="text" class="form-control autocomplete_path caffe-load-path2" name="caffe_path">
+											<!--<span class="input-group-addon">.00</span>-->
+										</div>
+									</div>
+								</div>
+
+
+								<div class="c-box col-md-12  mt-30" style="position: relative">
+									<h4 class="col-md-3">选择框架</h4>
+									<div class="input-group col-md-3">
+										<select type="text" class="form-control select_framework" id="select_model_cj" name="framework">
+											<!--<option value="caffe">caffe</option>-->
+										</select>
+										<!--<span class="input-group-addon">.00</span>-->
+
+									</div>
+									<i class="iconfont icon-shuaxin refresh-btn c-green"></i>
+
+
+								</div>
+
+							</div>
+						</div>
+						
+						
+						<!--step2-->
+			
+						<!--<div class="step">
+							<span>2</span>
+							<h4>选择数据集</h4>
+						</div>
+						<div class="c-box">
+							<div class="input-box">
+
+								
+								<div class="c-box mt-30">
+									<h4 class="col-md-3">选择数据集</h4>
+									<div class="input-group col-md-3">
+										<select type="text" class="form-control">
+											<option value="mnist">mnist</option>
+										</select>
+										
+									</div>
+								</div>
+
+							</div>
+						</div>-->
+						
+
+						<!--step3-->
+
+						<div class="step">
+							<span>2</span>
+							<h4>选择镜像</h4>
+						</div>
+						<div class="c-box">
+							<div class="input-box col-md-12">
+								<div class="c-box mt-30">
+									<h4 class="col-md-3">镜像名</h4>
+									<div class="input-group col-md-6">
+										<input type="text" class="form-control">
+										<span class="search">
+														<i class="iconfont icon-chazhao fz-24"></i>
+													</span>
+									</div>
+								</div>
+
+								<div class="c-box mt-30" style="padding-left: 40px;">
+									<div class="input-group col-md-12 title-btn bdr-b">
+										<span class="s-bdr">共享镜像</span>
+										<span>私有镜像</span>
+									</div>
+								</div>
+
+
+
+								<div class="clone-box">
+
+									<div class="list-info input-group col-md-12 bdr-b bdr-l bdr-r img-detail img-list">
+										<div class="col-md-4 bdr-r">
+											<input type="radio" name="img" id="" value="" class="img-checked" />
+											<label class="share_name"></label>
+										</div>
+										<div class="col-md-4 bdr-r share_tag"></div>
+										<div class="col-md-4 share_time"></div>
+									</div>
+
+
+
+									<div class="col-md-12 bdr-b bdr-l bdr-r h-40 fen-list" style="padding: 0px;">
+										<div class="col-md-3 bdr-r h-40">
+											<input type="radio" name="partition" id="" value="" class="fenqu-checked"/>
+											<label></label>
+
+										</div>
+										<div class="col-md-3 bdr-r h-40"></div>
+										<div class="col-md-3 bdr-r h-40"></div>
+										<div class="col-md-3  h-40"></div>
+									</div>
+
+
+
+
+								</div>
+
+
+
+
+
+								<div class="c-box mt-30" style="padding-left: 40px;">
+
+									<!--共享镜像-->
+									<div class="input-group col-md-12 public-img">
+										<div class="input-group col-md-12 bdr">
+											<div class="col-md-4 bdr-r">
+												镜像名
+											</div>
+											<div class="col-md-4 bdr-r">
+												标签
+											</div>
+											<div class="col-md-4">
+												创建时间
+											</div>
+										</div>
+
+										<div class=" input-group col-md-12 public-img-list">
+
+
+										</div>
+									</div>
+
+									<!--私有镜像-->
+									<div class="input-group col-md-12 private-img">
+										<div class="input-group col-md-12 bdr">
+											<div class="col-md-4 bdr-r">
+												镜像名
+											</div>
+											<div class="col-md-4 bdr-r">
+												标签
+											</div>
+											<div class="col-md-4">
+												创建时间
+											</div>
+										</div>
+
+										<div class=" input-group col-md-12 private-img-list">
+
+
+										</div>
+									</div>
+
+								</div>
+
+							</div>
+						</div>
+
+						<!--step4-->
+
+						<div class="step">
+							<span>3</span>
+							<h4>选择分区</h4>
+						</div>
+						<div class="c-box ">
+							<div class="input-box  input-group col-md-12">
+
+								<div class="c-box mt-30 input-group col-md-12" style="padding-left: 40px;">
+									<div class="col-md-12 bdr" style="padding: 0px;">
+										<div class="col-md-3 bdr-r h-80">
+											分区名
+										</div>
+										<div class="col-md-9" style="padding: 0px;">
+											<div class="col-md-12 h-40 bdr-b" style="text-align: center;">
+												剩余配额
+											</div>
+											<div class="col-md-4 h-40 bdr-r">
+												GPU
+											</div>
+											<div class="col-md-4 h-40 bdr-r">
+												CPU
+											</div>
+											<div class="col-md-4 h-40">
+												内存
+											</div>
+										</div>
+									</div>
+
+									<div class="col-md-12 fen-box" style="padding: 0px;background: #fff5ee;">
+
+									</div>
+
+								</div>
+
+							</div>
+						</div>
+
+						<!--step5-->
+
+						<div class="step">
+							<span>4</span>
+							<h4>资源配置</h4>
+						</div>
+						<div class="c-box">
+							<div class="input-box col-md-12">
+
+								<div class="c-box mt-30">
+									<h4 class="col-md-3"><span class="x-span">*</span>CPU</h4>
+									<div class="input-group col-md-6">
+										<select class="form-control cpu_count" name="cpu_count">
+											<option value="2">2</option>
+											<option value="4" selected="selected">4</option>
+											<option value="8">8</option>
+										</select>	
+										<span class="input-group-addon">Core</span>
+									</div>
+								</div>
+								<div class="c-box mt-30">
+									<h4 class="col-md-3"><span class="x-span">*</span>内存</h4>
+									<div class="input-group col-md-6">
+										<select class="form-control memory_count" name="memory">
+											<option value="8">8</option>
+											<option value="16" selected="selected">16</option>
+											<option value="32">32</option>
+										</select>
+										<span class="input-group-addon">GB</span>
+									</div>
+								</div>
+								<div class="c-box mt-30">
+									<h4 class="col-md-3"><span class="x-span">*</span>GPU</h4>
+									<div class="input-group col-md-6">
+										<select class="form-control gpu_count" name="gpu_count">
+											
+											<option value="1" selected="selected">1</option>
+											<option value="2">2</option>
+											
+										</select>
+										<span class="input-group-addon">个</span>
+									</div>
+								</div>
+								
+
+							</div>
+						</div>
+
+						<div class="c-box col-md-12">
+							 <div class="checkbox col-md-6" style="text-align: center;">
+							    <label style="margin-left: 100px;">
+							      <input type="checkbox" class="model-check">高级选项
+							    </label>
+							  </div>
+						</div>
+						<div class="c-box col-md-12 hide-box">
+							<div class="c-box mt-30">
+									<h4 class="col-md-3">参数（可选）</h4>
+									<div class="input-group col-md-6">
+											<div class="form-group">
+											    
+											    <textarea class="form-control" rows="3" placeholder="--param=value" name="extra_parameter"></textarea>
+											</div>
+										
+									</div>
+							</div>
+							<div class="c-box mt-30">
+									<h4 class="col-md-3">运行时限</h4>
+									<div class="input-group col-md-6">
+											<input type="text" class="form-control" name="max_run_time">
+										
+									</div>
+							</div>
+						</div>
+
+						<div class="col-sm-12 bg-white" style="text-align: center; padding: 30px 0;">
+							<input class="btn btn-sub bg-green c-white" type="submit" value="提交">
+							<input class="btn btn-default" type="reset" value="重置">
+						</div>
+						
+						
+					</form>	
+					
+					
+					
+					
+					<!--分布式任务-->
+					<form action="{{url_for('hyperai.vip.views.distributed_create')}}" enctype="multipart/form-data" method="post" class="form2" onSubmit="return mySubmit_distribute()" id="distribute-form">
+
+
+						<input type="hidden" value="" class="img-name" name="framework_name" />
+						<input type="hidden" value="" class="img-tag" name="framework_tag" />
+						<input type="hidden" value="" class="img-time" name="framework_time" />
+						<input type="hidden" value="" class="fen-name" name="matchExpressions_values" />
+
+						<!--step1-->
+						<div class="step">
+							<span>1</span>
+							<h4>基本配置</h4>
+						</div>
+						<div class="c-box">
+							<div class="input-box col-md-12">
+
+								<div class="c-box mt-30">
+									<h4 class="col-md-3"><span class="x-span">*</span>任务名</h4>
+									<div class="input-group col-md-6">
+										<input type="text" class="form-control" name="homework_name" id="distribute_name">
+										<!--<span class="input-group-addon">.00</span>-->
+									</div>
+								</div>
+								<div class="c-box mt-30">
+									<h4 class="col-md-3">代码文件</h4>
+									<div class="input-group col-md-6" style="position: relative;">
+										<input type="text" class="form-control image_list_i_2">
+										<!--<span class="input-group-addon">.00</span>-->
+										
+											<span href="#" class="load-file">上传
+											<input type="file" name="image_list" id="image_list2" value=""  multiple="multiple"/>
+											</span>
+										
+									</div>
+								</div>
+								<div class="c-box mt-30">
+									<h4 class="col-md-3">主文件名</h4>
+									<div class="input-group col-md-6" style="position: relative;">
+										<input type="text" class="form-control main_name" name="main_name" placeholder='文件全名'>
+
+
+									</div>
+								</div>
+								<div class="c-box mt-30 other-frame">
+									<h4 class="col-md-3">服务器路径</h4>
+									<div class="input-group col-md-6">
+										<input type="text" class="form-control autocomplete_path load-path2" name="server_path">
+										<!--<span class="input-group-addon">.00</span>-->
+									</div>
+								</div>
+
+								<div class="c-box mt-30 caffe-load">
+									<div class="c-box col-md-12 pd-n" style="padding-left: 0">
+										<h4 class="col-md-3">solver文件路径</h4>
+										<div class="input-group col-md-6">
+											<input type="text" class="form-control autocomplete_path caffempi-load-path1" name="solver_path">
+											<!--<span class="input-group-addon">.00</span>-->
+										</div>
+									</div>
+									<div class="c-box col-md-12 mt-30 pd-n" style="padding-left: 0">
+										<h4 class="col-md-3">train_val文件路径</h4>
+										<div class="input-group col-md-6">
+											<input type="text" class="form-control autocomplete_path caffempi-load-path2" name="caffe_path">
+											<!--<span class="input-group-addon">.00</span>-->
+										</div>
+									</div>
+								</div>
+								<div class="c-box col-md-12 mt-30" style="position: relative">
+									<h4 class="col-md-3">选择框架</h4>
+									<div class="input-group col-md-3">
+										<select type="text" class="form-control select_framework" name="framework" id="select_model_cjs">
+											<!--<option value="caffe">caffe</option>-->
+										</select>
+										<!--<span class="input-group-addon">.00</span>-->
+									</div>
+									<i class="iconfont icon-shuaxin refresh-btn c-green"></i>
+								</div>
+
+							</div>
+						</div>
+
+						<!--step2-->
+			
+						<!--<div class="step">
+							<span>2</span>
+							<h4>选择数据集</h4>
+						</div>
+						<div class="c-box">
+							<div class="input-box">
+
+								
+								<div class="c-box mt-30">
+									<h4 class="col-md-3">选择数据集</h4>
+									<div class="input-group col-md-3">
+										<select type="text" class="form-control">
+											<option value="mnist">mnist</option>
+										</select>
+										
+									</div>
+								</div>
+
+							</div>
+						</div>-->
+
+
+						<!--step3-->
+
+						<div class="step">
+							<span>2</span>
+							<h4>选择镜像</h4>
+						</div>
+						<div class="c-box">
+							<div class="input-box col-md-12">
+								<div class="c-box mt-30">
+									<h4 class="col-md-3">镜像名</h4>
+									<div class="input-group col-md-6">
+										<input type="text" class="form-control">
+										<span class="search">
+														<i class="iconfont icon-chazhao fz-24"></i>
+										</span>
+									</div>
+								</div>
+
+								<div class="c-box mt-30" style="padding-left: 40px;">
+									<div class="input-group col-md-12 title-btn bdr-b">
+										<span class="s-bdr">共享镜像</span>
+										<span>私有镜像</span>
+									</div>
+								</div>
+
+								<div class="c-box mt-30" style="padding-left: 40px;">
+
+									<!--共享镜像-->
+									<div class="input-group col-md-12 public-img">
+										<div class="input-group col-md-12 bdr">
+											<div class="col-md-4 bdr-r">
+												镜像名
+											</div>
+											<div class="col-md-4 bdr-r">
+												标签
+											</div>
+											<div class="col-md-4">
+												创建时间
+											</div>
+										</div>
+
+										<div class=" input-group col-md-12 public-img-list">
+
+
+										</div>
+									</div>
+
+									<!--私有镜像-->
+									<div class="input-group col-md-12 private-img">
+										<div class="input-group col-md-12 bdr">
+											<div class="col-md-4 bdr-r">
+												镜像名
+											</div>
+											<div class="col-md-4 bdr-r">
+												标签
+											</div>
+											<div class="col-md-4">
+												创建时间
+											</div>
+										</div>
+
+										<div class=" input-group col-md-12 private-img-list">
+
+
+										</div>
+									</div>
+
+								</div>
+
+							</div>
+						</div>
+
+						<!--step4-->
+
+						<div class="step">
+							<span>3</span>
+							<h4>选择分区</h4>
+						</div>
+						<div class="c-box ">
+							<div class="input-box  input-group col-md-12">
+
+								<div class="c-box mt-30 input-group col-md-12" style="padding-left: 40px;">
+									<div class="col-md-12 bdr" style="padding: 0px;">
+										<div class="col-md-3 bdr-r h-80">
+											分区名
+										</div>
+										<div class="col-md-9" style="padding: 0px;">
+											<div class="col-md-12 h-40 bdr-b" style="text-align: center;">
+												剩余配额
+											</div>
+											<div class="col-md-4 h-40 bdr-r">
+												GPU
+											</div>
+											<div class="col-md-4 h-40 bdr-r">
+												CPU
+											</div>
+											<div class="col-md-4 h-40">
+												内存
+											</div>
+										</div>
+									</div>
+
+									<div class="col-md-12 fen-box" style="padding: 0px;background: #fff5ee;">
+
+									</div>
+
+								</div>
+
+							</div>
+						</div>
+
+						<!--step5-->
+
+						<div class="step">
+							<span>4</span>
+							<h4>资源配置</h4>
+						</div>
+						<div class="c-box">
+							<div class="input-box col-md-12">
+								<div class="c-box mt-30">
+									<h4 class="col-md-3"><span class="x-span">*</span>CPU</h4>
+									<div class="input-group col-md-6">
+										<select class="form-control cpu_counts" name="cpu_count">
+											<option value="2">2</option>
+											<option value="4" selected="selected">4</option>
+											<option value="8">8</option>
+										</select>	
+										<span class="input-group-addon">Core</span>
+									</div>
+								</div>
+									
+								<div class="c-box mt-30">
+									<h4 class="col-md-3"><span class="x-span">*</span>内存</h4>
+									<div class="input-group col-md-6">
+										<select class="form-control memory_counts" name="memory">
+											<option value="8">8</option>
+											<option value="16" selected="selected">16</option>
+											<option value="32">32</option>
+										</select>
+										<span class="input-group-addon">GB</span>
+									</div>
+								</div>
+								<div class="c-box mt-30">
+									<h4 class="col-md-3"><span class="x-span">*</span>GPU</h4>
+									<div class="input-group col-md-6">
+										<select class="form-control gpu_counts" name="gpu_count">
+											
+											<option value="1" selected="selected">1</option>
+											<option value="2">2</option>
+											
+										</select>
+										<span class="input-group-addon">个</span>
+									</div>
+								</div>
+								
+								<div class="c-box mt-30">
+									<h4 class="col-md-3"><span class="x-span">*</span>节点数量</h4>
+									<div class="input-group col-md-6">
+										<input type="text" class="form-control node_counts" name="node_count">
+										<span class="input-group-addon">个</span>
+									</div>
+								</div>
+
+							</div>
+						</div>
+
+						<div class="c-box col-md-12">
+							 <div class="checkbox col-md-6" style="text-align: center;">
+							    <label style="margin-left: 100px;">
+							      <input type="checkbox" class="model-check">高级选项
+							    </label>
+							  </div>
+						</div>
+						<div class="c-box col-md-12 hide-box">
+							<div class="c-box mt-30">
+									<h4 class="col-md-3">参数（可选）</h4>
+									<div class="input-group col-md-6">
+											<div class="form-group">
+											    
+											    <textarea class="form-control" rows="3" placeholder="--param=value" name="extra_parameter"></textarea>
+											</div>
+										
+									</div>
+							</div>
+							<div class="c-box mt-30">
+									<h4 class="col-md-3">运行时限</h4>
+									<div class="input-group col-md-6">
+											<input type="text" class="form-control"name="max_run_time">
+										
+									</div>
+							</div>
+						</div>
+
+						<div class="col-sm-12 bg-white" style="text-align: center; padding: 30px 0;">
+							<input class="btn btn-sub bg-green c-white" type="submit" value="提交">
+							<input class="btn btn-default" type="reset" value="重置">
+						</div>
+						
+						
+					</form>	
+					
+					
+					
+					
+					
+					
+					
+					
+					</div>
+
+				</div>
+
+				<div class="col-sm-11 col-sm-offset-3 col-md-20 col-md-offset-2 main nav-bottom bg-white">Copyright © 2017
+					<a href="#">中科弘云科技(北京)有限公司,</a> All rights reserved.</div>
+
+			</div>
+		</div>
+
+		{% include 'new/public/script.html'%}
+		<script src="{{url_for('static', filename='advance/js/advance_user.js')}}" type="text/javascript" charset="utf-8"></script>
+
+		<script>
+            // $(document).ready(function () {
+            //     console.log(1)
+            //     $('.fen-box').find('input:nth-child(1)').attr('checked',true)
+            // })
+
+
+		</script>
+
+	</body>
+
+</html>

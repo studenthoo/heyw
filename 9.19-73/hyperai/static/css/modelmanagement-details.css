@@ -1,0 +1,34 @@
+.sbmit{
+	border: none;
+}
+.r-box img{
+	position: relative;
+	bottom: 50px;
+}
+.last4_snc_ipt{width: 100%;
+	background: white;
+	padding:20px;
+	font-size: 12px;
+}
+.last4_snc_ipt_l1{width: 52%;}
+.last4_snc_ipt_l2{width: 24%;}
+.last4_snc_ipt_l3{width: 24%;}
+#view_extension_id{height: 30px;
+	width: 30%;
+}
+#data_extension_id{height: 30px;
+	width: 60%;
+
+}
+#view_extension-details{width: 100%;
+	line-height: 18px;
+	padding: 5px 20px;
+}
+#view_extension-details div{height: 30px;
+	line-height: 30px;
+	width: 50%;
+}
+#view_extension-details div select{float: right;
+	height: 25px;
+	width: 110px;
+}
