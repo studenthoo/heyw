@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/Git_Code_Manage.iml" filepath="$PROJECT_DIR$/.idea/Git_Code_Manage.iml" />
+      <module fileurl="file://D:/workspace/.idea/workspace.iml" filepath="D:/workspace/.idea/workspace.iml" />
     </modules>
   </component>
 </project>
