@@ -2,7 +2,7 @@
 <project version="4">
   <component name="WebServers">
     <option name="servers">
-      <webServer id="d453c3a5-daa2-47c1-adc8-b0a02583121c" name="10.18.95.8:15073" url="http://10.18.95.4">
+      <webServer id="d453c3a5-daa2-47c1-adc8-b0a02583121c" name="10.18.95.4:15073" url="http://10.18.95.4">
         <fileTransfer host="10.18.95.4" port="12073" accessType="SFTP">
           <advancedOptions>
             <advancedOptions dataProtectionLevel="Private" shareSSLContext="true" />
@@ -10,8 +10,8 @@
           <option name="port" value="12073" />
         </fileTransfer>
       </webServer>
-      <webServer id="eed297d4-e1ad-490a-9172-2fcbe5ca5033" name="10.18.95.8:15015" url="http://10.18.95.8">
-        <fileTransfer host="10.18.95.8" port="12015" accessType="SFTP">
+      <webServer id="eed297d4-e1ad-490a-9172-2fcbe5ca5033" name="测试代码" url="http://10.18.95.4">
+        <fileTransfer host="10.18.95.4" port="12015" accessType="SFTP">
           <advancedOptions>
             <advancedOptions dataProtectionLevel="Private" shareSSLContext="true" />
           </advancedOptions>

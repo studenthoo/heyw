@@ -245,7 +245,7 @@ class TrainTask(Task):
                     if line is not None:
                         line = line.strip()
                     if line:
-                        time.sleep(0.1)
+                        time.sleep(0.01)
                         self.au_process_output(line)
                         sys.stdout.flush()
                     else:
