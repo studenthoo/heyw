@@ -9,6 +9,21 @@
           </mappings>
         </serverdata>
       </paths>
+      <paths name="10.18.95.4:18">
+        <serverdata>
+          <mappings>
+            <mapping local="D:/workspace" web="/" />
+            <mapping local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="12012">
+        <serverdata>
+          <mappings>
+            <mapping local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
       <paths name="测试代码">
         <serverdata>
           <mappings>
