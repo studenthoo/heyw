@@ -2,12 +2,12 @@
 <project version="4">
   <component name="WebServers">
     <option name="servers">
-      <webServer id="d453c3a5-daa2-47c1-adc8-b0a02583121c" name="10.18.95.4:15073" url="http://10.18.95.4">
-        <fileTransfer host="10.18.95.4" port="12073" accessType="SFTP">
+      <webServer id="d453c3a5-daa2-47c1-adc8-b0a02583121c" name="didiyun" url="http://116.85.23.58">
+        <fileTransfer host="116.85.23.58" port="2223" accessType="SFTP">
           <advancedOptions>
             <advancedOptions dataProtectionLevel="Private" shareSSLContext="true" />
           </advancedOptions>
-          <option name="port" value="12073" />
+          <option name="port" value="2223" />
         </fileTransfer>
       </webServer>
       <webServer id="eed297d4-e1ad-490a-9172-2fcbe5ca5033" name="测试代码" url="http://10.18.95.4">
@@ -18,12 +18,12 @@
           <option name="port" value="12015" />
         </fileTransfer>
       </webServer>
-      <webServer id="aff285e8-5fe9-4082-88fd-80c07d94caa4" name="高级用户抽取代码" url="http://10.18.95.4">
-        <fileTransfer host="10.18.95.4" port="12062" accessType="SFTP">
+      <webServer id="aff285e8-5fe9-4082-88fd-80c07d94caa4" name="高级用户抽取代码" url="http://10.18.95.3">
+        <fileTransfer host="10.18.95.3" port="12068" accessType="SFTP">
           <advancedOptions>
             <advancedOptions dataProtectionLevel="Private" shareSSLContext="true" />
           </advancedOptions>
-          <option name="port" value="12062" />
+          <option name="port" value="12068" />
         </fileTransfer>
       </webServer>
       <webServer id="4a22a4ec-2744-4583-8268-cca460bef3ae" name="10.18.95.4:18" url="http://10.18.95.4">
@@ -40,6 +40,38 @@
             <advancedOptions dataProtectionLevel="Private" shareSSLContext="true" />
           </advancedOptions>
           <option name="port" value="12012" />
+        </fileTransfer>
+      </webServer>
+      <webServer id="2ba878fa-547d-494d-8a91-3ede4e76fcab" name="10.18.95.3" url="http://10.18.95.3">
+        <fileTransfer host="10.18.95.3" port="12062" accessType="SFTP">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" shareSSLContext="true" />
+          </advancedOptions>
+          <option name="port" value="12062" />
+        </fileTransfer>
+      </webServer>
+      <webServer id="c38f8070-ffb5-4711-8c9f-c487eb1b667f" name="10.18.95.3:68" url="http://10.18.95.3">
+        <fileTransfer host="10.18.95.3" port="12068" accessType="SFTP">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" shareSSLContext="true" />
+          </advancedOptions>
+          <option name="port" value="12068" />
+        </fileTransfer>
+      </webServer>
+      <webServer id="f7c476b4-fe7e-4a13-a667-02496f840896" name="clear" url="http://10.18.95.3">
+        <fileTransfer host="10.18.95.3" port="12025" accessType="SFTP">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" shareSSLContext="true" />
+          </advancedOptions>
+          <option name="port" value="12025" />
+        </fileTransfer>
+      </webServer>
+      <webServer id="80146059-4e63-4e3f-9354-7818771b1877" name="12050" url="http://10.18.95.5">
+        <fileTransfer host="10.18.95.5" port="12050" rootFolder="/root" accessType="SFTP">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" shareSSLContext="true" />
+          </advancedOptions>
+          <option name="port" value="12050" />
         </fileTransfer>
       </webServer>
     </option>

@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" serverName="10.18.95.4:15073" uploadOnCheckin="d453c3a5-daa2-47c1-adc8-b0a02583121c">
+  <component name="PublishConfigData" serverName="didiyun" uploadOnCheckin="d453c3a5-daa2-47c1-adc8-b0a02583121c">
     <serverData>
-      <paths name="10.18.95.4:15073">
+      <paths name="10.18.95.3">
+        <serverdata>
+          <mappings>
+            <mapping local="D:/workspace" web="/" />
+            <mapping local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="10.18.95.3:68">
         <serverdata>
           <mappings>
             <mapping local="$PROJECT_DIR$" web="/" />
@@ -18,6 +26,27 @@
         </serverdata>
       </paths>
       <paths name="12012">
+        <serverdata>
+          <mappings>
+            <mapping local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="12050">
+        <serverdata>
+          <mappings>
+            <mapping local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="clear">
+        <serverdata>
+          <mappings>
+            <mapping local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="didiyun">
         <serverdata>
           <mappings>
             <mapping local="$PROJECT_DIR$" web="/" />

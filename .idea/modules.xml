@@ -3,7 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/Git_Code_Manage.iml" filepath="$PROJECT_DIR$/.idea/Git_Code_Manage.iml" />
-      <module fileurl="file://D:/workspace/.idea/workspace.iml" filepath="D:/workspace/.idea/workspace.iml" />
+      <module fileurl="file://D:/code_manager/.idea/code_manager.iml" filepath="D:/code_manager/.idea/code_manager.iml" />
+      <module fileurl="file://$USER_HOME$/PycharmProjects/project/.idea/project.iml" filepath="$USER_HOME$/PycharmProjects/project/.idea/project.iml" />
+      <module fileurl="file://$USER_HOME$/PycharmProjects/untitled/.idea/untitled.iml" filepath="$USER_HOME$/PycharmProjects/untitled/.idea/untitled.iml" />
     </modules>
   </component>
 </project>
